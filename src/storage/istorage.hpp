@@ -13,6 +13,22 @@ namespace storage
     Hard
   };
 
+  enum class Criterion
+  {
+    Date,
+    Priority,
+    Completed
+  };
+
+  enum class Filter
+  {
+    Search,
+    ShowAll,
+    ShowToday,
+    ShowOverdue,
+    Priority
+  };
+
   class IStorage
   {
     virtual ~IStorage();
@@ -24,8 +40,7 @@ namespace storage
     virtual QList< Task > getTasksForToday() const = 0;
     virtual QList< Task > getOverdueTasks() const = 0;
     virtual QList< Task > getTasksFiltered(const Qstring &searchText, bool today, bool overdue, Priority priority) const = 0;
-    virtual QList< Task > getSortedTasks(const QList< Task > &tasks, const QString &criterion) const = 0;
-    //criterion = date / priority / completed
+    virtual QList< Task > getSortedTasks(const QList< Task > &tasks, Criterion criterion) const = 0;
     virtual void saveToFile(const QString &path) = 0;
     virtual void loadFromFile(const QString &path) = 0;
   };
