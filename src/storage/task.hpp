@@ -7,10 +7,10 @@
 
 namespace storage
 {
-  struct Task
-  {
-    enum class Priority { Low, Medium, Hard };
+enum class Priority;
 
+struct Task
+{
     int id;
     QString name;
     QString description;
@@ -20,9 +20,11 @@ namespace storage
     bool completed;
     QList< QString > tags;
 
-    Task();
+    Task() = default;
+
     bool operator<(const Task &other) const;
-  };
+    bool operator==(const Task &other) const;
+};
 }
 
 #endif
