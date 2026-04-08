@@ -5,33 +5,33 @@
 
 namespace storage
 {
-enum class Priority
-{
+  enum class Priority
+  {
     All,
     Low,
     Medium,
     Hard
-};
+  };
 
-enum class Criterion
-{
+  enum class Criterion
+  {
     Date,
     Priority,
     Completed
-};
+  };
 
-enum class Filter
-{
+  enum class Filter
+  {
     Search,
     ShowAll,
     ShowToday,
     ShowOverdue,
     Priority
-};
+  };
 
-class IStorage
-{
-public:
+  class IStorage
+  {
+  public:
     virtual ~IStorage() = default;
     virtual void addTask(const Task &task) = 0;
     virtual void removeTask(int id) = 0;
@@ -44,7 +44,7 @@ public:
     virtual QList< Task > getSortedTasks(const QList< Task > &tasks, Criterion criterion) const = 0;
     virtual void saveToFile(const QString &path) = 0;
     virtual void loadFromFile(const QString &path) = 0;
-};
+  };
 }
 
 #endif
