@@ -1,6 +1,5 @@
 #ifndef ISTORAGE_H
 #define ISTORAGE_H
-
 #include "task.hpp"
 
 namespace storage
@@ -31,7 +30,8 @@ namespace storage
 
   class IStorage
   {
-    virtual ~IStorage();
+  public:
+    virtual ~IStorage() = default;
     virtual void addTask(const Task &task) = 0;
     virtual void removeTask(int id) = 0;
     virtual void updateTask(const Task &task) = 0;
