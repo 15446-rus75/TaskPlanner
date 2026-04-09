@@ -22,7 +22,7 @@ namespace controller
 
   public slots:
     void onViewReady() override;
-    void onTaskAddRequested(const storage::Task& task) override;
+    void onTaskAddRequested(const storage::Task &task) override;
     void onTaskEditRequested(int taskId) override;
     void onTaskUpdateRequested(const storage::Task &task) override;
     void onTaskDeleteRequested(int taskId) override;
