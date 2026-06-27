@@ -4,6 +4,7 @@
 #include "icontroller.hpp"
 #include "../storage/task.hpp"
 #include "../storage/istorage.hpp"
+#include "../utils/achievements.hpp"
 #include "../view/iview.hpp"
 
 namespace controller
@@ -48,6 +49,13 @@ namespace controller
     void refreshView();
     void updateStats();
     static bool priorityMatches(storage::Priority taskPriority, storage::Priority filterPriority);
+
+    int calculateTaskCompletionXP(const storage::Task &task) const;
+    int calculateTimelinessBonus(const storage::Task &task) const;
+    void grantXP(int amount, const QString &reason);
+    QList<storage::Achievement> checkAndUnlockAchievements();
+    bool isAchievementConditionMet(const storage::Achievement &achievement) const;
+    void announceUnlockedAchievements(const QList<storage::Achievement> &unlocked);
 
     storage::IStorage *m_storage;
     view::IView *m_view;
