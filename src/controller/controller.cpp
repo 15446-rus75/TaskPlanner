@@ -289,7 +289,7 @@ void controller::Controller::onTaskViewRequested(int task_id)
 
   const QList< storage::Task > all_tasks = m_storage->getAllTasks();
 
-  for (const storage::Task &task : all_tasks)
+  for (const storage::Task &task: all_tasks)
   {
     if (task.id == task_id)
     {
@@ -334,7 +334,7 @@ void controller::Controller::onTaskDeleteRequested(int task_id)
   const QList< storage::Task > all_tasks = m_storage->getAllTasks();
   QString task_name;
 
-  for (const storage::Task &task : all_tasks)
+  for (const storage::Task &task: all_tasks)
   {
     if (task.id == task_id)
     {
@@ -367,7 +367,7 @@ void controller::Controller::onCompleteRequested(int task_id)
 
   QList< storage::Task > all_tasks = m_storage->getAllTasks();
 
-  for (storage::Task &task : all_tasks)
+  for (storage::Task &task: all_tasks)
   {
     if (task.id == task_id)
     {
@@ -721,7 +721,7 @@ QList< storage::Achievement > controller::Controller::checkAndUnlockAchievements
 
   const QList< storage::Achievement > allAchievements = m_storage->getAllAchievements();
 
-  for (const storage::Achievement &achievement : allAchievements)
+  for (const storage::Achievement &achievement: allAchievements)
   {
     if (m_storage->isAchievementUnlocked(achievement.id))
     {
@@ -746,7 +746,7 @@ void controller::Controller::announceUnlockedAchievements(
     return;
   }
 
-  for (const storage::Achievement &achievement : unlocked)
+  for (const storage::Achievement &achievement: unlocked)
   {
     m_view->showAchievementUnlocked(achievement);
 
