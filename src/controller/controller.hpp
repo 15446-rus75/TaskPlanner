@@ -53,9 +53,9 @@ namespace controller
     int calculateTaskCompletionXP(const storage::Task &task) const;
     int calculateTimelinessBonus(const storage::Task &task) const;
     void grantXP(int amount, const QString &reason);
-    QList<storage::Achievement> checkAndUnlockAchievements();
+    QList< storage::Achievement > checkAndUnlockAchievements();
     bool isAchievementConditionMet(const storage::Achievement &achievement) const;
-    void announceUnlockedAchievements(const QList<storage::Achievement> &unlocked);
+    void announceUnlockedAchievements(const QList< storage::Achievement > &unlocked);
 
     storage::IStorage *m_storage;
     view::IView *m_view;
