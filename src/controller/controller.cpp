@@ -54,7 +54,7 @@ void controller::Controller::start()
   }
 
 #ifndef TEST_BUILD
-  auto *view_ptr = dynamic_cast< view::TaskPlannerView * >(m_view);
+  auto *view_ptr = dynamic_cast< view::TaskPlannerView* >(m_view);
   if (!view_ptr)
   {
     qCritical() << "Controller::start: view is not a TaskPlannerView instance";
@@ -108,9 +108,7 @@ bool controller::Controller::validateTask(const storage::Task &task) const
   return true;
 }
 
-bool controller::Controller::priorityMatches(
-  storage::Priority taskPriority,
-  storage::Priority filterPriority)
+bool controller::Controller::priorityMatches(storage::Priority taskPriority, storage::Priority filterPriority)
 {
   switch (filterPriority)
   {
@@ -224,7 +222,9 @@ void controller::Controller::refreshView()
 void controller::Controller::updateStats()
 {
   if (!checkReady())
+  {
     return;
+  }
 
   const QList< storage::Task > all_tasks = m_storage->getAllTasks();
   const int completed_count = std::count_if(all_tasks.begin(), all_tasks.end(),
@@ -293,7 +293,7 @@ void controller::Controller::onTaskViewRequested(int task_id)
   {
     if (task.id == task_id)
     {
-      auto *view_ptr = dynamic_cast< view::TaskPlannerView * >(m_view);
+      auto *view_ptr = dynamic_cast< view::TaskPlannerView* >(m_view);
       if (view_ptr)
       {
         view_ptr->showTaskDetails(task);
@@ -738,8 +738,7 @@ QList< storage::Achievement > controller::Controller::checkAndUnlockAchievements
   return newlyUnlocked;
 }
 
-void controller::Controller::announceUnlockedAchievements(
-  const QList< storage::Achievement > &unlocked)
+void controller::Controller::announceUnlockedAchievements(const QList< storage::Achievement > &unlocked)
 {
   if (!checkReady())
   {
