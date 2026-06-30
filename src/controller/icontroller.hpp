@@ -24,6 +24,7 @@ namespace controller
     virtual void onViewReady() = 0;
     virtual void onTaskAddRequested(const storage::Task &task) = 0;
     virtual void onTaskEditRequested(int taskId) = 0;
+    virtual void onTaskViewRequested(int taskId) = 0;
     virtual void onTaskUpdateRequested(const storage::Task &task) = 0;
     virtual void onTaskDeleteRequested(int taskId) = 0;
     virtual void onCompleteRequested(int taskId) = 0;

@@ -486,7 +486,9 @@ int controller::Controller::calculateTimelinessBonus(const storage::Task &task) 
 int controller::Controller::calculateTaskCompletionXP(const storage::Task &task) const
 {
   if (!task.completed)
+  {
     return 0;
+  }
 
   int baseXP = 0;
 
