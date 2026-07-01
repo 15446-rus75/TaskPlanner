@@ -25,7 +25,7 @@ public:
   void showUserTitle(const QString &title) override;
   void showXPNotification(int amount, const QString &reason) override;
   void showAchievementUnlocked(const storage::Achievement &achievement) override;
-  void showAchievementsList(const QList< storage::Achievement > &achievements) override;
+  void showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds) override;
   void showCampusMap(const QList< QString > &unlocked_locations) override;
   void showLocationUnlocked(const QString &location_name) override;
   void showLevelUpAnimation(int new_level, const QString &new_title) override;

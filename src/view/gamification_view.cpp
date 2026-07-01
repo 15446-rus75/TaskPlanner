@@ -124,25 +124,81 @@ void view::GamificationView::showAchievementUnlocked(const storage::Achievement 
   // Визуальное уведомление о разблокировке достижения будет реализовано в будущих итерациях
 }
 
-void view::GamificationView::showAchievementsList(const QList< storage::Achievement > &achievements)
+void view::GamificationView::showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds)
 {
-  QDialog dialog(this);
-  dialog.setWindowTitle("Достижения");
-  dialog.setMinimumSize(k_achievementDialogWidth, k_achievementDialogHeight);
+  QDialog *dialog = new QDialog(this);
+  dialog->setWindowTitle("Достижения");
+  dialog->setMinimumSize(500, 600);
 
-  QVBoxLayout *layout = new QVBoxLayout(&dialog);
-  QListWidget *list_widget = new QListWidget(&dialog);
+  // Применяем светлый стиль
+  dialog->setStyleSheet(
+      "QDialog { background-color: #ffffff; }"
+      "QLabel { color: #212121; }"
+      "QListWidget { background-color: #ffffff; border: 1px solid #c5cae9; border-radius: 6px; }"
+      "QListWidget::item { padding: 10px; border-bottom: 1px solid #e0e0e0; }"
+      "QListWidget::item:selected { background-color: #e8eaf6; }");
+
+  QVBoxLayout *layout = new QVBoxLayout(dialog);
+
+  QLabel *titleLabel = new QLabel("🏆 Ваши достижения", dialog);
+  titleLabel->setStyleSheet("font-size: 16px; font-weight: bold; color: #3f51b5; padding: 8px;");
+  layout->addWidget(titleLabel);
+
+  QListWidget *listWidget = new QListWidget(dialog);
+  listWidget->setSpacing(4);
+
+  int unlockedCount = 0;
 
   for (const storage::Achievement &achievement : achievements)
   {
     QListWidgetItem *item = new QListWidgetItem();
-    QString text = achievement.name + " 🔒";
+
+    // Проверяем, разблокировано ли достижение
+    bool isUnlocked = unlockedAchievementIds.contains(achievement.id);
+
+    QString text;
+    if (isUnlocked)
+    {
+      text = "🏆 " + achievement.name + " ✓";
+      item->setForeground(QColor("#3f51b5"));
+      item->setBackground(QColor("#e8eaf6"));
+      ++unlockedCount;
+    }
+    else
+    {
+      text = "🔒 " + achievement.name;
+      item->setForeground(QColor("#9e9e9e"));
+    }
+
+    if (!achievement.description.isEmpty())
+    {
+      text += "\n" + achievement.description;
+    }
+
+    if (achievement.xpReward > 0)
+    {
+      text += "\n💰 Награда: +" + QString::number(achievement.xpReward) + " XP";
+    }
+
     item->setText(text);
-    list_widget->addItem(item);
+    item->setData(Qt::UserRole, achievement.id);
+    item->setSizeHint(QSize(0, 60));
+
+    listWidget->addItem(item);
   }
 
-  layout->addWidget(list_widget);
-  dialog.exec();
+  layout->addWidget(listWidget);
+
+  QLabel *statsLabel = new QLabel(
+      QString(" Разблокировано: %1 из %2")
+          .arg(unlockedCount)
+          .arg(achievements.size()),
+      dialog);
+  statsLabel->setStyleSheet("color: #5c6bc0; font-size: 11px; padding: 4px;");
+  layout->addWidget(statsLabel);
+
+  dialog->exec();
+  delete dialog;
 }
 
 void view::GamificationView::showCampusMap(const QList< QString > &unlocked_locations)
