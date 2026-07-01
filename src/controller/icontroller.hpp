@@ -44,6 +44,7 @@ namespace controller
 
     virtual void onCheckAchievements() = 0;
     virtual void onCalculateXP(int taskId) = 0;
+    virtual void updateAchievementSlots() = 0;
   };
 }
 

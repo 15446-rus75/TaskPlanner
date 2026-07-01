@@ -4,7 +4,7 @@
 #include "taskplannerview.hpp"
 #include "mockstorage.hpp"
 
-class ViewTest : public QObject
+class ViewTest: public QObject
 {
   Q_OBJECT
 

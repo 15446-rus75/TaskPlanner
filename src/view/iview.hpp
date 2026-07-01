@@ -33,7 +33,7 @@ namespace view
     virtual void showXPNotification(int amount, const QString &reason) = 0;
 
     virtual void showAchievementUnlocked(const storage::Achievement &achievement) = 0;
-    virtual void showAchievementsList(const QList< storage::Achievement > &achievements) = 0;
+    virtual void showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds) = 0;
 
     virtual void showCampusMap(const QList< QString > &unlockedLocations) = 0;
     virtual void showLocationUnlocked(const QString &locationName) = 0;
@@ -41,6 +41,7 @@ namespace view
     virtual void showLevelUpAnimation(int newLevel, const QString &newTitle) = 0;
 
     virtual void updateGamificationPanel() = 0;
+    virtual void updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements) = 0;
   };
 
 }

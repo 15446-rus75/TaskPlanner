@@ -52,7 +52,6 @@ void controller::Controller::start()
   {
     return;
   }
-
 #ifndef TEST_BUILD
   auto *view_ptr = dynamic_cast< view::TaskPlannerView* >(m_view);
   if (!view_ptr)
@@ -60,7 +59,6 @@ void controller::Controller::start()
     qCritical() << "Controller::start: view is not a TaskPlannerView instance";
     return;
   }
-
   QObject::connect(view_ptr, &view::TaskPlannerView::viewReady, this, &controller::Controller::onViewReady);
   QObject::connect(view_ptr, &view::TaskPlannerView::taskAddRequested, this, &controller::Controller::onTaskAddRequested);
   QObject::connect(view_ptr, &view::TaskPlannerView::taskEditRequested, this, &controller::Controller::onTaskEditRequested);
@@ -71,8 +69,11 @@ void controller::Controller::start()
   QObject::connect(view_ptr, &view::TaskPlannerView::dateSelected, this, &controller::Controller::onDateSelected);
   QObject::connect(view_ptr, &view::TaskPlannerView::sortRequested, this, &controller::Controller::onSortRequested);
   QObject::connect(view_ptr, &view::TaskPlannerView::filterChanged, this, &controller::Controller::onFilterChanged);
+  QObject::connect(view_ptr, &view::TaskPlannerView::achievementsRequested,
+                   this, &controller::Controller::onAchievementsRequested);
+  QObject::connect(view_ptr, &view::TaskPlannerView::mapRequested,
+                   this, &controller::Controller::onMapRequested);
 #endif
-
   onApplicationStart();
 }
 
@@ -241,6 +242,7 @@ void controller::Controller::onViewReady()
     return;
   }
   refreshView();
+  updateAchievementSlots();
 }
 
 void controller::Controller::onTaskAddRequested(const storage::Task &task)
@@ -529,32 +531,30 @@ void controller::Controller::grantXP(int amount, const QString &reason)
     return;
   }
 
-  const int levelBefore = m_storage->getCurrentLevel();
-
+  const int level_before = m_storage->getCurrentLevel();
   m_storage->addXP(amount, reason);
   m_view->showXPNotification(amount, reason);
 
-  const int totalXP = m_storage->getTotalXP();
-  const int levelAfter = storage::calculateLevelFromXP(totalXP);
-  const int xpForCurrentLevel = storage::calculateTotalXPForLevel(levelAfter);
-  const int xpForNextLevel = storage::calculateTotalXPForLevel(levelAfter + 1);
+  // ИСПРАВЛЕНО: берём данные напрямую из хранилища,
+  // так как currentXP — это остаток до следующего уровня, а не общий опыт
+  const storage::UserProgress progress = m_storage->getUserProgress();
 
-  QString newTitle;
-  if (levelAfter >= storage::xp::MAX_LEVEL)
+  QString new_title;
+  if (progress.currentLevel >= storage::xp::MAX_LEVEL)
   {
-    newTitle = "Максимальный уровень";
+    new_title = "Максимальный уровень";
   }
   else
   {
-    newTitle = "Уровень " + QString::number(levelAfter);
+    new_title = "Уровень " + QString::number(progress.currentLevel);
   }
 
-  m_view->showUserLevel(levelAfter, totalXP - xpForCurrentLevel, xpForNextLevel - xpForCurrentLevel);
-  m_view->showUserTitle(newTitle);
+  m_view->showUserLevel(progress.currentLevel, progress.currentXP, progress.xpToNextLevel);
+  m_view->showUserTitle(new_title);
 
-  if (levelAfter > levelBefore)
+  if (progress.currentLevel > level_before)
   {
-    m_view->showLevelUpAnimation(levelAfter, newTitle);
+    m_view->showLevelUpAnimation(progress.currentLevel, new_title);
   }
 
   m_view->updateGamificationPanel();
@@ -746,16 +746,16 @@ void controller::Controller::announceUnlockedAchievements(const QList< storage::
   {
     return;
   }
-
   for (const storage::Achievement &achievement: unlocked)
   {
     m_view->showAchievementUnlocked(achievement);
-
     if (achievement.xpReward > 0)
     {
       grantXP(achievement.xpReward, "Achievement: " + achievement.name);
     }
   }
+
+  updateAchievementSlots();
 }
 
 void controller::Controller::onTaskCompleted(int taskId)
@@ -778,6 +778,7 @@ void controller::Controller::onTaskCompleted(int taskId)
   onCalculateXP(taskId);
   m_storage->updateStreak(QDate::currentDate());
   onCheckAchievements();
+  updateAchievementSlots();
 }
 
 void controller::Controller::onCalculateXP(int taskId)
@@ -825,7 +826,10 @@ void controller::Controller::onAchievementsRequested()
     return;
   }
 
-  m_view->showAchievementsList(m_storage->getAllAchievements());
+  const QList< storage::Achievement > allAchievements = m_storage->getAllAchievements();
+  const storage::UserProgress progress = m_storage->getUserProgress();
+
+  m_view->showAchievementsList(allAchievements, progress.unlockedAchievementIds);
 }
 
 void controller::Controller::onMapRequested()
@@ -868,11 +872,45 @@ void controller::Controller::onApplicationStart()
     return;
   }
 
-  const int level = m_storage->getCurrentLevel();
-  const int totalXP = m_storage->getTotalXP();
-  const int xpForCurrentLevel = storage::calculateTotalXPForLevel(level);
-  const int xpForNextLevel = storage::calculateTotalXPForLevel(level + 1);
+  // ИСПРАВЛЕНО: берём данные напрямую из хранилища
+  const storage::UserProgress progress = m_storage->getUserProgress();
+  m_view->showUserLevel(progress.currentLevel, progress.currentXP, progress.xpToNextLevel);
 
-  m_view->showUserLevel(level, totalXP - xpForCurrentLevel, xpForNextLevel - xpForCurrentLevel);
+  QString title;
+  if (progress.currentLevel >= storage::xp::MAX_LEVEL)
+  {
+    title = "Максимальный уровень";
+  }
+  else
+  {
+    title = "Уровень " + QString::number(progress.currentLevel);
+  }
+  m_view->showUserTitle(title);
+  m_view->showStreak(progress.streakDays);
+
   onNewDay(QDate::currentDate());
+}
+
+void controller::Controller::updateAchievementSlots()
+{
+  if (!checkReady())
+  {
+    return;
+  }
+
+  // Получаем все достижения и находим разблокированные
+  const QList< storage::Achievement > allAchievements = m_storage->getAllAchievements();
+  QList< storage::Achievement > unlockedAchievements;
+
+  for (const storage::Achievement &achievement : allAchievements)
+  {
+    if (m_storage->isAchievementUnlocked(achievement.id))
+    {
+      unlockedAchievements.append(achievement);
+    }
+  }
+
+  // Передаем первые 4 разблокированных достижения в view
+  // View сам решит, как их отобразить в 4 слотах
+  m_view->updateAchievementSlots(unlockedAchievements);
 }

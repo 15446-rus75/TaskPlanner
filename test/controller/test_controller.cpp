@@ -8,66 +8,65 @@ class ControllerTest: public QObject
 {
   Q_OBJECT
 
-private slots:
-  void init();
-  void cleanup();
+  private slots:
+    void init();
+    void cleanup();
 
-  void setStorage_nullptr_doesNotCrash();
-  void setView_nullptr_doesNotCrash();
-  void start_withoutDependencies_doesNotCrash();
+    void setStorage_nullptr_doesNotCrash();
+    void setView_nullptr_doesNotCrash();
+    void start_withoutDependencies_doesNotCrash();
 
-  void onViewReady_showsAllTasksByDefault();
-  void onViewReady_withoutDependencies_doesNotCrash();
+    void onViewReady_showsAllTasksByDefault();
+    void onViewReady_withoutDependencies_doesNotCrash();
 
-  void onTaskAddRequested_validTask_addsToStorage();
-  void onTaskAddRequested_emptyName_rejectsAndShowsError();
-  void onTaskAddRequested_invalidDeadline_rejectsAndShowsError();
-  void onTaskAddRequested_validTask_refreshesView();
+    void onTaskAddRequested_validTask_addsToStorage();
+    void onTaskAddRequested_emptyName_rejectsAndShowsError();
+    void onTaskAddRequested_invalidDeadline_rejectsAndShowsError();
+    void onTaskAddRequested_validTask_refreshesView();
 
-  void onTaskEditRequested_existingTask_showsForm();
-  void onTaskEditRequested_missingTask_showsError();
+    void onTaskEditRequested_existingTask_showsForm();
+    void onTaskEditRequested_missingTask_showsError();
 
-  void onTaskUpdateRequested_validTask_updatesStorage();
-  void onTaskUpdateRequested_emptyName_rejectsAndShowsError();
+    void onTaskUpdateRequested_validTask_updatesStorage();
+    void onTaskUpdateRequested_emptyName_rejectsAndShowsError();
 
-  void onTaskDeleteRequested_existingTask_removesAndNotifies();
-  void onTaskDeleteRequested_missingTask_stillRemovesQuietly();
+    void onTaskDeleteRequested_existingTask_removesAndNotifies();
+    void onTaskDeleteRequested_missingTask_stillRemovesQuietly();
 
-  void onCompleteRequested_existingTask_togglesCompletion();
-  void onCompleteRequested_missingTask_showsError();
-  void onCompleteRequested_calledTwice_togglesBackAndForth();
+    void onCompleteRequested_existingTask_togglesCompletion();
+    void onCompleteRequested_missingTask_showsError();
+    void onCompleteRequested_calledTwice_togglesBackAndForth();
 
-  void onDateSelected_firstClick_setsTitleToSelectedDate();
-  void onDateSelected_sameDataTwice_deselectsDate();
-  void onDateSelected_ignoresScopeFilter();
+    void onDateSelected_firstClick_setsTitleToSelectedDate();
+    void onDateSelected_sameDataTwice_deselectsDate();
+    void onDateSelected_ignoresScopeFilter();
 
-  void onSortRequested_changesCriterionAndRefreshes();
+    void onSortRequested_changesCriterionAndRefreshes();
 
-  void onFilterChanged_showAll_setsCorrectTitle();
-  void onFilterChanged_showToday_setsCorrectTitle();
-  void onFilterChanged_showOverdue_setsCorrectTitle();
-  void onFilterChanged_scopeFilter_resetsSelectedDate();
+    void onFilterChanged_showAll_setsCorrectTitle();
+    void onFilterChanged_showToday_setsCorrectTitle();
+    void onFilterChanged_showOverdue_setsCorrectTitle();
+    void onFilterChanged_scopeFilter_resetsSelectedDate();
 
-  void onFilterChanged_priorityFilter_doesNotResetScope();
-  void onFilterChanged_priorityFilter_doesNotResetSelectedDate();
-  void onFilterChanged_priorityAll_showsEverything();
-  void onFilterChanged_priorityLow_filtersOnlyLowTasks();
+    void onFilterChanged_priorityFilter_doesNotResetScope();
+    void onFilterChanged_priorityFilter_doesNotResetSelectedDate();
+    void onFilterChanged_priorityAll_showsEverything();
+    void onFilterChanged_priorityLow_filtersOnlyLowTasks();
 
-  void onFilterChanged_search_resetsDateAndScope();
-  void onFilterChanged_search_callsGetTasksFilteredWithText();
+    void onFilterChanged_search_resetsDateAndScope();
+    void onFilterChanged_search_callsGetTasksFilteredWithText();
 
-  void combination_scopeTodayPlusPriorityLow_bothApply();
-  void combination_dateSelectedPlusPriority_bothApply();
-  void combination_dateSelectedPlusScope_scopeIgnored();
+    void combination_scopeTodayPlusPriorityLow_bothApply();
+    void combination_dateSelectedPlusPriority_bothApply();
+    void combination_dateSelectedPlusScope_scopeIgnored();
 
-private:
-  storage::Task makeTask(int id, const QString &name, storage::Priority priority,
-                         const QDateTime &deadline, bool completed = false) const;
+  private:
+    storage::Task makeTask(int id, const QString &name, storage::Priority priority, const QDateTime &deadline, bool completed = false) const;
 
-  test::MockStorage *m_storage = nullptr;
-  test::MockView *m_view = nullptr;
-  controller::Controller *m_controller = nullptr;
-};
+    test::MockStorage *m_storage = nullptr;
+    test::MockView *m_view = nullptr;
+    controller::Controller *m_controller = nullptr;
+  };
 
 void ControllerTest::init()
 {

@@ -1,5 +1,6 @@
 #ifndef ACHIEVEMENTS_HPP
 #define ACHIEVEMENTS_HPP
+
 #include <QString>
 #include <cmath>
 
@@ -34,36 +35,33 @@ namespace storage
     {
       return 0;
     }
-
     if (targetLevel > xp::MAX_LEVEL)
     {
       targetLevel = xp::MAX_LEVEL;
     }
 
-    int totalXP = 0;
+    int total_xp = 0;
     for (qsizetype level = 1; level < targetLevel; ++level)
     {
-      totalXP += calculateXPForLevel(level);
+      total_xp += calculateXPForLevel(level);
     }
-
-    return totalXP;
+    return total_xp;
   }
 
-  inline int calculateLevelFromXP(int totalXP)
+  inline int calculateLevelFromXP(int total_xp)
   {
-    if (totalXP <= 0)
+    if (total_xp <= 0)
     {
       return 1;
     }
 
     int level = 1;
-    int currentXP = 0;
-    while (level < xp::MAX_LEVEL && currentXP + calculateXPForLevel(level) <= totalXP)
+    int current_xp = 0;
+    while (level < xp::MAX_LEVEL && current_xp + calculateXPForLevel(level) <= total_xp)
     {
-      currentXP += calculateXPForLevel(level);
+      current_xp += calculateXPForLevel(level);
       ++level;
     }
-
     return level;
   }
 
@@ -79,321 +77,325 @@ namespace storage
 
   namespace achievements
   {
-    inline constexpr Achievement LEVEL_1
+
+    inline const Achievement LEVEL_1
     {
       "level_1",
-      "Level 1 Reached",
-      "Reached level 1",
+      "Уровень 1",
+      "Достигнут 1 уровень",
       ":/icons/achievement_level_1.png",
       0,
       "level"
     };
 
-    inline constexpr Achievement LEVEL_5
+    inline const Achievement LEVEL_5
     {
-      "level_5",
-      "Level 5 Reached",
-      "Reached level 5",
+       "level_5",
+      "Уровень 5",
+      "Достигнут 5 уровень",
       ":/icons/achievement_level_5.png",
       250,
       "level"
     };
 
-    inline constexpr Achievement LEVEL_10
+    inline const Achievement LEVEL_10
     {
       "level_10",
-      "Level 10 Reached",
-      "Reached level 10",
+      "Уровень 10",
+      "Достигнут 10 уровень",
       ":/icons/achievement_level_10.png",
       500,
       "level"
     };
 
-    inline constexpr Achievement LEVEL_20
+    inline const Achievement LEVEL_20
     {
       "level_20",
-      "Level 20 Reached",
-      "Reached level 20",
+      "Уровень 20",
+      "Достигнут 20 уровень",
       ":/icons/achievement_level_20.png",
       1000,
       "level"
     };
 
-    inline constexpr Achievement LEVEL_30
+    inline const Achievement LEVEL_30
     {
       "level_30",
-      "Level 30 Reached",
-      "Reached level 30",
+      "Уровень 30",
+      "Достигнут 30 уровень",
       ":/icons/achievement_level_30.png",
       2000,
       "level"
     };
 
-    inline constexpr Achievement LEVEL_50
+    inline const Achievement LEVEL_50
     {
       "level_50",
-      "Level 50 Reached",
-      "Reached level 50 (maximum)",
+      "Максимальный уровень",
+      "Достигнут 50 уровень (максимум)",
       ":/icons/achievement_level_50.png",
       5000,
       "level"
     };
 
-    inline constexpr Achievement TASKS_10
+    inline const Achievement TASKS_10
     {
       "tasks_10",
-      "Task Completion 10",
-      "Completed 10 tasks",
+      "Выполнено 10 задач",
+      "Успешно завершено 10 учебных задач",
       ":/icons/achievement_tasks_10.png",
       100,
       "task"
     };
 
-    inline constexpr Achievement TASKS_50
+    inline const Achievement TASKS_50
     {
       "tasks_50",
-      "Task Completion 50",
-      "Completed 50 tasks",
+      "Выполнено 50 задач",
+      "Успешно завершено 50 учебных задач",
       ":/icons/achievement_tasks_50.png",
       300,
       "task"
     };
 
-    inline constexpr Achievement TASKS_100
+   inline const Achievement TASKS_100
     {
       "tasks_100",
-      "Task Completion 100",
-      "Completed 100 tasks",
+      "Выполнено 100 задач",
+      "Успешно завершено 100 учебных задач",
       ":/icons/achievement_tasks_100.png",
       750,
       "task"
     };
 
-    inline constexpr Achievement TASKS_250
+    inline const Achievement TASKS_250
     {
       "tasks_250",
-      "Task Completion 250",
-      "Completed 250 tasks",
+      "Выполнено 250 задач",
+      "Успешно завершено 250 учебных задач",
       ":/icons/achievement_tasks_250.png",
       2000,
       "task"
     };
 
-    inline constexpr Achievement ON_TIME_5
+
+    inline const Achievement ON_TIME_5
     {
       "on_time_5",
-      "Punctuality 5",
-      "Completed 5 tasks on time",
+      "Пунктуальность: 5",
+      "Выполнено 5 задач точно в срок",
       ":/icons/achievement_on_time_5.png",
       100,
       "task"
     };
 
-    inline constexpr Achievement ON_TIME_20
+    inline const Achievement ON_TIME_20
     {
       "on_time_20",
-      "Punctuality 20",
-      "Completed 20 tasks on time",
+      "Пунктуальность: 20",
+       "Выполнено 20 задач точно в срок",
       ":/icons/achievement_on_time_20.png",
       300,
       "task"
     };
 
-    inline constexpr Achievement ON_TIME_50
+    inline const Achievement ON_TIME_50
     {
       "on_time_50",
-      "Punctuality 50",
-      "Completed 50 tasks on time",
+      "Пунктуальность: 50",
+      "Выполнено 50 задач точно в срок",
       ":/icons/achievement_on_time_50.png",
       750,
       "task"
     };
 
-    inline constexpr Achievement HARD_10
+
+    inline const Achievement HARD_10
     {
       "hard_10",
-      "Hard Tasks 10",
-      "Completed 10 hard priority tasks",
+      "Сложные задачи: 10",
+      "Выполнено 10 задач с высоким приоритетом",
       ":/icons/achievement_hard_10.png",
       200,
       "task"
     };
 
-    inline constexpr Achievement HARD_50
+    inline const Achievement HARD_50
     {
       "hard_50",
-      "Hard Tasks 50",
-      "Completed 50 hard priority tasks",
+      "Сложные задачи: 50",
+      "Выполнено 50 задач с высоким приоритетом",
       ":/icons/achievement_hard_50.png",
       500,
       "task"
     };
 
-    inline constexpr Achievement MEDIUM_30
+    inline const Achievement MEDIUM_30
     {
       "medium_30",
-      "Medium Tasks 30",
-      "Completed 30 medium priority tasks",
+      "Средние задачи: 30",
+      "Выполнено 30 задач со средним приоритетом",
       ":/icons/achievement_medium_30.png",
       300,
       "task"
     };
 
-    inline constexpr Achievement LOW_50
+    inline const Achievement LOW_50
     {
       "low_50",
-      "Low Tasks 50",
-      "Completed 50 low priority tasks",
+      "Легкие задачи: 50",
+      "Выполнено 50 задач с низким приоритетом",
       ":/icons/achievement_low_50.png",
       250,
       "task"
     };
 
-    inline constexpr Achievement BALANCED_ALL
+    inline const Achievement BALANCED_ALL
     {
       "balanced_all",
-      "Balanced Master",
-      "Completed 10 tasks of each priority",
+      "Мастер баланса",
+      "Выполнено по 10 задач каждого приоритета",
       ":/icons/achievement_balanced.png",
       250,
       "task"
     };
 
-    inline constexpr Achievement PERFECT_DAY_1
+    inline const Achievement PERFECT_DAY_1
     {
       "perfect_day_1",
-      "Perfect Day 1",
-      "Completed all tasks for 1 day",
+      "Идеальный день",
+      "Выполнены все задачи за 1 день",
       ":/icons/achievement_perfect_day_1.png",
       100,
       "special"
     };
 
-    inline constexpr Achievement PERFECT_DAY_7
+    inline const Achievement PERFECT_DAY_7
     {
       "perfect_day_7",
-      "Perfect Days 7",
-      "Completed all tasks for 7 days",
+      "Неделя продуктивности",
+      "Выполнены все задачи за 7 дней подряд",
       ":/icons/achievement_perfect_day_7.png",
       300,
       "special"
     };
 
-    inline constexpr Achievement PERFECT_DAY_30
+    inline const Achievement PERFECT_DAY_30
     {
       "perfect_day_30",
-      "Perfect Days 30",
-      "Completed all tasks for 30 days",
+      "Месяц продуктивности",
+      "Выполнены все задачи за 30 дней подряд",
       ":/icons/achievement_perfect_day_30.png",
       1000,
       "special"
     };
 
-    inline constexpr Achievement STREAK_7
+    inline const Achievement STREAK_7
     {
       "streak_7",
-      "Active Streak 7",
-      "Active for 7 consecutive days",
+      "Серия: 7 дней",
+      "Активность в приложении 7 дней подряд",
       ":/icons/achievement_streak_7.png",
       150,
       "special"
     };
 
-    inline constexpr Achievement STREAK_30
+    inline const Achievement STREAK_30
     {
       "streak_30",
-      "Active Streak 30",
-      "Active for 30 consecutive days",
+      "Серия: 30 дней",
+      "Активность в приложении 30 дней подряд",
       ":/icons/achievement_streak_30.png",
       500,
       "special"
     };
 
-    inline constexpr Achievement STREAK_100
+    inline const Achievement STREAK_100
     {
       "streak_100",
-      "Active Streak 100",
-      "Active for 100 consecutive days",
+      "Серия: 100 дней",
+      "Активность в приложении 100 дней подряд",
       ":/icons/achievement_streak_100.png",
       2000,
       "special"
     };
 
-    inline constexpr Achievement COMBO_NIGHTMARE
+    inline const Achievement COMBO_NIGHTMARE
     {
       "combo_nightmare",
-      "Combo Nightmare",
-      "Completed 3 hard tasks in one day",
+      "Кошмарное комбо",
+      "Выполнено 3 сложных задачи за один день",
       ":/icons/achievement_nightmare.png",
       200,
       "special"
     };
 
-    inline constexpr Achievement COMBO_MARATHON
+    inline const Achievement COMBO_MARATHON
     {
       "combo_marathon",
-      "Combo Marathon",
-      "Completed 15+ tasks in one day",
+      "Марафон",
+      "Выполнено 15 и более задач за один день",
       ":/icons/achievement_marathon.png",
       300,
       "special"
     };
 
-    inline constexpr Achievement LOCATION_5
+
+    inline const Achievement LOCATION_5
     {
-      "location_5",
-      "Locations 5",
-      "Unlocked 5 locations",
-      ":/icons/achievement_location_5.png",
-      200,
-      "special"
+        "location_5",
+        "Локации: 5",
+        "Открыто 5 локаций кампуса",
+        ":/icons/achievement_location_5.png",
+        200,
+        "special"
     };
 
-    inline constexpr Achievement LOCATION_10
+    inline const Achievement LOCATION_10
     {
       "location_10",
-      "Locations 10",
-      "Unlocked 10 locations",
+      "Локации: 10",
+      "Открыто 10 локаций кампуса",
       ":/icons/achievement_location_10.png",
       500,
       "special"
     };
 
-    inline constexpr Achievement LOCATION_ALL
+    inline const Achievement LOCATION_ALL
     {
       "location_all",
-      "Locations Master",
-      "Unlocked all locations",
+      "Исследователь кампуса",
+      "Открыты все доступные локации",
       ":/icons/achievement_location_all.png",
       1500,
       "special"
     };
 
-    inline constexpr Achievement DELETE_5
+    inline const Achievement DELETE_5
     {
       "delete_5",
-      "Deletions 5",
-      "Deleted 5 tasks",
+      "Удалено 5 задач",
+      "Удалено 5 ненужных задач",
       ":/icons/achievement_delete_5.png",
       50,
       "special"
     };
 
-    inline constexpr Achievement DELETE_20
+    inline const Achievement DELETE_20
     {
       "delete_20",
-      "Deletions 20",
-      "Deleted 20 tasks",
+      "Удалено 20 задач",
+      "Удалено 20 ненужных задач",
       ":/icons/achievement_delete_20.png",
       150,
       "special"
     };
 
-    inline constexpr Achievement DELETE_100
+    inline const Achievement DELETE_100
     {
       "delete_100",
-      "Deletions 100",
-      "Deleted 100 tasks",
+      "Удалено 100 задач",
+      "Удалено 100 ненужных задач",
       ":/icons/achievement_delete_100.png",
       500,
       "special"
@@ -402,4 +404,3 @@ namespace storage
 }
 
 #endif
-

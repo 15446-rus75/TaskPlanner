@@ -1,4 +1,5 @@
 #include "taskplannerview.hpp"
+
 #include <QCalendarWidget>
 #include <QCheckBox>
 #include <QComboBox>
@@ -21,14 +22,49 @@ view::TaskPlannerView::TaskPlannerView(QWidget *parent):
     m_isFormReadOnly(false)
 {
   ui->setupUi(this);
+
+  // ИСПРАВЛЕНИЕ ТЁМНОЙ ТЕМЫ WINDOWS: применяем стиль к форме задачи
+  ui->frameTaskForm->setAttribute(Qt::WA_StyledBackground, true);
+  ui->frameTaskForm->setStyleSheet(
+      "QFrame#frameTaskForm { background-color: #ffffff; border: 1px solid #c5cae9; border-radius: 8px; }"
+      "QFrame#frameTaskForm QLabel { color: #212121; background-color: transparent; }"
+      "QFrame#frameTaskForm QLineEdit,"
+      "QFrame#frameTaskForm QTextEdit,"
+      "QFrame#frameTaskForm QDateTimeEdit,"
+      "QFrame#frameTaskForm QComboBox {"
+      "  background-color: #ffffff; color: #000000;"
+      "  border: 1px solid #c5cae9; border-radius: 4px; padding: 4px 8px;"
+      "}"
+      "QFrame#frameTaskForm QLineEdit:focus,"
+      "QFrame#frameTaskForm QTextEdit:focus,"
+      "QFrame#frameTaskForm QDateTimeEdit:focus {"
+      "  border: 2px solid #3f51b5;"
+      "}"
+      "QFrame#frameTaskForm QPushButton {"
+      "  background-color: #ffffff; color: #212121;"
+      "  border: 1px solid #c5cae9; border-radius: 6px; padding: 6px 12px;"
+      "  font-weight: bold;"
+      "}"
+      "QFrame#frameTaskForm QPushButton:hover {"
+      "  background-color: #f5f5f5;"
+      "}"
+      "QFrame#frameTaskForm QPushButton:pressed {"
+      "  background-color: #e8eaf6;"
+      "}");
+
   connectSignals();
   setupFilterLogic();
   setupGamification();
   ui->frameTaskForm->setVisible(false);
+
   m_statusTimer->setSingleShot(true);
   QObject::connect(m_statusTimer, &QTimer::timeout, this,
                    &TaskPlannerView::clearStatusMessage);
-  QTimer::singleShot(0, [this](){ emit viewReady(); });
+
+  QTimer::singleShot(0, [this]()
+                     {
+                       emit viewReady();
+                     });
 }
 
 void view::TaskPlannerView::setupGamification()
@@ -45,28 +81,39 @@ void view::TaskPlannerView::setupGamification()
       ui->achievement4
   });
 
-  QObject::connect(m_gamificationView, &GamificationView::achievementsRequested, this, &TaskPlannerView::onGamificationAchievementsRequested);
-  QObject::connect(m_gamificationView, &GamificationView::mapRequested, this, &TaskPlannerView::onGamificationMapRequested);
-  QObject::connect(ui->groupBoxAchievements, &QGroupBox::clicked, this, &TaskPlannerView::onGroupBoxAchievementsClicked);
+  QObject::connect(m_gamificationView, &GamificationView::achievementsRequested,
+                   this, &TaskPlannerView::onGamificationAchievementsRequested);
+  QObject::connect(m_gamificationView, &GamificationView::mapRequested,
+                   this, &TaskPlannerView::onGamificationMapRequested);
+
+  // ИСПРАВЛЕНО: подключаем сигнал от кнопки "Все достижения" вместо QGroupBox
+  QObject::connect(ui->btnViewAchievements, &QPushButton::clicked,
+                   this, &TaskPlannerView::onGamificationAchievementsRequested);
 }
 
 void view::TaskPlannerView::showTaskList(const QList< storage::Task > &tasks)
 {
   ui->listWidgetTasks->clear();
+
   for (const storage::Task &task: tasks)
   {
     QString line = "[" + QString::number(task.id) + "] ";
     line += task.name;
+
     if (!task.discipline.trimmed().isEmpty())
     {
       line += " | 📚 " + task.discipline;
     }
+
     line += " | " + task.deadline.toString("dd.MM.yyyy HH:mm");
+
     if (task.priority != storage::Priority::All)
     {
       line += " | Priority: " + QString::number(static_cast< int >(task.priority));
     }
+
     line += task.completed ? " | ✅" : " | ⬜";
+
     auto *item = new QListWidgetItem(line, ui->listWidgetTasks);
     item->setData(Qt::UserRole, task.id);
   }
@@ -88,9 +135,10 @@ void view::TaskPlannerView::showTaskCreationForm()
   clearFormFields();
   setFormReadOnly(false);
   m_currentTaskId = -1;
+
   ui->frameTaskForm->setVisible(true);
   ui->btnFormSave->setVisible(true);
-  ui->btnFormCancel->setText("Отмена");
+  ui->btnFormCancel->setText("❌ Отмена");
 }
 
 void view::TaskPlannerView::showTaskCreationForm(const storage::Task &task)
@@ -98,9 +146,10 @@ void view::TaskPlannerView::showTaskCreationForm(const storage::Task &task)
   taskToForm(task);
   setFormReadOnly(false);
   m_currentTaskId = task.id;
+
   ui->frameTaskForm->setVisible(true);
   ui->btnFormSave->setVisible(true);
-  ui->btnFormCancel->setText("Отмена");
+  ui->btnFormCancel->setText("❌ Отмена");
 }
 
 void view::TaskPlannerView::showTaskDetails(const storage::Task &task)
@@ -108,6 +157,7 @@ void view::TaskPlannerView::showTaskDetails(const storage::Task &task)
   taskToForm(task);
   setFormReadOnly(true);
   m_currentTaskId = task.id;
+
   ui->frameTaskForm->setVisible(true);
   ui->btnFormSave->setVisible(false);
   ui->btnFormCancel->setText("Закрыть");
@@ -166,9 +216,9 @@ void view::TaskPlannerView::showAchievementUnlocked(const storage::Achievement &
   m_gamificationView->showAchievementUnlocked(achievement);
 }
 
-void view::TaskPlannerView::showAchievementsList(const QList< storage::Achievement > &achievements)
+void view::TaskPlannerView::showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds)
 {
-  m_gamificationView->showAchievementsList(achievements);
+  m_gamificationView->showAchievementsList(achievements, unlockedAchievementIds);
 }
 
 void view::TaskPlannerView::showCampusMap(const QList< QString > &unlockedLocations)
@@ -188,16 +238,7 @@ void view::TaskPlannerView::showLevelUpAnimation(int newLevel, const QString &ne
 
 void view::TaskPlannerView::updateGamificationPanel()
 {
-  // TODO: Реализовать обновление панели геймификации
-  // Этот метод будет вызываться контроллером для обновления всей панели
-}
-
-void view::TaskPlannerView::onGroupBoxAchievementsClicked(bool checked)
-{
-  if (checked)
-  {
-    emit achievementsRequested();
-  }
+  // Панель обновляется через отдельные вызовы showUserLevel, showStreak и т.д.
 }
 
 void view::TaskPlannerView::clearStatusMessage()
@@ -218,11 +259,13 @@ void view::TaskPlannerView::onSearchTextChanged(const QString &text)
 void view::TaskPlannerView::onFilterStateChanged(Qt::CheckState state)
 {
   Q_UNUSED(state)
+
   QCheckBox *clickedCheckBox = qobject_cast< QCheckBox * >(sender());
   if (!clickedCheckBox)
   {
     return;
   }
+
   if (clickedCheckBox->isChecked())
   {
     if (clickedCheckBox == ui->checkBoxAll)
@@ -308,12 +351,14 @@ void view::TaskPlannerView::onSortClicked()
   {
     m_currentSortCriterion = storage::Criterion::Date;
   }
+
   emit sortRequested(m_currentSortCriterion);
 }
 
 void view::TaskPlannerView::onFormSaveClicked()
 {
   storage::Task task = formToTask();
+
   if (m_currentTaskId == -1)
   {
     emit taskAddRequested(task);
@@ -323,6 +368,7 @@ void view::TaskPlannerView::onFormSaveClicked()
     task.id = m_currentTaskId;
     emit taskUpdateRequested(task);
   }
+
   closeTaskCreationForm();
 }
 
@@ -343,36 +389,58 @@ void view::TaskPlannerView::onGamificationMapRequested()
 
 void view::TaskPlannerView::connectSignals()
 {
-  QObject::connect(ui->calendarWidget, &QCalendarWidget::clicked, this, &TaskPlannerView::onCalendarClicked);
-  QObject::connect(ui->lineEditSearch, &QLineEdit::textChanged, this, &TaskPlannerView::onSearchTextChanged);
-  QObject::connect(ui->checkBoxAll, &QCheckBox::checkStateChanged, this, &TaskPlannerView::onFilterStateChanged);
-  QObject::connect(ui->checkBoxToday, &QCheckBox::checkStateChanged, this, &TaskPlannerView::onFilterStateChanged);
-  QObject::connect(ui->checkBoxOverdue, &QCheckBox::checkStateChanged, this, &TaskPlannerView::onFilterStateChanged);
-  QObject::connect(ui->comboBoxPriority, QOverload< int >::of(&QComboBox::currentIndexChanged), this, &TaskPlannerView::onPriorityIndexChanged);
-  QObject::connect(ui->btnAdd, &QPushButton::clicked, this, &TaskPlannerView::onAddClicked);
-  QObject::connect(ui->btnEdit, &QPushButton::clicked, this, &TaskPlannerView::onEditClicked);
-  QObject::connect(ui->btnDelete, &QPushButton::clicked, this, &TaskPlannerView::onDeleteClicked);
-  QObject::connect(ui->btnMarkComplete, &QPushButton::clicked, this, &TaskPlannerView::onMarkCompleteClicked);
-  QObject::connect(ui->btnSort, &QPushButton::clicked, this, &TaskPlannerView::onSortClicked);
-  QObject::connect(ui->btnFormSave, &QPushButton::clicked, this, &TaskPlannerView::onFormSaveClicked);
-  QObject::connect(ui->btnFormCancel, &QPushButton::clicked, this, &TaskPlannerView::onFormCancelClicked);
-  QObject::connect(ui->listWidgetTasks, &QListWidget::itemDoubleClicked, this,
-                   [this](QListWidgetItem *item){
+  QObject::connect(ui->calendarWidget, &QCalendarWidget::clicked,
+                   this, &TaskPlannerView::onCalendarClicked);
+  QObject::connect(ui->lineEditSearch, &QLineEdit::textChanged,
+                   this, &TaskPlannerView::onSearchTextChanged);
+
+  QObject::connect(ui->checkBoxAll, &QCheckBox::checkStateChanged,
+                   this, &TaskPlannerView::onFilterStateChanged);
+  QObject::connect(ui->checkBoxToday, &QCheckBox::checkStateChanged,
+                   this, &TaskPlannerView::onFilterStateChanged);
+  QObject::connect(ui->checkBoxOverdue, &QCheckBox::checkStateChanged,
+                   this, &TaskPlannerView::onFilterStateChanged);
+
+  QObject::connect(ui->comboBoxPriority, QOverload< int >::of(&QComboBox::currentIndexChanged),
+                   this, &TaskPlannerView::onPriorityIndexChanged);
+
+  QObject::connect(ui->btnAdd, &QPushButton::clicked,
+                   this, &TaskPlannerView::onAddClicked);
+  QObject::connect(ui->btnEdit, &QPushButton::clicked,
+                   this, &TaskPlannerView::onEditClicked);
+  QObject::connect(ui->btnDelete, &QPushButton::clicked,
+                   this, &TaskPlannerView::onDeleteClicked);
+  QObject::connect(ui->btnMarkComplete, &QPushButton::clicked,
+                   this, &TaskPlannerView::onMarkCompleteClicked);
+  QObject::connect(ui->btnSort, &QPushButton::clicked,
+                   this, &TaskPlannerView::onSortClicked);
+
+  QObject::connect(ui->btnFormSave, &QPushButton::clicked,
+                   this, &TaskPlannerView::onFormSaveClicked);
+  QObject::connect(ui->btnFormCancel, &QPushButton::clicked,
+                   this, &TaskPlannerView::onFormCancelClicked);
+
+  QObject::connect(ui->listWidgetTasks, &QListWidget::itemDoubleClicked,
+                   this, [this](QListWidgetItem *item)
+                   {
                      if (item)
                      {
                        const int taskId = item->data(Qt::UserRole).toInt();
                        emit taskViewRequested(taskId);
                      }
                    });
+  QObject::connect(ui->btnViewAchievements, &QPushButton::clicked,
+                   this, &TaskPlannerView::onGamificationAchievementsRequested);
 }
 
 void view::TaskPlannerView::setupFilterLogic()
 {
   ui->comboBoxPriority->clear();
-  ui->comboBoxPriority->addItem("Приоритет: Все", static_cast< int >(storage::Priority::All));
-  ui->comboBoxPriority->addItem("🟢 Низкий", static_cast< int >(storage::Priority::Low));
-  ui->comboBoxPriority->addItem("🟡 Средний", static_cast< int >(storage::Priority::Medium));
+  ui->comboBoxPriority->addItem("🎯 Приоритет: Все", static_cast< int >(storage::Priority::All));
   ui->comboBoxPriority->addItem("🔴 Высокий", static_cast< int >(storage::Priority::Hard));
+  ui->comboBoxPriority->addItem("🟡 Средний", static_cast< int >(storage::Priority::Medium));
+  ui->comboBoxPriority->addItem("🟢 Низкий", static_cast< int >(storage::Priority::Low));
+
   ui->comboBoxFormPriority->clear();
   ui->comboBoxFormPriority->addItem("🟢 Низкий");
   ui->comboBoxFormPriority->addItem("🟡 Средний");
@@ -388,11 +456,13 @@ storage::Task view::TaskPlannerView::formToTask() const
   task.deadline = ui->dateTimeFormDeadline->dateTime();
   task.priority = indexToPriority(ui->comboBoxFormPriority->currentIndex());
   task.completed = false;
+
   const QStringList rawTags = ui->lineEditFormTags->text().split(",", Qt::SkipEmptyParts);
   for (const QString &tag: rawTags)
   {
     task.tags.append(tag.trimmed());
   }
+
   const QString rawLinks = ui->lineEditFormLinks->text();
   if (!rawLinks.isEmpty())
   {
@@ -402,6 +472,7 @@ storage::Task view::TaskPlannerView::formToTask() const
       task.tags.append("link:" + link.trimmed());
     }
   }
+
   return task;
 }
 
@@ -412,6 +483,7 @@ void view::TaskPlannerView::taskToForm(const storage::Task &task)
   ui->lineEditFormDiscipline->setText(task.discipline);
   ui->dateTimeFormDeadline->setDateTime(task.deadline);
   ui->comboBoxFormPriority->setCurrentIndex(priorityToIndex(task.priority));
+
   QString tagsStr;
   for (const QString &tag: task.tags)
   {
@@ -421,6 +493,7 @@ void view::TaskPlannerView::taskToForm(const storage::Task &task)
     }
   }
   ui->lineEditFormTags->setText(tagsStr);
+
   QString linksStr;
   for (const QString &tag: task.tags)
   {
@@ -484,30 +557,31 @@ storage::Priority view::TaskPlannerView::indexToPriority(int index) const
 
 int view::TaskPlannerView::priorityToIndex(storage::Priority priority) const
 {
-  switch (priority)
-  {
-  case storage::Priority::All:
-  {
-    return 0;
-  }
-  case storage::Priority::Low:
-  {
-    return 1;
-  }
-  case storage::Priority::Medium:
-  {
-    return 2;
-  }
-  case storage::Priority::Hard:
-  {
-    return 3;
-  }
-  default:
-  {
-    return 0;
-  }
+    switch (priority)
+    {
+    case storage::Priority::All:
+    {
+      return 0;
+    }
+    case storage::Priority::Low:
+    {
+      return 1;
+    }
+    case storage::Priority::Medium:
+    {
+      return 2;
+    }
+    case storage::Priority::Hard:
+    {
+      return 3;
+    }
+    default:
+    {
+      return 0;
+    }
   }
 }
+
 
 int view::TaskPlannerView::getSelectedTaskId() const
 {
@@ -517,4 +591,46 @@ int view::TaskPlannerView::getSelectedTaskId() const
     return -1;
   }
   return item->data(Qt::UserRole).toInt();
+}
+
+void view::TaskPlannerView::updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements)
+{
+  const QList< QLabel* > achievementLabels = {
+      ui->achievement1,
+      ui->achievement2,
+      ui->achievement3,
+      ui->achievement4
+  };
+
+  for (QLabel *label : achievementLabels)
+  {
+    if (label)
+    {
+      label->setText("🔒 ???");
+      label->setStyleSheet("background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;");
+      label->setToolTip("");
+    }
+  }
+
+  if (unlockedAchievements.isEmpty())
+  {
+    return;
+  }
+
+
+  QList< storage::Achievement > reversedAchievements = unlockedAchievements;
+  std::reverse(reversedAchievements.begin(), reversedAchievements.end());
+
+  const int slotsCount = qMin(4, reversedAchievements.size());
+  for (int i = 0; i < slotsCount; ++i)
+  {
+    if (achievementLabels[i])
+    {
+      const storage::Achievement &achievement = reversedAchievements[i];
+      achievementLabels[i]->setText("🏆 " + achievement.name);
+      achievementLabels[i]->setStyleSheet(
+          "background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px; color: #3f51b5; font-weight: bold;");
+      achievementLabels[i]->setToolTip(achievement.description);
+    }
+  }
 }
