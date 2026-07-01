@@ -6,16 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>800</height>
+    <width>1024</width>
+    <height>768</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>1024</width>
+    <height>768</height>
+   </size>
+  </property>
   <property name="windowTitle">
-   <string>Планировщик учебных задач</string>
+   <string>📅 Планировщик учебных задач</string>
   </property>
   <property name="styleSheet">
    <string notr="true">
-/* Глобальные стили */
 QMainWindow {
     background-color: #e8eaf6;
 }
@@ -23,19 +28,18 @@ QMainWindow {
 QWidget {
     color: #212121;
     font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 13px;
+    font-size: 12px;
 }
 
-/* Кнопки - ЕДИНЫЙ СТИЛЬ */
 QPushButton {
     background-color: #ffffff;
     color: #212121;
     border: 1px solid #c5cae9;
-    border-radius: 8px;
-    padding: 8px 16px;
+    border-radius: 6px;
+    padding: 6px 12px;
     font-weight: bold;
-    min-height: 36px;
-    font-size: 13px;
+    min-height: 32px;
+    font-size: 12px;
 }
 QPushButton:hover {
     background-color: #f5f5f5;
@@ -46,14 +50,13 @@ QPushButton:pressed {
     border-color: #3f51b5;
 }
 
-/* Поля ввода */
 QLineEdit {
     background-color: #ffffff;
     color: #000000;
     border: 1px solid #c5cae9;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 13px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
 }
 QLineEdit:focus {
     border: 2px solid #3f51b5;
@@ -62,31 +65,30 @@ QLineEdit:focus {
 QTextEdit {
     background-color: #ffffff;
     color: #000000;
-    border: 2px solid #9fa8da;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 13px;
+    border: 1px solid #9fa8da;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
 }
 QTextEdit:focus {
     border: 2px solid #3f51b5;
 }
 
-/* ComboBox */
 QComboBox {
     background-color: #ffffff;
     color: #000000;
     border: 1px solid #c5cae9;
-    border-radius: 6px;
-    padding: 6px 10px;
-    min-width: 100px;
-    font-size: 13px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    min-width: 80px;
+    font-size: 12px;
 }
 QComboBox:hover {
     border: 1px solid #9fa8da;
 }
 QComboBox::drop-down {
     border: none;
-    width: 20px;
+    width: 16px;
 }
 QComboBox QAbstractItemView {
     background-color: #ffffff;
@@ -95,15 +97,14 @@ QComboBox QAbstractItemView {
     border: 1px solid #c5cae9;
 }
 
-/* CheckBox */
 QCheckBox {
     color: #000000;
-    spacing: 8px;
-    font-size: 13px;
+    spacing: 6px;
+    font-size: 12px;
 }
 QCheckBox::indicator {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     border: 2px solid #9fa8da;
     border-radius: 3px;
     background-color: #ffffff;
@@ -113,23 +114,21 @@ QCheckBox::indicator:checked {
     border-color: #3f51b5;
 }
 
-/* Label */
 QLabel {
     color: #000000;
     background-color: transparent;
-    font-size: 13px;
+    font-size: 12px;
 }
 
-/* Calendar - исправленная навигация и заголовки */
 QCalendarWidget {
     background-color: #ffffff;
     border: 1px solid #c5cae9;
-    border-radius: 8px;
+    border-radius: 6px;
 }
 QCalendarWidget QWidget#qt_calendar_navigationbar {
     background-color: #3f51b5;
-    border-top-left-radius: 7px;
-    border-top-right-radius: 7px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 QCalendarWidget QToolButton {
     background-color: transparent;
@@ -138,7 +137,7 @@ QCalendarWidget QToolButton {
     border-radius: 4px;
     padding: 4px 8px;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 12px;
 }
 QCalendarWidget QToolButton:hover {
     background-color: rgba(255,255,255,0.2);
@@ -172,19 +171,18 @@ QCalendarWidget QTableView {
     selection-color: #1a237e;
 }
 
-/* Список задач - УЛУЧШЕННЫЕ КАРТОЧКИ */
 QListWidget {
     background-color: #f5f5f5;
     border: 1px solid #c5cae9;
-    border-radius: 8px;
-    padding: 8px;
+    border-radius: 6px;
+    padding: 6px;
 }
 QListWidget::item {
     background-color: #ffffff;
     border: 1px solid #c5cae9;
-    border-radius: 6px;
-    padding: 10px 12px;
-    margin: 4px 0;
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin: 3px 0;
 }
 QListWidget::item:hover {
     background-color: #f8f9fa;
@@ -196,499 +194,520 @@ QListWidget::item:selected {
     color: #1a237e;
 }
 
-/* GroupBox */
 QGroupBox {
     border: 1px solid #c5cae9;
-    border-radius: 8px;
-    margin-top: 12px;
-    padding-top: 12px;
+    border-radius: 6px;
+    margin-top: 10px;
+    padding-top: 10px;
     background-color: #ffffff;
     font-weight: bold;
     color: #3f51b5;
 }
 QGroupBox::title {
     subcontrol-origin: margin;
-    left: 12px;
+    left: 10px;
     padding: 0 6px;
     color: #3f51b5;
 }
 
-/* Статус */
 QLabel#labelStatus {
-    padding: 8px;
-    border-radius: 6px;
+    padding: 6px;
+    border-radius: 4px;
     font-weight: bold;
 }
 
-/* ScrollBar */
 QScrollBar:vertical {
     background-color: #f5f5f5;
-    width: 10px;
-    border-radius: 5px;
+    width: 8px;
+    border-radius: 4px;
 }
 QScrollBar::handle:vertical {
     background-color: #bdbdbd;
-    border-radius: 5px;
+    border-radius: 4px;
     min-height: 20px;
 }
 QScrollBar::handle:vertical:hover {
     background-color: #9e9e9e;
 }
 
-/* DateTimeEdit */
 QDateTimeEdit {
     background-color: #ffffff;
     color: #000000;
     border: 1px solid #c5cae9;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-size: 13px;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
 }
 QDateTimeEdit::drop-down {
     border: none;
-    width: 20px;
+    width: 16px;
 }
 QDateTimeEdit::down-arrow {
     image: none;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #3f51b5;
-    margin-right: 10px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid #3f51b5;
+    margin-right: 8px;
+}
+
+/* Стили для формы создания задачи */
+QFrame#frameTaskForm,
+QFrame#frameTaskForm QLineEdit,
+QFrame#frameTaskForm QTextEdit,
+QFrame#frameTaskForm QDateTimeEdit,
+QFrame#frameTaskForm QComboBox {
+    background-color: #ffffff;
+    color: #000000;
+}
+QFrame#frameTaskForm QLabel {
+    color: #212121;
 }
    </string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayoutMain">
     <property name="spacing">
-     <number>12</number>
+     <number>10</number>
     </property>
     <property name="leftMargin">
-     <number>16</number>
+     <number>12</number>
     </property>
     <property name="topMargin">
-     <number>16</number>
+     <number>12</number>
     </property>
     <property name="rightMargin">
-     <number>16</number>
+     <number>12</number>
     </property>
     <property name="bottomMargin">
-     <number>16</number>
+     <number>12</number>
     </property>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayoutTop" stretch="1,3">
+     <layout class="QHBoxLayout" name="horizontalLayoutTop" stretch="1,2">
       <property name="spacing">
-       <number>16</number>
+       <number>12</number>
       </property>
       <item>
-  <layout class="QVBoxLayout" name="verticalLayoutLeft">
-    <property name="spacing">
-      <number>12</number>
-    </property>
-    <item>
-      <widget class="QFrame" name="frameProfile">
-        <property name="minimumSize">
-          <size>
-            <width>0</width>
-            <height>90</height>
-          </size>
-        </property>
-        <property name="styleSheet">
-          <string notr="true">QFrame#frameProfile { background-color: #ffffff; border-radius: 10px; padding: 8px; }</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayoutProfile">
-          <property name="spacing">
-            <number>12</number>
-          </property>
-          <item>
-            <widget class="QLabel" name="labelAvatar">
-              <property name="text">
-                <string>🧑</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>28</pointsize>
-                </font>
-              </property>
-              <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <layout class="QVBoxLayout" name="verticalLayoutProfileInfo">
-              <item>
-                <widget class="QLabel" name="labelUserName">
-                  <property name="text">
-                    <string>Имя пользователя</string>
-                  </property>
-                  <property name="font">
-                    <font>
-                      <pointsize>14</pointsize>
-                      <bold>true</bold>
-                    </font>
-                  </property>
-                  <property name="styleSheet">
-                    <string notr="true">color: #1a237e;</string>
-                  </property>
-                </widget>
-              </item>
-              <item>
-                <widget class="QLabel" name="labelUserRank">
-                  <property name="text">
-                    <string>🏅 Начинающий</string>
-                  </property>
-                  <property name="font">
-                    <font>
-                      <pointsize>11</pointsize>
-                    </font>
-                  </property>
-                  <property name="styleSheet">
-                    <string notr="true">color: #5c6bc0;</string>
-                  </property>
-                </widget>
-              </item>
-            </layout>
-          </item>
-          <item>
-            <spacer name="horizontalSpacerProfile">
-              <property name="orientation">
-                <enum>Qt::Orientation::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-                <size>
-                  <width>40</width>
-                  <height>20</height>
-                </size>
-              </property>
-            </spacer>
-          </item>
-          <item>
-            <widget class="QLabel" name="labelLevel">
-              <property name="text">
-                <string>Lv.1</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>18</pointsize>
-                  <bold>true</bold>
-                </font>
-              </property>
-              <property name="styleSheet">
-                <string notr="true">color: #3f51b5;</string>
-              </property>
-              <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignVCenter</set>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </widget>
-    </item>
-    <item>
-      <widget class="QFrame" name="frameProgress">
-        <property name="minimumSize">
-          <size>
-            <width>0</width>
-            <height>80</height>
-          </size>
-        </property>
-        <property name="styleSheet">
-          <string notr="true">QFrame#frameProgress { background-color: #ffffff; border-radius: 10px; padding: 8px 12px; }</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayoutProgress">
-          <property name="spacing">
-            <number>4</number>
-          </property>
-          <item>
-            <layout class="QHBoxLayout" name="horizontalLayoutExp">
-              <item>
-                <widget class="QLabel" name="labelExpText">
-                  <property name="text">
-                    <string>Опыт:</string>
-                  </property>
-                  <property name="font">
-                    <font>
-                      <bold>true</bold>
-                    </font>
-                  </property>
-                </widget>
-              </item>
-              <item>
-                <widget class="QLabel" name="labelExpValue">
-                  <property name="text">
-                    <string>0 / 100</string>
-                  </property>
-                  <property name="font">
-                    <font>
-                      <bold>true</bold>
-                    </font>
-                  </property>
-                  <property name="styleSheet">
-                    <string notr="true">color: #3f51b5;</string>
-                  </property>
-                </widget>
-              </item>
-              <item>
-                <spacer name="horizontalSpacerExp">
-                  <property name="orientation">
-                    <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                    <size>
-                      <width>40</width>
-                      <height>20</height>
-                    </size>
-                  </property>
-                </spacer>
-              </item>
-              <item>
-                <widget class="QLabel" name="labelStreak">
-                  <property name="text">
-                    <string>🔥 0 дней</string>
-                  </property>
-                  <property name="font">
-                    <font>
-                      <bold>true</bold>
-                      <pointsize>12</pointsize>
-                    </font>
-                  </property>
-                  <property name="styleSheet">
-                    <string notr="true">color: #e65100;</string>
-                  </property>
-                </widget>
-              </item>
-            </layout>
-          </item>
-          <item>
-            <widget class="QProgressBar" name="progressBarExp">
-              <property name="maximum">
-                <number>100</number>
-              </property>
-              <property name="value">
-                <number>0</number>
-              </property>
-              <property name="styleSheet">
-                <string notr="true">QProgressBar { border: none; border-radius: 5px; background-color: #e8eaf6; height: 12px; text-align: center; } QProgressBar::chunk { background-color: #3f51b5; border-radius: 5px; }</string>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </widget>
-    </item>
-    <item>
-      <widget class="QGroupBox" name="groupBoxAchievements">
-        <property name="title">
-          <string>🏆 Достижения</string>
-        </property>
-        <property name="minimumSize">
-          <size>
-            <width>0</width>
-            <height>120</height>
-          </size>
-        </property>
-        <property name="styleSheet">
-          <string notr="true">QGroupBox { background-color: #ffffff; border-radius: 10px; margin-top: 12px; padding-top: 12px; border: 1px solid #c5cae9; } QGroupBox::title { color: #3f51b5; left: 12px; padding: 0 6px; }</string>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayoutAchievements">
-          <property name="spacing">
-            <number>8</number>
-          </property>
-          <property name="leftMargin">
-            <number>8</number>
-          </property>
-          <property name="topMargin">
-            <number>8</number>
-          </property>
-          <property name="rightMargin">
-            <number>8</number>
-          </property>
-          <property name="bottomMargin">
-            <number>8</number>
-          </property>
-          <item>
-            <widget class="QLabel" name="achievement1">
-              <property name="text">
-                <string>🎯 Первая задача</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>10</pointsize>
-                </font>
-              </property>
-              <property name="styleSheet">
-                <string notr="true">background-color: #e8eaf6; border-radius: 12px; padding: 6px 10px;</string>
-              </property>
-              <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QLabel" name="achievement2">
-              <property name="text">
-                <string>🔥 Серия 7 дней</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>10</pointsize>
-                </font>
-              </property>
-              <property name="styleSheet">
-                <string notr="true">background-color: #e8eaf6; border-radius: 12px; padding: 6px 10px;</string>
-              </property>
-              <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QLabel" name="achievement3">
-              <property name="text">
-                <string>💪 10 задач выполнено</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>10</pointsize>
-                </font>
-              </property>
-              <property name="styleSheet">
-                <string notr="true">background-color: #e8eaf6; border-radius: 12px; padding: 6px 10px;</string>
-              </property>
-              <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QLabel" name="achievement4">
-              <property name="text">
-                <string>🏅 Уровень 5</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>10</pointsize>
-                </font>
-              </property>
-              <property name="styleSheet">
-                <string notr="true">background-color: #e8eaf6; border-radius: 12px; padding: 6px 10px;</string>
-              </property>
-              <property name="alignment">
-                <set>Qt::AlignmentFlag::AlignCenter</set>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </widget>
-    </item>
-    <item>
-      <widget class="QCalendarWidget" name="calendarWidget">
-        <property name="minimumSize">
-          <size>
-            <width>280</width>
-            <height>0</height>
-          </size>
-        </property>
-        <property name="maximumSize">
-          <size>
-            <width>320</width>
-            <height>16777215</height>
-          </size>
-        </property>
-      </widget>
-    </item>
-    <item>
-      <widget class="QGroupBox" name="groupBoxStats">
-        <property name="minimumSize">
-          <size>
-            <width>0</width>
-            <height>140</height>
-          </size>
-        </property>
-        <property name="title">
-          <string>📊 Статистика</string>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayoutStats">
-          <property name="spacing">
-            <number>12</number>
-          </property>
-          <item>
-            <widget class="QLabel" name="labelStatsTotal">
-              <property name="text">
-                <string>Всего задач: 0</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>11</pointsize>
-                  <bold>true</bold>
-                </font>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QLabel" name="labelStatsCompleted">
-              <property name="text">
-                <string>✅ Выполнено: 0</string>
-              </property>
-              <property name="styleSheet">
-                <string notr="true">color: #43a047;</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>11</pointsize>
-                  <bold>true</bold>
-                </font>
-              </property>
-            </widget>
-          </item>
-          <item>
-            <widget class="QLabel" name="labelStatsToday">
-              <property name="text">
-                <string>📌 На сегодня: 0</string>
-              </property>
-              <property name="styleSheet">
-                <string notr="true">color: #3f51b5;</string>
-              </property>
-              <property name="font">
-                <font>
-                  <pointsize>11</pointsize>
-                  <bold>true</bold>
-                </font>
-              </property>
-            </widget>
-          </item>
-        </layout>
-      </widget>
-    </item>
-  </layout>
-</item>
-<item>
-       <layout class="QVBoxLayout" name="verticalLayoutCenter" stretch="0,0,0,1,0">
+       <layout class="QVBoxLayout" name="verticalLayoutLeft">
         <property name="spacing">
          <number>10</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="frameProfile">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>70</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QFrame#frameProfile { background-color: #ffffff; border-radius: 8px; padding: 6px; }</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayoutProfile">
+           <property name="spacing">
+            <number>10</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="labelAvatar">
+             <property name="text">
+              <string>👤</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>24</pointsize>
+              </font>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayoutProfileInfo">
+             <item>
+              <widget class="QLabel" name="labelUserName">
+               <property name="text">
+                <string>Имя пользователя</string>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>12</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: #1a237e;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelUserRank">
+               <property name="text">
+                <string>🏅 Начинающий</string>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: #5c6bc0;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="horizontalSpacerProfile">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelLevel">
+             <property name="text">
+              <string>Lv.1</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>16</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: #3f51b5;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="frameProgress">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>60</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QFrame#frameProgress { background-color: #ffffff; border-radius: 8px; padding: 6px 10px; }</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayoutProgress">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayoutExp">
+             <item>
+              <widget class="QLabel" name="labelExpText">
+               <property name="text">
+                <string>Опыт:</string>
+               </property>
+               <property name="font">
+                <font>
+                 <bold>true</bold>
+                </font>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelExpValue">
+               <property name="text">
+                <string>0 / 100</string>
+               </property>
+               <property name="font">
+                <font>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: #3f51b5;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacerExp">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="labelStreak">
+               <property name="text">
+                <string>🔥 0 дней</string>
+               </property>
+               <property name="font">
+                <font>
+                 <bold>true</bold>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: #e65100;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QProgressBar" name="progressBarExp">
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QProgressBar { border: none; border-radius: 4px; background-color: #e8eaf6; height: 10px; text-align: center; } QProgressBar::chunk { background-color: #3f51b5; border-radius: 4px; }</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBoxAchievements">
+          <property name="title">
+           <string>🏆 Достижения</string>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QGroupBox { background-color: #ffffff; border-radius: 8px; margin-top: 10px; padding-top: 10px; border: 1px solid #c5cae9; } QGroupBox::title { color: #3f51b5; left: 10px; padding: 0 6px; }</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayoutAchievements">
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
+           </property>
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="achievement1">
+             <property name="text">
+              <string>🎯 Первая задача</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="toolTip">
+              <string>Выполните первую задачу</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="achievement2">
+             <property name="text">
+              <string>🔥 Серия 7 дней</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="toolTip">
+              <string>Выполняйте задачи 7 дней подряд</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="achievement3">
+             <property name="text">
+              <string>💪 10 задач</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="toolTip">
+              <string>Выполните 10 задач</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="achievement4">
+             <property name="text">
+              <string>🏅 Уровень 5</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>9</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="toolTip">
+              <string>Достигните 5 уровня</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCalendarWidget" name="calendarWidget">
+          <property name="minimumSize">
+           <size>
+            <width>240</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>280</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBoxStats">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>110</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>📊 Статистика</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayoutStats">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="labelStatsTotal">
+             <property name="text">
+              <string>Всего задач: 0</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelStatsCompleted">
+             <property name="text">
+              <string>✅ Выполнено: 0</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: #43a047;</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="labelStatsToday">
+             <property name="text">
+              <string>📌 На сегодня: 0</string>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: #3f51b5;</string>
+             </property>
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayoutCenter" stretch="0,0,0,1,0">
+        <property name="spacing">
+         <number>8</number>
         </property>
         <item>
          <widget class="QFrame" name="frameSearch">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>50</height>
+            <height>40</height>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: #ffffff; border-radius: 8px;</string>
+           <string notr="true">background-color: #ffffff; border-radius: 6px;</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayoutSearch">
            <property name="leftMargin">
-            <number>12</number>
+            <number>10</number>
            </property>
            <property name="topMargin">
-            <number>6</number>
+            <number>4</number>
            </property>
            <property name="rightMargin">
-            <number>12</number>
+            <number>10</number>
            </property>
            <property name="bottomMargin">
-            <number>6</number>
+            <number>4</number>
            </property>
            <item>
             <widget class="QLabel" name="labelSearchIcon">
@@ -697,7 +716,7 @@ QDateTimeEdit::down-arrow {
              </property>
              <property name="font">
               <font>
-               <pointsize>14</pointsize>
+               <pointsize>12</pointsize>
               </font>
              </property>
             </widget>
@@ -717,24 +736,24 @@ QDateTimeEdit::down-arrow {
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>45</height>
+            <height>36</height>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: #ffffff; border-radius: 8px;</string>
+           <string notr="true">background-color: #ffffff; border-radius: 6px;</string>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayoutFilters">
            <property name="leftMargin">
-            <number>12</number>
+            <number>10</number>
            </property>
            <property name="topMargin">
-            <number>6</number>
+            <number>4</number>
            </property>
            <property name="rightMargin">
-            <number>12</number>
+            <number>10</number>
            </property>
            <property name="bottomMargin">
-            <number>6</number>
+            <number>4</number>
            </property>
            <item>
             <widget class="QLabel" name="labelFilterTitle">
@@ -751,7 +770,7 @@ QDateTimeEdit::down-arrow {
            <item>
             <widget class="QCheckBox" name="checkBoxAll">
              <property name="text">
-              <string>Все</string>
+              <string>✅ Все</string>
              </property>
              <property name="checked">
               <bool>true</bool>
@@ -761,21 +780,21 @@ QDateTimeEdit::down-arrow {
            <item>
             <widget class="QCheckBox" name="checkBoxToday">
              <property name="text">
-              <string>Сегодня</string>
+              <string>📅 Сегодня</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="checkBoxOverdue">
              <property name="text">
-              <string>Просроченные</string>
+              <string>⚠️ Просроченные</string>
              </property>
             </widget>
            </item>
            <item>
             <spacer name="horizontalSpacerFilters">
              <property name="orientation">
-              <enum>Qt::Orientation::Horizontal</enum>
+              <enum>Qt::Horizontal</enum>
              </property>
              <property name="sizeHint" stdset="0">
               <size>
@@ -789,7 +808,7 @@ QDateTimeEdit::down-arrow {
             <widget class="QComboBox" name="comboBoxPriority">
              <item>
               <property name="text">
-               <string>Приоритет: Все</string>
+               <string>🎯 Приоритет: Все</string>
               </property>
              </item>
              <item>
@@ -817,17 +836,17 @@ QDateTimeEdit::down-arrow {
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>40</height>
+            <height>32</height>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">background-color: #ffe0b2; color: #e65100; border-radius: 6px; padding: 8px; font-weight: bold; font-size: 14px;</string>
+           <string notr="true">background-color: #ffe0b2; color: #e65100; border-radius: 4px; padding: 6px; font-weight: bold; font-size: 12px;</string>
           </property>
           <property name="text">
            <string>📋 СПИСОК ЗАДАЧ</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -846,14 +865,14 @@ QDateTimeEdit::down-arrow {
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>36</height>
+            <height>28</height>
            </size>
           </property>
           <property name="text">
            <string/>
           </property>
           <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -869,38 +888,39 @@ QDateTimeEdit::down-arrow {
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>320</height>
+        <height>280</height>
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: #ffffff; border-radius: 8px;</string>
+       <string notr="true">QFrame#frameTaskForm { 
+    background-color: #ffffff; 
+    border-radius: 8px; 
+    border: 1px solid #c5cae9;
+}</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayoutForm">
        <property name="spacing">
-        <number>12</number>
+        <number>10</number>
        </property>
        <property name="leftMargin">
-        <number>16</number>
+        <number>12</number>
        </property>
        <property name="topMargin">
-        <number>16</number>
+        <number>12</number>
        </property>
        <property name="rightMargin">
-        <number>16</number>
+        <number>12</number>
        </property>
        <property name="bottomMargin">
-        <number>16</number>
+        <number>12</number>
        </property>
        <item>
         <layout class="QFormLayout" name="formLayoutTask">
-         <property name="labelAlignment">
-          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
-         </property>
          <property name="horizontalSpacing">
           <number>12</number>
          </property>
          <property name="verticalSpacing">
-          <number>10</number>
+          <number>8</number>
          </property>
          <item row="0" column="0">
           <widget class="QLabel" name="labelFormName">
@@ -917,7 +937,7 @@ QDateTimeEdit::down-arrow {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>32</height>
+             <height>28</height>
             </size>
            </property>
           </widget>
@@ -937,7 +957,7 @@ QDateTimeEdit::down-arrow {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>32</height>
+             <height>28</height>
             </size>
            </property>
           </widget>
@@ -954,7 +974,7 @@ QDateTimeEdit::down-arrow {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>32</height>
+             <height>28</height>
             </size>
            </property>
            <property name="calendarPopup">
@@ -974,7 +994,7 @@ QDateTimeEdit::down-arrow {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>32</height>
+             <height>28</height>
             </size>
            </property>
            <item>
@@ -1006,7 +1026,7 @@ QDateTimeEdit::down-arrow {
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>80</height>
+             <height>60</height>
             </size>
            </property>
           </widget>
@@ -1026,7 +1046,7 @@ QDateTimeEdit::down-arrow {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>32</height>
+             <height>28</height>
             </size>
            </property>
           </widget>
@@ -1046,7 +1066,7 @@ QDateTimeEdit::down-arrow {
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>32</height>
+             <height>28</height>
             </size>
            </property>
           </widget>
@@ -1054,30 +1074,14 @@ QDateTimeEdit::down-arrow {
         </layout>
        </item>
        <item>
-        <spacer name="verticalSpacerForm">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Policy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <layout class="QHBoxLayout" name="horizontalLayoutFormButtons">
          <property name="spacing">
-          <number>12</number>
+          <number>10</number>
          </property>
          <item>
           <spacer name="horizontalSpacerFormLeft">
            <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
+            <enum>Qt::Horizontal</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -1090,7 +1094,7 @@ QDateTimeEdit::down-arrow {
          <item>
           <widget class="QPushButton" name="btnFormCancel">
            <property name="text">
-            <string>Отмена</string>
+            <string>❌ Отмена</string>
            </property>
            <property name="autoDefault">
             <bool>false</bool>
@@ -1117,27 +1121,27 @@ QDateTimeEdit::down-arrow {
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>64</height>
+        <height>50</height>
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: #ffffff; border-radius: 8px;</string>
+       <string notr="true">background-color: #ffffff; border-radius: 6px;</string>
       </property>
       <layout class="QHBoxLayout" name="horizontalLayoutButtons">
        <property name="spacing">
-        <number>12</number>
+        <number>10</number>
        </property>
        <property name="leftMargin">
-        <number>12</number>
+        <number>10</number>
        </property>
        <property name="topMargin">
-        <number>8</number>
+        <number>6</number>
        </property>
        <property name="rightMargin">
-        <number>12</number>
+        <number>10</number>
        </property>
        <property name="bottomMargin">
-        <number>8</number>
+        <number>6</number>
        </property>
        <item>
         <widget class="QPushButton" name="btnAdd">
@@ -1156,14 +1160,14 @@ QDateTimeEdit::down-arrow {
        <item>
         <widget class="QPushButton" name="btnDelete">
          <property name="text">
-          <string>️ Удалить</string>
+          <string>🗑️ Удалить</string>
          </property>
         </widget>
        </item>
        <item>
         <spacer name="horizontalSpacerButtons">
          <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
+          <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
