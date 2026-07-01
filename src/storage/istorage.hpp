@@ -1,7 +1,8 @@
-#ifndef ISTORAGE_H
-#define ISTORAGE_H
+#ifndef ISTORAGE_HPP
+#define ISTORAGE_HPP
+#include <QMetaType>
 #include "task.hpp"
-#include "igamification_storage.hpp"
+#include "../utils/achievements.hpp"
 
 namespace storage
 {
@@ -29,10 +30,24 @@ namespace storage
     Priority
   };
 
+  struct UserProgress
+  {
+    int currentLevel;
+    int currentXP;
+    int xpToNextLevel;
+    int streakDays;
+    int deletedTasksCount;
+    QDate lastActivityDate;
+    QString currentTitle;
+    QList< QString > unlockedAchievementIds;
+    QList< QString > unlockedLocations;
+  };
+
   class IStorage
   {
   public:
     virtual ~IStorage() = default;
+
     virtual void addTask(const Task &task) = 0;
     virtual void removeTask(int id) = 0;
     virtual void updateTask(const Task &task) = 0;
@@ -60,6 +75,16 @@ namespace storage
     virtual void unlockLocation(const QString &locationId) = 0;
     virtual bool isLocationUnlocked(const QString &locationId) const = 0;
 
+    virtual int getCompletedTasksCount() const = 0;
+    virtual int getOnTimeCompletedCount() const = 0;
+    virtual int getCompletedCountByPriority(Priority priority) const = 0;
+    virtual int getDeletedTasksCount() const = 0;
+    virtual int getPerfectDaysCount() const = 0;
+
+    virtual int getTotalLocationsCount() const = 0;
+    virtual int getMaxTasksCompletedInOneDay() const = 0;
+    virtual int getMaxHardTasksCompletedInOneDay() const = 0;
+
   private:
     virtual void saveToFile() noexcept = 0;
     virtual void loadFromFile() noexcept = 0;
@@ -67,5 +92,9 @@ namespace storage
     virtual void loadGamificationData() noexcept = 0;
   };
 }
+
+Q_DECLARE_METATYPE(storage::Priority)
+Q_DECLARE_METATYPE(storage::Criterion)
+Q_DECLARE_METATYPE(storage::Filter)
 
 #endif
