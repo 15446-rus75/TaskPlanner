@@ -586,7 +586,6 @@ int view::TaskPlannerView::getSelectedTaskId() const
 
 void view::TaskPlannerView::updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements)
 {
-  // Обновляем 4 слота достижений
   const QList< QLabel* > achievementLabels = {
       ui->achievement1,
       ui->achievement2,
@@ -594,23 +593,31 @@ void view::TaskPlannerView::updateAchievementSlots(const QList< storage::Achieve
       ui->achievement4
   };
 
-  // Очищаем все слоты
   for (QLabel *label : achievementLabels)
   {
     if (label)
     {
       label->setText("🔒 ???");
       label->setStyleSheet("background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;");
+      label->setToolTip("");
     }
   }
 
-  // Заполняем слоты разблокированными достижениями (максимум 4)
-  const int slotsCount = qMin(4, unlockedAchievements.size());
+  if (unlockedAchievements.isEmpty())
+  {
+    return;
+  }
+
+
+  QList< storage::Achievement > reversedAchievements = unlockedAchievements;
+  std::reverse(reversedAchievements.begin(), reversedAchievements.end());
+
+  const int slotsCount = qMin(4, reversedAchievements.size());
   for (int i = 0; i < slotsCount; ++i)
   {
     if (achievementLabels[i])
     {
-      const storage::Achievement &achievement = unlockedAchievements[i];
+      const storage::Achievement &achievement = reversedAchievements[i];
       achievementLabels[i]->setText("🏆 " + achievement.name);
       achievementLabels[i]->setStyleSheet(
           "background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px; color: #3f51b5; font-weight: bold;");

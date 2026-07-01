@@ -746,16 +746,16 @@ void controller::Controller::announceUnlockedAchievements(const QList< storage::
   {
     return;
   }
-
   for (const storage::Achievement &achievement: unlocked)
   {
     m_view->showAchievementUnlocked(achievement);
-
     if (achievement.xpReward > 0)
     {
       grantXP(achievement.xpReward, "Achievement: " + achievement.name);
     }
   }
+
+  updateAchievementSlots();
 }
 
 void controller::Controller::onTaskCompleted(int taskId)
