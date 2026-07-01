@@ -96,6 +96,7 @@ void view::GamificationView::showUserTitle(const QString &title)
 
 void view::GamificationView::showXPNotification(int amount, const QString &reason)
 {
+  Q_UNUSED(amount);
   Q_UNUSED(reason);
 
   if (!m_opacity_effect)

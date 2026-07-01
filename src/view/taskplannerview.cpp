@@ -534,45 +534,54 @@ storage::Priority view::TaskPlannerView::indexToPriority(int index) const
   {
   case 0:
   {
-    return storage::Priority::Low;
+    return storage::Priority::All;
   }
   case 1:
   {
-    return storage::Priority::Medium;
+    return storage::Priority::Low;
   }
   case 2:
+  {
+    return storage::Priority::Medium;
+  }
+  case 3:
   {
     return storage::Priority::Hard;
   }
   default:
   {
-    return storage::Priority::Low;
+    return storage::Priority::All;
   }
   }
 }
 
 int view::TaskPlannerView::priorityToIndex(storage::Priority priority) const
 {
-  switch (priority)
-  {
-  case storage::Priority::Low:
-  {
-    return 0;
-  }
-  case storage::Priority::Medium:
-  {
-    return 1;
-  }
-  case storage::Priority::Hard:
-  {
-    return 2;
-  }
-  default:
-  {
-    return 0;
-  }
+    switch (priority)
+    {
+    case storage::Priority::All:
+    {
+      return 0;
+    }
+    case storage::Priority::Low:
+    {
+      return 1;
+    }
+    case storage::Priority::Medium:
+    {
+      return 2;
+    }
+    case storage::Priority::Hard:
+    {
+      return 3;
+    }
+    default:
+    {
+      return 0;
+    }
   }
 }
+
 
 int view::TaskPlannerView::getSelectedTaskId() const
 {
