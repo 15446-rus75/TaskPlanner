@@ -42,6 +42,7 @@ namespace controller
     void onApplicationStart() override;
     void onCheckAchievements() override;
     void onCalculateXP(int taskId) override;
+    void updateAchievementSlots() override;
 
   private:
     bool checkReady() const;
