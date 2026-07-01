@@ -97,9 +97,10 @@ namespace test
       Q_UNUSED(achievement);
     }
 
-    void showAchievementsList(const QList<storage::Achievement> &achievements) override
+    void showAchievementsList(const QList< storage::Achievement >& achievements, const QList< QString >& unlocked_achievement_ids) override
     {
       Q_UNUSED(achievements);
+      Q_UNUSED(unlocked_achievement_ids);
     }
 
     void showCampusMap(const QList<QString> &unlockedLocations) override

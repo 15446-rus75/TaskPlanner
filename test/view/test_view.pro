@@ -30,7 +30,6 @@ HEADERS += \
     $$PWD/../../src/view/taskplannerview.hpp \
     $$PWD/../../src/view/iview.hpp \
     $$PWD/../../src/view/gamification_view.hpp \
-    $$PWD/../../src/view/igamification_view.hpp \
     $$PWD/../../src/storage/istorage.hpp \
     $$PWD/../../src/storage/task.hpp \
     $$PWD/../../src/storage/igamification_storage.hpp \

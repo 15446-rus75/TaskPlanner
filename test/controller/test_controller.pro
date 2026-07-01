@@ -25,5 +25,5 @@ HEADERS += \
     $$PWD/../../src/controller/icontroller.hpp \
     $$PWD/../../src/storage/istorage.hpp \
     $$PWD/../../src/storage/task.hpp \
-    $$PWD/../../src/storage/achievement.hpp \
+    $$PWD/../../src/utils/achievements.hpp \
     $$PWD/../../src/view/iview.hpp
