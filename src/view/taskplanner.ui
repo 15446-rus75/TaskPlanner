@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>📅 Планировщик учебных задач</string>
+   <string> Планировщик учебных задач</string>
   </property>
   <property name="styleSheet">
    <string notr="true">
@@ -250,17 +250,31 @@ QDateTimeEdit::down-arrow {
     margin-right: 8px;
 }
 
-/* Стили для формы создания задачи */
-QFrame#frameTaskForm,
+QFrame#frameTaskForm {
+    background-color: #ffffff;
+    border: 1px solid #c5cae9;
+    border-radius: 8px;
+}
+QFrame#frameTaskForm QLabel {
+    color: #212121;
+}
 QFrame#frameTaskForm QLineEdit,
 QFrame#frameTaskForm QTextEdit,
 QFrame#frameTaskForm QDateTimeEdit,
 QFrame#frameTaskForm QComboBox {
     background-color: #ffffff;
     color: #000000;
+    border: 1px solid #c5cae9;
+    border-radius: 4px;
+    padding: 4px 8px;
 }
-QFrame#frameTaskForm QLabel {
+QFrame#frameTaskForm QPushButton {
+    background-color: #ffffff;
     color: #212121;
+    border: 1px solid #c5cae9;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-weight: bold;
 }
    </string>
   </property>
@@ -483,118 +497,153 @@ QFrame#frameTaskForm QLabel {
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBoxAchievements">
-          <property name="title">
-           <string>🏆 Достижения</string>
-          </property>
+         <widget class="QFrame" name="frameAchievements">
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>100</height>
+            <height>120</height>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">QGroupBox { background-color: #ffffff; border-radius: 8px; margin-top: 10px; padding-top: 10px; border: 1px solid #c5cae9; } QGroupBox::title { color: #3f51b5; left: 10px; padding: 0 6px; }</string>
+           <string notr="true">QFrame#frameAchievements { background-color: #ffffff; border-radius: 8px; border: 1px solid #c5cae9; }</string>
           </property>
-          <layout class="QHBoxLayout" name="horizontalLayoutAchievements">
+          <layout class="QVBoxLayout" name="verticalLayoutAchievements">
            <property name="spacing">
-            <number>6</number>
+            <number>8</number>
            </property>
            <property name="leftMargin">
-            <number>6</number>
+            <number>10</number>
            </property>
            <property name="topMargin">
-            <number>6</number>
+            <number>10</number>
            </property>
            <property name="rightMargin">
-            <number>6</number>
+            <number>10</number>
            </property>
            <property name="bottomMargin">
-            <number>6</number>
+            <number>10</number>
            </property>
            <item>
-            <widget class="QLabel" name="achievement1">
-             <property name="text">
-              <string>🎯 Первая задача</string>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>9</pointsize>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="toolTip">
-              <string>Выполните первую задачу</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayoutAchievementsHeader">
+             <item>
+              <widget class="QLabel" name="labelAchievementsTitle">
+               <property name="text">
+                <string>🏆 Достижения</string>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>11</pointsize>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">color: #3f51b5;</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacerAchievements">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="btnViewAchievements">
+               <property name="text">
+                <string>Все достижения</string>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #3f51b5; color: #ffffff; border-radius: 4px; padding: 4px 12px; font-size: 10px;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
-            <widget class="QLabel" name="achievement2">
-             <property name="text">
-              <string>🔥 Серия 7 дней</string>
+            <layout class="QHBoxLayout" name="horizontalLayoutAchievements">
+             <property name="spacing">
+              <number>6</number>
              </property>
-             <property name="font">
-              <font>
-               <pointsize>9</pointsize>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="toolTip">
-              <string>Выполняйте задачи 7 дней подряд</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="achievement3">
-             <property name="text">
-              <string>💪 10 задач</string>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>9</pointsize>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="toolTip">
-              <string>Выполните 10 задач</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="achievement4">
-             <property name="text">
-              <string>🏅 Уровень 5</string>
-             </property>
-             <property name="font">
-              <font>
-               <pointsize>9</pointsize>
-              </font>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px;</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <property name="toolTip">
-              <string>Достигните 5 уровня</string>
-             </property>
-            </widget>
+             <item>
+              <widget class="QLabel" name="achievement1">
+               <property name="text">
+                <string>🔒 ???</string>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="achievement2">
+               <property name="text">
+                <string>🔒 ???</string>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="achievement3">
+               <property name="text">
+                <string> ???</string>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="achievement4">
+               <property name="text">
+                <string>🔒 ???</string>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>9</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
@@ -787,7 +836,7 @@ QFrame#frameTaskForm QLabel {
            <item>
             <widget class="QCheckBox" name="checkBoxOverdue">
              <property name="text">
-              <string>⚠️ Просроченные</string>
+              <string>️ Просроченные</string>
              </property>
             </widget>
            </item>
@@ -813,17 +862,17 @@ QFrame#frameTaskForm QLabel {
              </item>
              <item>
               <property name="text">
-               <string>🔴 Высокий</string>
+               <string> Высокий</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>🟡 Средний</string>
+               <string> Средний</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>🟢 Низкий</string>
+               <string> Низкий</string>
               </property>
              </item>
             </widget>
@@ -843,7 +892,7 @@ QFrame#frameTaskForm QLabel {
            <string notr="true">background-color: #ffe0b2; color: #e65100; border-radius: 4px; padding: 6px; font-weight: bold; font-size: 12px;</string>
           </property>
           <property name="text">
-           <string>📋 СПИСОК ЗАДАЧ</string>
+           <string> СПИСОК ЗАДАЧ</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
