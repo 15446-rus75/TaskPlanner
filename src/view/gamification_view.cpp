@@ -124,45 +124,44 @@ void view::GamificationView::showAchievementUnlocked(const storage::Achievement 
   // Визуальное уведомление о разблокировке достижения будет реализовано в будущих итерациях
 }
 
-void view::GamificationView::showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds)
+void view::GamificationView::showAchievementsList( const QList< storage::Achievement > &achievements, const QList< QString > &unlocked_achievement_ids)
 {
-  QDialog *dialog = new QDialog(this);
-  dialog->setWindowTitle("Достижения");
-  dialog->setMinimumSize(500, 600);
+  QDialog dialog(this);
+  dialog.setWindowTitle("Достижения");
+  dialog.setMinimumSize(500, 600);
 
-  // Применяем светлый стиль
-  dialog->setStyleSheet(
+  dialog.setStyleSheet(
       "QDialog { background-color: #ffffff; }"
       "QLabel { color: #212121; }"
       "QListWidget { background-color: #ffffff; border: 1px solid #c5cae9; border-radius: 6px; }"
       "QListWidget::item { padding: 10px; border-bottom: 1px solid #e0e0e0; }"
       "QListWidget::item:selected { background-color: #e8eaf6; }");
 
-  QVBoxLayout *layout = new QVBoxLayout(dialog);
+  QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
-  QLabel *titleLabel = new QLabel("🏆 Ваши достижения", dialog);
-  titleLabel->setStyleSheet("font-size: 16px; font-weight: bold; color: #3f51b5; padding: 8px;");
-  layout->addWidget(titleLabel);
+  QLabel *title_label = new QLabel("🏆 Ваши достижения", &dialog);
+  title_label->setStyleSheet(
+      "font-size: 16px; font-weight: bold; color: #3f51b5; padding: 8px;");
+  layout->addWidget(title_label);
 
-  QListWidget *listWidget = new QListWidget(dialog);
-  listWidget->setSpacing(4);
+  QListWidget *list_widget = new QListWidget(&dialog);
+  list_widget->setSpacing(4);
 
-  int unlockedCount = 0;
+  int unlocked_count = 0;
 
   for (const storage::Achievement &achievement : achievements)
   {
     QListWidgetItem *item = new QListWidgetItem();
 
-    // Проверяем, разблокировано ли достижение
-    bool isUnlocked = unlockedAchievementIds.contains(achievement.id);
+    const bool is_unlocked = unlocked_achievement_ids.contains(achievement.id);
 
     QString text;
-    if (isUnlocked)
+    if (is_unlocked)
     {
       text = "🏆 " + achievement.name + " ✓";
       item->setForeground(QColor("#3f51b5"));
       item->setBackground(QColor("#e8eaf6"));
-      ++unlockedCount;
+      ++unlocked_count;
     }
     else
     {
@@ -174,7 +173,6 @@ void view::GamificationView::showAchievementsList(const QList< storage::Achievem
     {
       text += "\n" + achievement.description;
     }
-
     if (achievement.xpReward > 0)
     {
       text += "\n💰 Награда: +" + QString::number(achievement.xpReward) + " XP";
@@ -184,21 +182,20 @@ void view::GamificationView::showAchievementsList(const QList< storage::Achievem
     item->setData(Qt::UserRole, achievement.id);
     item->setSizeHint(QSize(0, 60));
 
-    listWidget->addItem(item);
+    list_widget->addItem(item);
   }
 
-  layout->addWidget(listWidget);
+  layout->addWidget(list_widget);
 
-  QLabel *statsLabel = new QLabel(
-      QString(" Разблокировано: %1 из %2")
-          .arg(unlockedCount)
+  QLabel *stats_label = new QLabel(
+      QString("📊 Разблокировано: %1 из %2")
+          .arg(unlocked_count)
           .arg(achievements.size()),
-      dialog);
-  statsLabel->setStyleSheet("color: #5c6bc0; font-size: 11px; padding: 4px;");
-  layout->addWidget(statsLabel);
+      &dialog);
+  stats_label->setStyleSheet("color: #5c6bc0; font-size: 11px; padding: 4px;");
+  layout->addWidget(stats_label);
 
-  dialog->exec();
-  delete dialog;
+  dialog.exec();
 }
 
 void view::GamificationView::showCampusMap(const QList< QString > &unlocked_locations)
