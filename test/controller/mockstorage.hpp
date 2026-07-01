@@ -4,7 +4,8 @@
 #include "istorage.hpp"
 #include <QList>
 #include <QString>
-#include <QVector>
+#include <QMap>
+#include <QSet>
 
 namespace test
 {
@@ -82,8 +83,8 @@ namespace test
       return overdueTasksToReturn;
     }
 
-    QList< storage::Task > getTasksFiltered(const QString &searchText, bool today,
-      bool overdue, storage::Priority priority) const override
+    QList< storage::Task > getTasksFiltered(const QString &searchText, bool today, bool overdue,
+      storage::Priority priority) const override
     {
       getTasksFilteredCallCount++;
       lastSearchText = searchText;
@@ -102,20 +103,121 @@ namespace test
       return tasks;
     }
 
-    void saveToFile(const QString &path) override
+    storage::UserProgress getUserProgress() const override
     {
-      Q_UNUSED(path);
+      return userProgressToReturn;
+    }
+    void updateUserProgress(const storage::UserProgress &progress) override
+    {
+      updateUserProgressCallCount++;
+      userProgressToReturn = progress;
     }
 
-    void loadFromFile(const QString &path) override
+    void addXP(int amount, const QString &reason) override
     {
-      Q_UNUSED(path);
+      addXPCallCount++;
+      lastXPAmount = amount;
+      lastXPReason = reason;
+      totalXP += amount;
     }
 
-    void setTasks(const QList< storage::Task > &tasks)
+    void updateStreak(const QDate &currentDate) override
     {
-      m_tasks = tasks;
+      updateStreakCallCount++;
+      lastStreakDate = currentDate;
     }
+
+    int getCurrentLevel() const override
+    {
+      getCurrentLevelCallCount++;
+      return currentLevelToReturn;
+    }
+    int getTotalXP() const override
+    {
+      getTotalXPCallCount++; return totalXP;
+    }
+    int getStreakDays() const override
+    {
+      return streakDaysToReturn;
+    }
+
+    QList< storage::Achievement > getAllAchievements() const override
+    {
+      getAllAchievementsCallCount++;
+      return allAchievementsToReturn;
+    }
+
+    void unlockAchievement(const QString &achievementId) override
+    {
+      unlockAchievementCallCount++;
+      lastUnlockedAchievementId = achievementId;
+      unlockedIds.insert(achievementId);
+    }
+
+    bool isAchievementUnlocked(const QString &achievementId) const override
+    {
+      return unlockedIds.contains(achievementId);
+    }
+
+    storage::Achievement getAchievementById(const QString &id) const override
+    {
+      for (const auto &a: allAchievementsToReturn){
+        if (a.id == id)
+        {
+          return a;
+        }
+      }
+      return storage::Achievement();
+    }
+
+    QList< QString > getUnlockedLocations() const override
+    {
+      return unlockedLocationsToReturn;
+    }
+    void unlockLocation(const QString &locationId) override
+    {
+      unlockLocationCallCount++;
+      unlockedLocationsToReturn.append(locationId);
+    }
+    bool isLocationUnlocked(const QString &locationId) const override
+    {
+      return unlockedLocationsToReturn.contains(locationId);
+    }
+
+    int getCompletedTasksCount() const override
+    {
+      return completedTasksCountToReturn;
+    }
+    int getOnTimeCompletedCount() const override
+    {
+      return onTimeCompletedCountToReturn;
+    }
+    int getCompletedCountByPriority(storage::Priority priority) const override
+    {
+      return completedCountByPriorityToReturn.value(priority, 0);
+    }
+    int getDeletedTasksCount() const override
+    {
+      return deletedTasksCountToReturn;
+    }
+    int getPerfectDaysCount() const override
+    {
+      return perfectDaysCountToReturn;
+    }
+    int getTotalLocationsCount() const override
+    {
+      return totalLocationsCountToReturn;
+    }
+    int getMaxTasksCompletedInOneDay() const override
+    {
+      return maxTasksCompletedInOneDayToReturn;
+    }
+    int getMaxHardTasksCompletedInOneDay() const override
+    {
+      return maxHardTasksCompletedInOneDayToReturn;
+    }
+
+    void setTasks(const QList< storage::Task > &tasks) { m_tasks = tasks; }
 
     mutable int addTaskCallCount = 0;
     mutable int removeTaskCallCount = 0;
@@ -126,6 +228,14 @@ namespace test
     mutable int getOverdueTasksCallCount = 0;
     mutable int getTasksFilteredCallCount = 0;
     mutable int getSortedTasksCallCount = 0;
+    int updateUserProgressCallCount = 0;
+    int addXPCallCount = 0;
+    int updateStreakCallCount = 0;
+    mutable int getCurrentLevelCallCount = 0;
+    mutable int getTotalXPCallCount = 0;
+    mutable int getAllAchievementsCallCount = 0;
+    int unlockAchievementCallCount = 0;
+    int unlockLocationCallCount = 0;
 
     storage::Task lastAddedTask;
     storage::Task lastUpdatedTask;
@@ -137,13 +247,37 @@ namespace test
     mutable storage::Priority lastPriorityArg = storage::Priority::All;
     mutable QList< storage::Task > lastSortedInput;
     mutable storage::Criterion lastCriterion = storage::Criterion::Date;
+    int lastXPAmount = 0;
+    QString lastXPReason;
+    QDate lastStreakDate;
+    QString lastUnlockedAchievementId;
 
     QList< storage::Task > tasksForTodayToReturn;
     QList< storage::Task > overdueTasksToReturn;
     QList< storage::Task > filteredTasksToReturn;
+    storage::UserProgress userProgressToReturn{};
+    int currentLevelToReturn = 1;
+    int totalXP = 0;
+    int streakDaysToReturn = 0;
+    QList< storage::Achievement > allAchievementsToReturn;
+    QSet< QString > unlockedIds;
+    QList< QString > unlockedLocationsToReturn;
+    int completedTasksCountToReturn = 0;
+    int onTimeCompletedCountToReturn = 0;
+    QMap< storage::Priority, int > completedCountByPriorityToReturn;
+    int deletedTasksCountToReturn = 0;
+    int perfectDaysCountToReturn = 0;
+    int totalLocationsCountToReturn = 0;
+    int maxTasksCompletedInOneDayToReturn = 0;
+    int maxHardTasksCompletedInOneDayToReturn = 0;
 
   private:
     QList< storage::Task > m_tasks;
+
+    void saveToFile() noexcept override {}
+    void loadFromFile() noexcept override {}
+    void saveGamificationData() noexcept override {}
+    void loadGamificationData() noexcept override {}
   };
 }
 
