@@ -162,7 +162,10 @@ void storage::MemoryStorage::updateTask(const Task &task)
     if (t.id == task.id)
     {
       Task updated_task = task;
-      updated_task.completedAt = QDateTime::currentDateTime();
+      if (!t.completed && updated_task.completed)
+      {
+        updated_task.completedAt = QDateTime::currentDateTime();
+      }
       t = updated_task;
       saveToFile();
       return;

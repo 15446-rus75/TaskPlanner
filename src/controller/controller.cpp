@@ -528,29 +528,31 @@ void controller::Controller::grantXP(int amount, const QString &reason)
   {
     return;
   }
-  const int levelBefore = m_storage->getCurrentLevel();
+
+  const int level_before = m_storage->getCurrentLevel();
   m_storage->addXP(amount, reason);
   m_view->showXPNotification(amount, reason);
 
-  // ИСПРАВЛЕНО: используем данные напрямую из хранилища, без пересчёта
+  // ИСПРАВЛЕНО: берём данные напрямую из хранилища,
+  // так как currentXP — это остаток до следующего уровня, а не общий опыт
   const storage::UserProgress progress = m_storage->getUserProgress();
 
-  QString newTitle;
+  QString new_title;
   if (progress.currentLevel >= storage::xp::MAX_LEVEL)
   {
-    newTitle = "Максимальный уровень";
+    new_title = "Максимальный уровень";
   }
   else
   {
-    newTitle = "Уровень " + QString::number(progress.currentLevel);
+    new_title = "Уровень " + QString::number(progress.currentLevel);
   }
 
   m_view->showUserLevel(progress.currentLevel, progress.currentXP, progress.xpToNextLevel);
-  m_view->showUserTitle(newTitle);
+  m_view->showUserTitle(new_title);
 
-  if (progress.currentLevel > levelBefore)
+  if (progress.currentLevel > level_before)
   {
-    m_view->showLevelUpAnimation(progress.currentLevel, newTitle);
+    m_view->showLevelUpAnimation(progress.currentLevel, new_title);
   }
 
   m_view->updateGamificationPanel();
@@ -863,7 +865,22 @@ void controller::Controller::onApplicationStart()
   {
     return;
   }
+
+  // ИСПРАВЛЕНО: берём данные напрямую из хранилища
   const storage::UserProgress progress = m_storage->getUserProgress();
   m_view->showUserLevel(progress.currentLevel, progress.currentXP, progress.xpToNextLevel);
+
+  QString title;
+  if (progress.currentLevel >= storage::xp::MAX_LEVEL)
+  {
+    title = "Максимальный уровень";
+  }
+  else
+  {
+    title = "Уровень " + QString::number(progress.currentLevel);
+  }
+  m_view->showUserTitle(title);
+  m_view->showStreak(progress.streakDays);
+
   onNewDay(QDate::currentDate());
 }
