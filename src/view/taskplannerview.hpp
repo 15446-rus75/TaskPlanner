@@ -35,11 +35,12 @@ public:
   void showUserTitle(const QString &title) override;
   void showXPNotification(int amount, const QString &reason) override;
   void showAchievementUnlocked(const storage::Achievement &achievement) override;
-  void showAchievementsList(const QList< storage::Achievement > &achievements) override;
+  void showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds) override;
   void showCampusMap(const QList< QString > &unlockedLocations) override;
   void showLocationUnlocked(const QString &locationName) override;
   void showLevelUpAnimation(int newLevel, const QString &newTitle) override;
   void updateGamificationPanel() override;
+  void updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements) override;
 
 signals:
   void viewReady();
@@ -73,7 +74,6 @@ private slots:
   void clearStatusMessage();
   void onGamificationAchievementsRequested();
   void onGamificationMapRequested();
-  void onGroupBoxAchievementsClicked(bool checked);
 
 private:
   void connectSignals();

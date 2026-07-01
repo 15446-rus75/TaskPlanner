@@ -85,8 +85,10 @@ void view::TaskPlannerView::setupGamification()
                    this, &TaskPlannerView::onGamificationAchievementsRequested);
   QObject::connect(m_gamificationView, &GamificationView::mapRequested,
                    this, &TaskPlannerView::onGamificationMapRequested);
-  QObject::connect(ui->groupBoxAchievements, &QGroupBox::clicked,
-                   this, &TaskPlannerView::onGroupBoxAchievementsClicked);
+
+  // ИСПРАВЛЕНО: подключаем сигнал от кнопки "Все достижения" вместо QGroupBox
+  QObject::connect(ui->btnViewAchievements, &QPushButton::clicked,
+                   this, &TaskPlannerView::onGamificationAchievementsRequested);
 }
 
 void view::TaskPlannerView::showTaskList(const QList< storage::Task > &tasks)
@@ -214,9 +216,9 @@ void view::TaskPlannerView::showAchievementUnlocked(const storage::Achievement &
   m_gamificationView->showAchievementUnlocked(achievement);
 }
 
-void view::TaskPlannerView::showAchievementsList(const QList< storage::Achievement > &achievements)
+void view::TaskPlannerView::showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds)
 {
-  m_gamificationView->showAchievementsList(achievements);
+  m_gamificationView->showAchievementsList(achievements, unlockedAchievementIds);
 }
 
 void view::TaskPlannerView::showCampusMap(const QList< QString > &unlockedLocations)
@@ -237,14 +239,6 @@ void view::TaskPlannerView::showLevelUpAnimation(int newLevel, const QString &ne
 void view::TaskPlannerView::updateGamificationPanel()
 {
   // Панель обновляется через отдельные вызовы showUserLevel, showStreak и т.д.
-}
-
-void view::TaskPlannerView::onGroupBoxAchievementsClicked(bool checked)
-{
-  if (checked)
-  {
-    emit achievementsRequested();
-  }
 }
 
 void view::TaskPlannerView::clearStatusMessage()
@@ -435,6 +429,8 @@ void view::TaskPlannerView::connectSignals()
                        emit taskViewRequested(taskId);
                      }
                    });
+  QObject::connect(ui->btnViewAchievements, &QPushButton::clicked,
+                   this, &TaskPlannerView::onGamificationAchievementsRequested);
 }
 
 void view::TaskPlannerView::setupFilterLogic()
@@ -586,4 +582,39 @@ int view::TaskPlannerView::getSelectedTaskId() const
     return -1;
   }
   return item->data(Qt::UserRole).toInt();
+}
+
+void view::TaskPlannerView::updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements)
+{
+  // Обновляем 4 слота достижений
+  const QList< QLabel* > achievementLabels = {
+      ui->achievement1,
+      ui->achievement2,
+      ui->achievement3,
+      ui->achievement4
+  };
+
+  // Очищаем все слоты
+  for (QLabel *label : achievementLabels)
+  {
+    if (label)
+    {
+      label->setText("🔒 ???");
+      label->setStyleSheet("background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;");
+    }
+  }
+
+  // Заполняем слоты разблокированными достижениями (максимум 4)
+  const int slotsCount = qMin(4, unlockedAchievements.size());
+  for (int i = 0; i < slotsCount; ++i)
+  {
+    if (achievementLabels[i])
+    {
+      const storage::Achievement &achievement = unlockedAchievements[i];
+      achievementLabels[i]->setText("🏆 " + achievement.name);
+      achievementLabels[i]->setStyleSheet(
+          "background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px; color: #3f51b5; font-weight: bold;");
+      achievementLabels[i]->setToolTip(achievement.description);
+    }
+  }
 }
