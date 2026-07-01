@@ -528,33 +528,29 @@ void controller::Controller::grantXP(int amount, const QString &reason)
   {
     return;
   }
-
   const int levelBefore = m_storage->getCurrentLevel();
-
   m_storage->addXP(amount, reason);
   m_view->showXPNotification(amount, reason);
 
-  const int totalXP = m_storage->getTotalXP();
-  const int levelAfter = storage::calculateLevelFromXP(totalXP);
-  const int xpForCurrentLevel = storage::calculateTotalXPForLevel(levelAfter);
-  const int xpForNextLevel = storage::calculateTotalXPForLevel(levelAfter + 1);
+  // ИСПРАВЛЕНО: используем данные напрямую из хранилища, без пересчёта
+  const storage::UserProgress progress = m_storage->getUserProgress();
 
   QString newTitle;
-  if (levelAfter >= storage::xp::MAX_LEVEL)
+  if (progress.currentLevel >= storage::xp::MAX_LEVEL)
   {
     newTitle = "Максимальный уровень";
   }
   else
   {
-    newTitle = "Уровень " + QString::number(levelAfter);
+    newTitle = "Уровень " + QString::number(progress.currentLevel);
   }
 
-  m_view->showUserLevel(levelAfter, totalXP - xpForCurrentLevel, xpForNextLevel - xpForCurrentLevel);
+  m_view->showUserLevel(progress.currentLevel, progress.currentXP, progress.xpToNextLevel);
   m_view->showUserTitle(newTitle);
 
-  if (levelAfter > levelBefore)
+  if (progress.currentLevel > levelBefore)
   {
-    m_view->showLevelUpAnimation(levelAfter, newTitle);
+    m_view->showLevelUpAnimation(progress.currentLevel, newTitle);
   }
 
   m_view->updateGamificationPanel();
@@ -867,12 +863,7 @@ void controller::Controller::onApplicationStart()
   {
     return;
   }
-
-  const int level = m_storage->getCurrentLevel();
-  const int totalXP = m_storage->getTotalXP();
-  const int xpForCurrentLevel = storage::calculateTotalXPForLevel(level);
-  const int xpForNextLevel = storage::calculateTotalXPForLevel(level + 1);
-
-  m_view->showUserLevel(level, totalXP - xpForCurrentLevel, xpForNextLevel - xpForCurrentLevel);
+  const storage::UserProgress progress = m_storage->getUserProgress();
+  m_view->showUserLevel(progress.currentLevel, progress.currentXP, progress.xpToNextLevel);
   onNewDay(QDate::currentDate());
 }
