@@ -8,10 +8,10 @@ namespace storage
 {
   enum class Priority
   {
-    All,
-    Low,
-    Medium,
-    Hard
+    Low = 1,
+    Medium = 2,
+    Hard = 3,
+    All = 0
   };
 
   enum class Criterion

@@ -99,7 +99,31 @@ void view::TaskPlannerView::showTaskList(const QList< storage::Task > &tasks)
 
     if (task.priority != storage::Priority::All)
     {
-      line += " | Priority: " + QString::number(static_cast< int >(task.priority));
+      QString priority_text;
+      switch (task.priority)
+      {
+      case storage::Priority::Low:
+      {
+        priority_text = "🟢 Низкий";
+        break;
+      }
+      case storage::Priority::Medium:
+      {
+        priority_text = "🟡 Средний";
+        break;
+      }
+      case storage::Priority::Hard:
+      {
+        priority_text = "🔴 Высокий";
+        break;
+      }
+      default:
+      {
+        priority_text = "⚪ Все";
+        break;
+      }
+      }
+      line += " | " + priority_text;
     }
 
     line += task.completed ? " | ✅" : " | ⬜";
@@ -289,7 +313,8 @@ void view::TaskPlannerView::onFilterStateChanged(Qt::CheckState state)
 
 void view::TaskPlannerView::onPriorityIndexChanged(int index)
 {
-  const storage::Priority priority = indexToPriority(index);
+  const int priority_value = ui->comboBoxPriority->itemData(index).toInt();
+  const storage::Priority priority = static_cast< storage::Priority >(priority_value);
   emit filterChanged(storage::Filter::Priority, QVariant::fromValue(priority));
 }
 
@@ -411,9 +436,9 @@ void view::TaskPlannerView::setupFilterLogic()
   ui->comboBoxPriority->addItem("🟢 Низкий", static_cast< int >(storage::Priority::Low));
 
   ui->comboBoxFormPriority->clear();
-  ui->comboBoxFormPriority->addItem("🟢 Низкий");
-  ui->comboBoxFormPriority->addItem("🟡 Средний");
-  ui->comboBoxFormPriority->addItem("🔴 Высокий");
+  ui->comboBoxFormPriority->addItem("🟢 Низкий", static_cast< int >(storage::Priority::Low));
+  ui->comboBoxFormPriority->addItem("🟡 Средний", static_cast< int >(storage::Priority::Medium));
+  ui->comboBoxFormPriority->addItem("🔴 Высокий", static_cast< int >(storage::Priority::Hard));
 }
 
 storage::Task view::TaskPlannerView::formToTask() const
@@ -499,56 +524,21 @@ void view::TaskPlannerView::setFormReadOnly(bool readOnly)
 
 storage::Priority view::TaskPlannerView::indexToPriority(int index) const
 {
-  switch (index)
-  {
-  case 0:
-  {
-    return storage::Priority::All;
-  }
-  case 1:
-  {
-    return storage::Priority::Low;
-  }
-  case 2:
-  {
-    return storage::Priority::Medium;
-  }
-  case 3:
-  {
-    return storage::Priority::Hard;
-  }
-  default:
-  {
-    return storage::Priority::All;
-  }
-  }
+  const int value = ui->comboBoxFormPriority->itemData(index).toInt();
+  return static_cast< storage::Priority >(value);
 }
 
 int view::TaskPlannerView::priorityToIndex(storage::Priority priority) const
 {
-  switch (priority)
+  const int value = static_cast< int >(priority);
+  for (int i = 0; i < ui->comboBoxFormPriority->count(); ++i)
   {
-  case storage::Priority::All:
-  {
-    return 0;
+    if (ui->comboBoxFormPriority->itemData(i).toInt() == value)
+    {
+      return i;
+    }
   }
-  case storage::Priority::Low:
-  {
-    return 1;
-  }
-  case storage::Priority::Medium:
-  {
-    return 2;
-  }
-  case storage::Priority::Hard:
-  {
-    return 3;
-  }
-  default:
-  {
-    return 0;
-  }
-  }
+  return 0;
 }
 
 
