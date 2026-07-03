@@ -96,6 +96,12 @@ namespace view
     storage::Criterion m_currentSortCriterion;
     QTimer *m_statusTimer;
     bool m_isFormReadOnly;
+
+    int m_currentLevel = 1;
+    int m_currentXP = 0;
+    int m_xpToNextLevel = 100;
+    int m_streakDays = 0;
+    QString m_userTitle = "Новичок";
   };
 }
 
