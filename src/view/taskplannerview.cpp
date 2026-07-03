@@ -23,7 +23,6 @@ view::TaskPlannerView::TaskPlannerView(QWidget *parent):
 {
   ui->setupUi(this);
 
-  // ИСПРАВЛЕНИЕ ТЁМНОЙ ТЕМЫ WINDOWS: применяем стиль к форме задачи
   ui->frameTaskForm->setAttribute(Qt::WA_StyledBackground, true);
   ui->frameTaskForm->setStyleSheet(
       "QFrame#frameTaskForm { background-color: #ffffff; border: 1px solid #c5cae9; border-radius: 8px; }"
@@ -58,8 +57,7 @@ view::TaskPlannerView::TaskPlannerView(QWidget *parent):
   ui->frameTaskForm->setVisible(false);
 
   m_statusTimer->setSingleShot(true);
-  QObject::connect(m_statusTimer, &QTimer::timeout, this,
-                   &TaskPlannerView::clearStatusMessage);
+  QObject::connect(m_statusTimer, &QTimer::timeout, this, &TaskPlannerView::clearStatusMessage);
 
   QTimer::singleShot(0, [this]()
                      {
@@ -74,21 +72,13 @@ void view::TaskPlannerView::setupGamification()
   m_gamificationView->setExpValueLabel(ui->labelExpValue);
   m_gamificationView->setStreakLabel(ui->labelStreak);
   m_gamificationView->setUserRankLabel(ui->labelUserRank);
-  m_gamificationView->setAchievementLabels({
-      ui->achievement1,
-      ui->achievement2,
-      ui->achievement3,
-      ui->achievement4
-  });
+  m_gamificationView->setAchievementLabels({ ui->achievement1, ui->achievement2, ui->achievement3, ui->achievement4 });
 
-  QObject::connect(m_gamificationView, &GamificationView::achievementsRequested,
-                   this, &TaskPlannerView::onGamificationAchievementsRequested);
-  QObject::connect(m_gamificationView, &GamificationView::mapRequested,
-                   this, &TaskPlannerView::onGamificationMapRequested);
+  QObject::connect(m_gamificationView, &GamificationView::achievementsRequested, this, &TaskPlannerView::onGamificationAchievementsRequested);
+  QObject::connect(m_gamificationView, &GamificationView::mapRequested, this, &TaskPlannerView::onGamificationMapRequested);
 
-  // ИСПРАВЛЕНО: подключаем сигнал от кнопки "Все достижения" вместо QGroupBox
-  QObject::connect(ui->btnViewAchievements, &QPushButton::clicked,
-                   this, &TaskPlannerView::onGamificationAchievementsRequested);
+
+  QObject::connect(ui->btnViewAchievements, &QPushButton::clicked, this, &TaskPlannerView::onGamificationAchievementsRequested);
 }
 
 void view::TaskPlannerView::showTaskList(const QList< storage::Task > &tasks)
@@ -289,9 +279,7 @@ void view::TaskPlannerView::onFilterStateChanged(Qt::CheckState state)
   }
   else
   {
-    if (!ui->checkBoxAll->isChecked() &&
-        !ui->checkBoxToday->isChecked() &&
-        !ui->checkBoxOverdue->isChecked())
+    if (!ui->checkBoxAll->isChecked() && !ui->checkBoxToday->isChecked() && !ui->checkBoxOverdue->isChecked())
     {
       ui->checkBoxAll->setChecked(true);
       emit filterChanged(storage::Filter::ShowAll, QVariant());
@@ -389,37 +377,19 @@ void view::TaskPlannerView::onGamificationMapRequested()
 
 void view::TaskPlannerView::connectSignals()
 {
-  QObject::connect(ui->calendarWidget, &QCalendarWidget::clicked,
-                   this, &TaskPlannerView::onCalendarClicked);
-  QObject::connect(ui->lineEditSearch, &QLineEdit::textChanged,
-                   this, &TaskPlannerView::onSearchTextChanged);
-
-  QObject::connect(ui->checkBoxAll, &QCheckBox::checkStateChanged,
-                   this, &TaskPlannerView::onFilterStateChanged);
-  QObject::connect(ui->checkBoxToday, &QCheckBox::checkStateChanged,
-                   this, &TaskPlannerView::onFilterStateChanged);
-  QObject::connect(ui->checkBoxOverdue, &QCheckBox::checkStateChanged,
-                   this, &TaskPlannerView::onFilterStateChanged);
-
-  QObject::connect(ui->comboBoxPriority, QOverload< int >::of(&QComboBox::currentIndexChanged),
-                   this, &TaskPlannerView::onPriorityIndexChanged);
-
-  QObject::connect(ui->btnAdd, &QPushButton::clicked,
-                   this, &TaskPlannerView::onAddClicked);
-  QObject::connect(ui->btnEdit, &QPushButton::clicked,
-                   this, &TaskPlannerView::onEditClicked);
-  QObject::connect(ui->btnDelete, &QPushButton::clicked,
-                   this, &TaskPlannerView::onDeleteClicked);
-  QObject::connect(ui->btnMarkComplete, &QPushButton::clicked,
-                   this, &TaskPlannerView::onMarkCompleteClicked);
-  QObject::connect(ui->btnSort, &QPushButton::clicked,
-                   this, &TaskPlannerView::onSortClicked);
-
-  QObject::connect(ui->btnFormSave, &QPushButton::clicked,
-                   this, &TaskPlannerView::onFormSaveClicked);
-  QObject::connect(ui->btnFormCancel, &QPushButton::clicked,
-                   this, &TaskPlannerView::onFormCancelClicked);
-
+  QObject::connect(ui->calendarWidget, &QCalendarWidget::clicked, this, &TaskPlannerView::onCalendarClicked);
+  QObject::connect(ui->lineEditSearch, &QLineEdit::textChanged, this, &TaskPlannerView::onSearchTextChanged);
+  QObject::connect(ui->checkBoxAll, &QCheckBox::checkStateChanged, this, &TaskPlannerView::onFilterStateChanged);
+  QObject::connect(ui->checkBoxToday, &QCheckBox::checkStateChanged, this, &TaskPlannerView::onFilterStateChanged);
+  QObject::connect(ui->checkBoxOverdue, &QCheckBox::checkStateChanged, this, &TaskPlannerView::onFilterStateChanged);
+  QObject::connect(ui->comboBoxPriority, QOverload< int >::of(&QComboBox::currentIndexChanged), this, &TaskPlannerView::onPriorityIndexChanged);
+  QObject::connect(ui->btnAdd, &QPushButton::clicked, this, &TaskPlannerView::onAddClicked);
+  QObject::connect(ui->btnEdit, &QPushButton::clicked, this, &TaskPlannerView::onEditClicked);
+  QObject::connect(ui->btnDelete, &QPushButton::clicked, this, &TaskPlannerView::onDeleteClicked);
+  QObject::connect(ui->btnMarkComplete, &QPushButton::clicked, this, &TaskPlannerView::onMarkCompleteClicked);
+  QObject::connect(ui->btnSort, &QPushButton::clicked, this, &TaskPlannerView::onSortClicked);
+  QObject::connect(ui->btnFormSave, &QPushButton::clicked, this, &TaskPlannerView::onFormSaveClicked);
+  QObject::connect(ui->btnFormCancel, &QPushButton::clicked, this, &TaskPlannerView::onFormCancelClicked);
   QObject::connect(ui->listWidgetTasks, &QListWidget::itemDoubleClicked,
                    this, [this](QListWidgetItem *item)
                    {
@@ -429,8 +399,7 @@ void view::TaskPlannerView::connectSignals()
                        emit taskViewRequested(taskId);
                      }
                    });
-  QObject::connect(ui->btnViewAchievements, &QPushButton::clicked,
-                   this, &TaskPlannerView::onGamificationAchievementsRequested);
+  QObject::connect(ui->btnViewAchievements, &QPushButton::clicked, this, &TaskPlannerView::onGamificationAchievementsRequested);
 }
 
 void view::TaskPlannerView::setupFilterLogic()
@@ -557,28 +526,28 @@ storage::Priority view::TaskPlannerView::indexToPriority(int index) const
 
 int view::TaskPlannerView::priorityToIndex(storage::Priority priority) const
 {
-    switch (priority)
-    {
-    case storage::Priority::All:
-    {
-      return 0;
-    }
-    case storage::Priority::Low:
-    {
-      return 1;
-    }
-    case storage::Priority::Medium:
-    {
-      return 2;
-    }
-    case storage::Priority::Hard:
-    {
-      return 3;
-    }
-    default:
-    {
-      return 0;
-    }
+  switch (priority)
+  {
+  case storage::Priority::All:
+  {
+    return 0;
+  }
+  case storage::Priority::Low:
+  {
+    return 1;
+  }
+  case storage::Priority::Medium:
+  {
+    return 2;
+  }
+  case storage::Priority::Hard:
+  {
+    return 3;
+  }
+  default:
+  {
+    return 0;
+  }
   }
 }
 
@@ -595,12 +564,7 @@ int view::TaskPlannerView::getSelectedTaskId() const
 
 void view::TaskPlannerView::updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements)
 {
-  const QList< QLabel* > achievementLabels = {
-      ui->achievement1,
-      ui->achievement2,
-      ui->achievement3,
-      ui->achievement4
-  };
+  const QList< QLabel* > achievementLabels = { ui->achievement1, ui->achievement2, ui->achievement3, ui->achievement4 };
 
   for (QLabel *label : achievementLabels)
   {
@@ -628,8 +592,7 @@ void view::TaskPlannerView::updateAchievementSlots(const QList< storage::Achieve
     {
       const storage::Achievement &achievement = reversedAchievements[i];
       achievementLabels[i]->setText("🏆 " + achievement.name);
-      achievementLabels[i]->setStyleSheet(
-          "background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px; color: #3f51b5; font-weight: bold;");
+      achievementLabels[i]->setStyleSheet("background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px; color: #3f51b5; font-weight: bold;");
       achievementLabels[i]->setToolTip(achievement.description);
     }
   }
