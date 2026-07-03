@@ -2,6 +2,7 @@
 #define MOCKVIEW_HPP
 
 #include "iview.hpp"
+#include "../../src/utils/achievements.hpp"
 
 namespace test
 {
@@ -102,8 +103,9 @@ namespace test
       unlockedAchievementHistory.append(achievement);
     }
 
-    void showAchievementsList(const QList< storage::Achievement > &achievements) override
+    void showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds) override
     {
+      Q_UNUSED(unlockedAchievementIds);
       showAchievementsListCallCount++;
       lastAchievementsList = achievements;
     }
@@ -132,6 +134,12 @@ namespace test
       updateGamificationPanelCallCount++;
     }
 
+    void updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements) override
+    {
+      Q_UNUSED(unlockedAchievements);
+      updateAchievementSlotsCallCount++;
+    }
+
     int showTaskListCallCount = 0;
     int showTasksForDateCallCount = 0;
     int setTaskListTitleCallCount = 0;
@@ -151,6 +159,7 @@ namespace test
     int showLocationUnlockedCallCount = 0;
     int showLevelUpAnimationCallCount = 0;
     int updateGamificationPanelCallCount = 0;
+    int updateAchievementSlotsCallCount = 0;
 
     QList< storage::Task > lastShownTasks;
     QDate lastDateArg;

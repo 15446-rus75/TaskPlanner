@@ -85,9 +85,51 @@ namespace
   };
 }
 
+const QList< storage::Achievement > storage::MemoryStorage::k_allAchievements = {
+  achievements::LEVEL_1,
+  achievements::LEVEL_5,
+  achievements::LEVEL_10,
+  achievements::LEVEL_20,
+  achievements::LEVEL_30,
+  achievements::LEVEL_50,
+  achievements::TASKS_10,
+  achievements::TASKS_50,
+  achievements::TASKS_100,
+  achievements::TASKS_250,
+  achievements::ON_TIME_5,
+  achievements::ON_TIME_20,
+  achievements::ON_TIME_50,
+  achievements::HARD_10,
+  achievements::HARD_50,
+  achievements::MEDIUM_30,
+  achievements::LOW_50,
+  achievements::BALANCED_ALL,
+  achievements::PERFECT_DAY_1,
+  achievements::PERFECT_DAY_7,
+  achievements::PERFECT_DAY_30,
+  achievements::STREAK_7,
+  achievements::STREAK_30,
+  achievements::STREAK_100,
+  achievements::COMBO_NIGHTMARE,
+  achievements::COMBO_MARATHON,
+  achievements::LOCATION_5,
+  achievements::LOCATION_10,
+  achievements::LOCATION_ALL,
+  achievements::DELETE_5,
+  achievements::DELETE_20,
+  achievements::DELETE_100,
+};
+
 storage::MemoryStorage::MemoryStorage():
-  nextId_(1)
+  nextId_(1),
+  perfectDaysCount_(0),
+  maxTasksCompletedInOneDay_(0),
+  maxHardTasksCompletedInOneDay_(0)
 {
+  progress_.currentLevel = 1;
+  progress_.currentXP = 0;
+  progress_.xpToNextLevel = calculateXPForLevel(1);
+  progress_.streakDays = 0;
   load();
 }
 
@@ -105,6 +147,7 @@ void storage::MemoryStorage::removeTask(int id)
   {
     if (tasks_[i].id == id)
     {
+      ++progress_.deletedTasksCount;
       tasks_.removeAt(i);
       saveToFile();
       return;
@@ -118,7 +161,12 @@ void storage::MemoryStorage::updateTask(const Task &task)
   {
     if (t.id == task.id)
     {
-      t = task;
+      Task updated_task = task;
+      if (!t.completed && updated_task.completed)
+      {
+        updated_task.completedAt = QDateTime::currentDateTime();
+      }
+      t = updated_task;
       saveToFile();
       return;
     }
@@ -137,7 +185,7 @@ QList< storage::Task > storage::MemoryStorage::getTasksForDate(const QDate &date
   {
     if (task.deadline.date() == date)
     {
-     result.append(task);
+      result.append(task);
     }
   }
   return result;
@@ -176,6 +224,195 @@ QList< storage::Task > storage::MemoryStorage::getSortedTasks(const QList< Task 
   return result;
 }
 
+storage::UserProgress storage::MemoryStorage::getUserProgress() const
+{
+  return progress_;
+}
+
+void storage::MemoryStorage::updateUserProgress(const UserProgress &progress)
+{
+  progress_ = progress;
+  saveGamificationData();
+}
+
+void storage::MemoryStorage::addXP(int amount, const QString &reason)
+{
+  Q_UNUSED(reason)
+  progress_.currentXP += amount;
+  checkLevelUp();
+  saveGamificationData();
+}
+
+void storage::MemoryStorage::updateStreak(const QDate &currentDate)
+{
+  if (!progress_.lastActivityDate.isValid())
+  {
+    progress_.streakDays = 1;
+    progress_.lastActivityDate = currentDate;
+    saveGamificationData();
+    return;
+  }
+
+  const int daysDiff = progress_.lastActivityDate.daysTo(currentDate);
+
+  if (daysDiff == 0)
+  {
+    return;
+  }
+
+  if (daysDiff == 1)
+  {
+    ++progress_.streakDays;
+  }
+  else
+  {
+    progress_.streakDays = 1;
+  }
+
+  progress_.lastActivityDate = currentDate;
+  saveGamificationData();
+}
+
+int storage::MemoryStorage::getCurrentLevel() const
+{
+  return progress_.currentLevel;
+}
+
+int storage::MemoryStorage::getTotalXP() const
+{
+  return progress_.currentXP;
+}
+
+int storage::MemoryStorage::getStreakDays() const
+{
+  return progress_.streakDays;
+}
+
+QList< storage::Achievement > storage::MemoryStorage::getAllAchievements() const
+{
+  return k_allAchievements;
+}
+
+void storage::MemoryStorage::unlockAchievement(const QString &achievementId)
+{
+  if (isAchievementUnlocked(achievementId))
+  {
+    return;
+  }
+  progress_.unlockedAchievementIds.append(achievementId);
+  saveGamificationData();
+}
+
+bool storage::MemoryStorage::isAchievementUnlocked(const QString &achievementId) const
+{
+  return progress_.unlockedAchievementIds.contains(achievementId);
+}
+
+storage::Achievement storage::MemoryStorage::getAchievementById(const QString &id) const
+{
+  for (const auto &achievement: k_allAchievements)
+  {
+    if (achievement.id == id)
+    {
+      return achievement;
+    }
+  }
+  return {};
+}
+
+QList< QString > storage::MemoryStorage::getUnlockedLocations() const
+{
+  return progress_.unlockedLocations;
+}
+
+void storage::MemoryStorage::unlockLocation(const QString &locationId)
+{
+  if (!progress_.unlockedLocations.contains(locationId))
+  {
+    progress_.unlockedLocations.append(locationId);
+    saveGamificationData();
+  }
+}
+
+bool storage::MemoryStorage::isLocationUnlocked(const QString &locationId) const
+{
+  return progress_.unlockedLocations.contains(locationId);
+}
+
+int storage::MemoryStorage::getCompletedTasksCount() const
+{
+  int count = 0;
+  for (const auto &task: tasks_)
+  {
+    if (task.completed)
+    {
+      ++count;
+    }
+  }
+  return count;
+}
+
+int storage::MemoryStorage::getOnTimeCompletedCount() const
+{
+  int count = 0;
+  for (const auto &task: tasks_)
+  {
+    if (task.completed && task.completedAt <= task.deadline)
+    {
+      ++count;
+    }
+  }
+  return count;
+}
+
+int storage::MemoryStorage::getCompletedCountByPriority(Priority priority) const
+{
+  int count = 0;
+  for (const auto &task: tasks_)
+  {
+    if (task.completed && task.priority == priority)
+    {
+      ++count;
+    }
+  }
+  return count;
+}
+
+int storage::MemoryStorage::getDeletedTasksCount() const
+{
+  return progress_.deletedTasksCount;
+}
+
+int storage::MemoryStorage::getPerfectDaysCount() const
+{
+  return perfectDaysCount_;
+}
+
+int storage::MemoryStorage::getTotalLocationsCount() const
+{
+  return 0;
+}
+
+int storage::MemoryStorage::getMaxTasksCompletedInOneDay() const
+{
+  return maxTasksCompletedInOneDay_;
+}
+
+int storage::MemoryStorage::getMaxHardTasksCompletedInOneDay() const
+{
+  return maxHardTasksCompletedInOneDay_;
+}
+
+void storage::MemoryStorage::checkLevelUp() noexcept
+{
+  while (progress_.currentLevel < xp::MAX_LEVEL && progress_.currentXP >= progress_.xpToNextLevel)
+  {
+    progress_.currentXP -= progress_.xpToNextLevel;
+    ++progress_.currentLevel;
+    progress_.xpToNextLevel = calculateXPForLevel(progress_.currentLevel);
+  }
+}
+
 void storage::MemoryStorage::saveToFile() noexcept
 {
   QJsonArray array;
@@ -210,12 +447,43 @@ void storage::MemoryStorage::saveToFile() noexcept
   }
 }
 
+void storage::MemoryStorage::saveGamificationData() noexcept
+{
+  QJsonObject root;
+  root["progress"] = serial::progressToJson(progress_);
+  root["perfectDaysCount"] = perfectDaysCount_;
+  root["maxTasksCompletedInOneDay"] = maxTasksCompletedInOneDay_;
+  root["maxHardTasksCompletedInOneDay"] = maxHardTasksCompletedInOneDay_;
+
+  const QByteArray data = QJsonDocument(root).toJson(QJsonDocument::Indented);
+  const QString main = serial::filePath(serial::k_gamificationFileName);
+  const QString backup = serial::filePath(serial::k_gamificationFileNameBackup);
+
+  QFile f(main);
+  if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate))
+  {
+    return;
+  }
+
+  f.write(data);
+  f.close();
+
+  const QString temp = backup + ".tmp";
+  QFile::remove(temp);
+  if (QFile::copy(main, temp))
+  {
+    QFile::remove(backup);
+    QFile::rename(temp, backup);
+  }
+}
+
 void storage::MemoryStorage::load() noexcept
 {
   if (!serial::tryLoad(serial::filePath(serial::k_fileName), tasks_, nextId_))
   {
     serial::tryLoad(serial::filePath(serial::k_fileNameBackup), tasks_, nextId_);
   }
+  loadGamificationData();
 }
 
 void storage::MemoryStorage::loadFromFile() noexcept
@@ -223,75 +491,42 @@ void storage::MemoryStorage::loadFromFile() noexcept
   load();
 }
 
-storage::UserProgress storage::MemoryStorage::getUserProgress() const
-{
-  return {};
-}
-
-void storage::MemoryStorage::updateUserProgress(const UserProgress &)
-{
-}
-
-void storage::MemoryStorage::addXP(int, const QString &)
-{
-}
-
-void storage::MemoryStorage::updateStreak(const QDate &)
-{
-}
-
-int storage::MemoryStorage::getCurrentLevel() const
-{
-  return 1;
-}
-
-int storage::MemoryStorage::getTotalXP() const
-{
-  return 0;
-}
-
-int storage::MemoryStorage::getStreakDays() const
-{
-  return 0;
-}
-
-QList< storage::Achievement > storage::MemoryStorage::getAllAchievements() const
-{
-  return {};
-}
-
-void storage::MemoryStorage::unlockAchievement(const QString &)
-{
-}
-
-bool storage::MemoryStorage::isAchievementUnlocked(const QString &) const
-{
-  return false;
-}
-
-storage::Achievement storage::MemoryStorage::getAchievementById(const QString &) const
-{
-  return {};
-}
-
-QList< QString > storage::MemoryStorage::getUnlockedLocations() const
-{
-  return {};
-}
-
-void storage::MemoryStorage::unlockLocation(const QString &)
-{
-}
-
-bool storage::MemoryStorage::isLocationUnlocked(const QString &) const
-{
-  return false;
-}
-
-void storage::MemoryStorage::saveGamificationData() noexcept
-{
-}
-
 void storage::MemoryStorage::loadGamificationData() noexcept
 {
+  UserProgress loadedProgress;
+
+  const auto tryLoad = [&](const QString &path) -> bool
+  {
+    QFile f(path);
+    if (!f.open(QIODevice::ReadOnly))
+    {
+      return false;
+    }
+
+    const QJsonDocument doc = QJsonDocument::fromJson(f.readAll());
+    f.close();
+
+    if (doc.isNull() || !doc.isObject())
+    {
+      return false;
+    }
+
+    const QJsonObject root = doc.object();
+
+    if (!root.contains("progress"))
+    {
+      return false;
+    }
+
+    loadedProgress = serial::progressFromJson(root["progress"].toObject());
+    perfectDaysCount_ = root["perfectDaysCount"].toInt(0);
+    maxTasksCompletedInOneDay_ = root["maxTasksCompletedInOneDay"].toInt(0);
+    maxHardTasksCompletedInOneDay_ = root["maxHardTasksCompletedInOneDay"].toInt(0);
+    return true;
+  };
+
+  if (tryLoad(serial::filePath(serial::k_gamificationFileName)) || tryLoad(serial::filePath(serial::k_gamificationFileNameBackup)))
+  {
+    progress_ = loadedProgress;
+  }
 }

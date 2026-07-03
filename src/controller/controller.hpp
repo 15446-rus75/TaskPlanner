@@ -4,6 +4,7 @@
 #include "icontroller.hpp"
 #include "../storage/task.hpp"
 #include "../storage/istorage.hpp"
+#include "../utils/achievements.hpp"
 #include "../view/iview.hpp"
 
 namespace controller
@@ -24,7 +25,7 @@ namespace controller
     void onViewReady() override;
     void onTaskAddRequested(const storage::Task &task) override;
     void onTaskEditRequested(int taskId) override;
-    void onTaskViewRequested(int taskId);
+    void onTaskViewRequested(int taskId) override;
     void onTaskUpdateRequested(const storage::Task &task) override;
     void onTaskDeleteRequested(int taskId) override;
     void onCompleteRequested(int taskId) override;
@@ -41,6 +42,7 @@ namespace controller
     void onApplicationStart() override;
     void onCheckAchievements() override;
     void onCalculateXP(int taskId) override;
+    void updateAchievementSlots() override;
 
   private:
     bool checkReady() const;
@@ -48,6 +50,13 @@ namespace controller
     void refreshView();
     void updateStats();
     static bool priorityMatches(storage::Priority taskPriority, storage::Priority filterPriority);
+
+    int calculateTaskCompletionXP(const storage::Task &task) const;
+    int calculateTimelinessBonus(const storage::Task &task) const;
+    void grantXP(int amount, const QString &reason);
+    QList< storage::Achievement > checkAndUnlockAchievements();
+    bool isAchievementConditionMet(const storage::Achievement &achievement) const;
+    void announceUnlockedAchievements(const QList< storage::Achievement > &unlocked);
 
     storage::IStorage *m_storage;
     view::IView *m_view;
