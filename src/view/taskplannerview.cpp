@@ -207,17 +207,29 @@ void view::TaskPlannerView::updateStats(int total, int completed, int today)
 
 void view::TaskPlannerView::showUserLevel(int level, int currentXP, int xpToNext)
 {
+  m_currentLevel = level;
+  m_currentXP = currentXP;
+  m_xpToNextLevel = xpToNext;
   m_gamificationView->showUserLevel(level, currentXP, xpToNext);
 }
 
 void view::TaskPlannerView::showStreak(int days)
 {
+  m_streakDays = days;
   m_gamificationView->showStreak(days);
 }
 
 void view::TaskPlannerView::showUserTitle(const QString &title)
 {
+  m_userTitle = title;
   m_gamificationView->showUserTitle(title);
+}
+
+void view::TaskPlannerView::updateGamificationPanel()
+{
+  m_gamificationView->showUserLevel(m_currentLevel, m_currentXP, m_xpToNextLevel);
+  m_gamificationView->showStreak(m_streakDays);
+  m_gamificationView->showUserTitle(m_userTitle);
 }
 
 void view::TaskPlannerView::showXPNotification(int amount, const QString &reason)
@@ -248,11 +260,6 @@ void view::TaskPlannerView::showLocationUnlocked(const QString &locationName)
 void view::TaskPlannerView::showLevelUpAnimation(int newLevel, const QString &newTitle)
 {
   m_gamificationView->showLevelUpAnimation(newLevel, newTitle);
-}
-
-void view::TaskPlannerView::updateGamificationPanel()
-{
-  // Панель обновляется через отдельные вызовы showUserLevel, showStreak и т.д.
 }
 
 void view::TaskPlannerView::clearStatusMessage()
