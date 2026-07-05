@@ -38,16 +38,35 @@ namespace storage
     void unlockLocation(const QString &locationId) override;
     bool isLocationUnlocked(const QString &locationId) const override;
 
+    int getCompletedTasksCount() const override;
+    int getOnTimeCompletedCount() const override;
+    int getCompletedCountByPriority(Priority priority) const override;
+    int getDeletedTasksCount() const override;
+    int getPerfectDaysCount() const override;
+
+    int getTotalLocationsCount() const override;
+    int getMaxTasksCompletedInOneDay() const override;
+    int getMaxHardTasksCompletedInOneDay() const override;
+
   private:
     QList< Task > tasks_;
     int nextId_;
 
+    UserProgress progress_;
+
+    int perfectDaysCount_;
+    int maxTasksCompletedInOneDay_;
+    int maxHardTasksCompletedInOneDay_;
+
+    static const QList< Achievement > k_allAchievements;
+
+    void checkLevelUp() noexcept;
+
     void saveToFile() noexcept override;
     void loadFromFile() noexcept override;
-    void load() noexcept;
-
     void saveGamificationData() noexcept override;
     void loadGamificationData() noexcept override;
+    void load() noexcept;
   };
 }
 

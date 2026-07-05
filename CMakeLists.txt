@@ -8,39 +8,42 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core)
+# 1. Добавляем Test в поиск пакетов Qt
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Core Test)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Core Test)
 
 set(PROJECT_SOURCES
-    src/main/main.cpp
-
-    src/storage/task.hpp
-    src/storage/task.cpp
-    src/storage/istorage.hpp
-    src/storage/igamification_storage.hpp
-    src/storage/memorystorage.hpp
-    src/storage/memorystorage.cpp
-    src/storage/serial-utils.hpp
-    src/storage/serial-utils.cpp
-
-    src/view/iview.hpp
-    src/view/igamification_view.hpp
-    src/view/taskplannerview.hpp
-    src/view/taskplannerview.cpp
-    src/view/taskplanner.ui
-
-    src/controller/icontroller.hpp
-    src/controller/igamification_controller.hpp
-    src/controller/controller.hpp
-    src/controller/controller.cpp
+        src/main/main.cpp
+        src/storage/task.hpp
+        src/storage/task.cpp
+        src/storage/istorage.hpp
+        # УДАЛЕНО: src/storage/igamification_storage.hpp (вызывал redefinition)
+        src/storage/memorystorage.hpp
+        src/storage/memorystorage.cpp
+        src/storage/serial-utils.hpp
+        src/storage/serial-utils.cpp
+        src/view/iview.hpp
+        src/view/igamification_view.hpp
+        src/view/taskplannerview.hpp
+        src/view/taskplannerview.cpp
+        src/view/taskplanner.ui
+        src/controller/icontroller.hpp
+        # УДАЛЕНО: src/controller/igamification_controller.hpp (вызывал redefinition)
+        src/controller/controller.hpp
+        src/controller/controller.cpp
+        src/utils/achievements.hpp
+        src/view/gamification_view.hpp
+        src/view/gamification_view.cpp
 )
-
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_add_executable(TaskPlanner
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
     )
+
+    # ПРИМЕЧАНИЕ: Тестовые файлы убраны из основной сборки, чтобы избежать
+    # конфликта функции main() и ошибок линковки. Для предзащиты это самое надежное решение.
 else()
     if(ANDROID)
         add_library(TaskPlanner SHARED
@@ -53,9 +56,11 @@ else()
     endif()
 endif()
 
+# 2. Добавляем Test в линковку
 target_link_libraries(TaskPlanner PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets
     Qt${QT_VERSION_MAJOR}::Core
+    Qt${QT_VERSION_MAJOR}::Test
 )
 
 if(QT_VERSION VERSION_LESS 6.1.0)
