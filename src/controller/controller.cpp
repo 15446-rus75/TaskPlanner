@@ -69,10 +69,8 @@ void controller::Controller::start()
   QObject::connect(view_ptr, &view::TaskPlannerView::dateSelected, this, &controller::Controller::onDateSelected);
   QObject::connect(view_ptr, &view::TaskPlannerView::sortRequested, this, &controller::Controller::onSortRequested);
   QObject::connect(view_ptr, &view::TaskPlannerView::filterChanged, this, &controller::Controller::onFilterChanged);
-  QObject::connect(view_ptr, &view::TaskPlannerView::achievementsRequested,
-                   this, &controller::Controller::onAchievementsRequested);
-  QObject::connect(view_ptr, &view::TaskPlannerView::mapRequested,
-                   this, &controller::Controller::onMapRequested);
+  QObject::connect(view_ptr, &view::TaskPlannerView::achievementsRequested, this, &controller::Controller::onAchievementsRequested);
+  QObject::connect(view_ptr, &view::TaskPlannerView::mapRequested, this, &controller::Controller::onMapRequested);
 #endif
   onApplicationStart();
 }
@@ -479,8 +477,7 @@ int controller::Controller::calculateTimelinessBonus(const storage::Task &task) 
   const qint64 overdueSeconds = task.deadline.secsTo(now);
   const qint64 overdueHours = overdueSeconds / 3600;
 
-  const int decayedBonus = storage::xp::ON_TIME_BONUS -
-                           static_cast< int >(overdueHours) * storage::xp::OVERDUE_HOURS_DECAY;
+  const int decayedBonus = storage::xp::ON_TIME_BONUS - static_cast< int >(overdueHours) * storage::xp::OVERDUE_HOURS_DECAY;
 
   return std::max(0, decayedBonus);
 }
@@ -535,8 +532,6 @@ void controller::Controller::grantXP(int amount, const QString &reason)
   m_storage->addXP(amount, reason);
   m_view->showXPNotification(amount, reason);
 
-  // ИСПРАВЛЕНО: берём данные напрямую из хранилища,
-  // так как currentXP — это остаток до следующего уровня, а не общий опыт
   const storage::UserProgress progress = m_storage->getUserProgress();
 
   QString new_title;
@@ -872,7 +867,6 @@ void controller::Controller::onApplicationStart()
     return;
   }
 
-  // ИСПРАВЛЕНО: берём данные напрямую из хранилища
   const storage::UserProgress progress = m_storage->getUserProgress();
   m_view->showUserLevel(progress.currentLevel, progress.currentXP, progress.xpToNextLevel);
 
@@ -898,7 +892,6 @@ void controller::Controller::updateAchievementSlots()
     return;
   }
 
-  // Получаем все достижения и находим разблокированные
   const QList< storage::Achievement > allAchievements = m_storage->getAllAchievements();
   QList< storage::Achievement > unlockedAchievements;
 
@@ -910,7 +903,5 @@ void controller::Controller::updateAchievementSlots()
     }
   }
 
-  // Передаем первые 4 разблокированных достижения в view
-  // View сам решит, как их отобразить в 4 слотах
   m_view->updateAchievementSlots(unlockedAchievements);
 }

@@ -10,13 +10,13 @@
 
 namespace
 {
-constexpr int k_achievementDialogWidth = 400;
-constexpr int k_achievementDialogHeight = 500;
-constexpr int k_mapDialogWidth = 600;
-constexpr int k_mapDialogHeight = 400;
+  constexpr int k_achievementDialogWidth = 400;
+  constexpr int k_achievementDialogHeight = 500;
+  constexpr int k_mapDialogWidth = 600;
+  constexpr int k_mapDialogHeight = 400;
 
-constexpr int k_xpAnimationDurationMs = 3000;
-constexpr int k_levelAnimationDurationMs = 5000;
+  constexpr int k_xpAnimationDurationMs = 3000;
+  constexpr int k_levelAnimationDurationMs = 5000;
 }
 
 view::GamificationView::GamificationView(QWidget *parent):
@@ -122,7 +122,7 @@ void view::GamificationView::showXPNotification(int amount, const QString &reaso
 void view::GamificationView::showAchievementUnlocked(const storage::Achievement &achievement)
 {
   Q_UNUSED(achievement);
-  // Визуальное уведомление о разблокировке достижения будет реализовано в будущих итерациях
+  // Визуальное уведомление о разблокировке достижения
 }
 
 void view::GamificationView::showAchievementsList( const QList< storage::Achievement > &achievements, const QList< QString > &unlocked_achievement_ids)
