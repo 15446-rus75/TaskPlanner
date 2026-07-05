@@ -10,10 +10,11 @@ PROJECT_SOURCES := \
   $(SRC_DIR)/serial-utils.cpp
 
 TEST_SOURCES := \
-  $(TEST_DIR)/main_test.cpp \
-  $(TEST_DIR)/test_task.cpp \
-  $(TEST_DIR)/test_memorystorage.cpp \
-  $(TEST_DIR)/test_serial.cpp
+  test/storage/main_test.cpp \
+  test/storage/test_task.cpp \
+  test/storage/test_memorystorage.cpp \
+  test/storage/test_serial.cpp \
+  test/storage/test_gamification.cpp
 
 TEST_BIN := $(TEST_DIR)/run_tests
 
