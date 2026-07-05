@@ -131,8 +131,7 @@ private slots:
   void delete_checksAchievementsAfterRemoval();
 
 private:
-  storage::Task makeTask(int id, const QString &name, storage::Priority priority,
-                         const QDateTime &deadline, bool completed = false) const;
+  storage::Task makeTask(int id, const QString &name, storage::Priority priority, const QDateTime &deadline, bool completed = false) const;
   storage::Achievement makeAchievement(const QString &id, int xpReward = 0) const;
 
   test::MockStorage *m_storage = nullptr;
@@ -159,8 +158,7 @@ void ControllerTest::cleanup()
   m_storage = nullptr;
 }
 
-storage::Task ControllerTest::makeTask(int id, const QString &name, storage::Priority priority,
-                                       const QDateTime &deadline, bool completed) const
+storage::Task ControllerTest::makeTask(int id, const QString &name, storage::Priority priority, const QDateTime &deadline, bool completed) const
 {
   storage::Task task;
   task.id = id;
@@ -740,7 +738,7 @@ void ControllerTest::achievements_multipleInOneCheck_allUnlocked()
 {
   m_storage->currentLevelToReturn = 10;
   m_storage->completedTasksCountToReturn = 50;
-  m_storage->allAchievementsToReturn = { makeAchievement("level_10", 500), makeAchievement("tasks_50", 300), };
+  m_storage->allAchievementsToReturn = { makeAchievement("level_10", 500), makeAchievement("tasks_50", 300) };
 
   m_controller->onCheckAchievements();
 
@@ -983,9 +981,7 @@ void ControllerTest::complete_triggersXpAndAchievementCheck()
 
 void ControllerTest::complete_streakUpdated()
 {
-  const storage::Task task = makeTask(
-    1, "Streak task", storage::Priority::Low,
-    QDateTime::currentDateTime().addDays(1));
+  const storage::Task task = makeTask(1, "Streak task", storage::Priority::Low, QDateTime::currentDateTime().addDays(1));
   m_storage->setTasks({ task });
   m_storage->allAchievementsToReturn = {};
 
@@ -1008,9 +1004,7 @@ void ControllerTest::dailyTasksCompleted_grantsPerfectDayBonus()
 void ControllerTest::dailyTasksCompleted_checksAchievements()
 {
   m_storage->allAchievementsToReturn = {};
-
   m_controller->onDailyTasksCompleted();
-
   QVERIFY(m_storage->getAllAchievementsCallCount >= 1);
 }
 
@@ -1018,7 +1012,6 @@ void ControllerTest::newDay_updatesStreak()
 {
   m_storage->allAchievementsToReturn = {};
   const QDate date(2026, 6, 26);
-
   m_controller->onNewDay(date);
 
   QCOMPARE(m_storage->updateStreakCallCount, 1);
@@ -1029,7 +1022,6 @@ void ControllerTest::newDay_showsStreak()
 {
   m_storage->streakDaysToReturn = 5;
   m_storage->allAchievementsToReturn = {};
-
   m_controller->onNewDay(QDate::currentDate());
 
   QCOMPARE(m_view->showStreakCallCount, 1);
@@ -1039,9 +1031,7 @@ void ControllerTest::newDay_showsStreak()
 void ControllerTest::newDay_checksAchievements()
 {
   m_storage->allAchievementsToReturn = {};
-
   m_controller->onNewDay(QDate::currentDate());
-
   QVERIFY(m_storage->getAllAchievementsCallCount >= 1);
 }
 
@@ -1050,7 +1040,6 @@ void ControllerTest::applicationStart_showsCurrentLevel()
   m_storage->currentLevelToReturn = 7;
   m_storage->totalXP = storage::calculateTotalXPForLevel(7) + 50;
   m_storage->allAchievementsToReturn = {};
-
   m_controller->onApplicationStart();
 
   QCOMPARE(m_view->showUserLevelCallCount, 1);
@@ -1060,20 +1049,13 @@ void ControllerTest::applicationStart_showsCurrentLevel()
 void ControllerTest::applicationStart_triggersNewDay()
 {
   m_storage->allAchievementsToReturn = {};
-
   m_controller->onApplicationStart();
-
   QCOMPARE(m_storage->updateStreakCallCount, 1);
 }
 
 void ControllerTest::achievementsRequested_showsFullList()
 {
-  m_storage->allAchievementsToReturn = {
-    makeAchievement("level_1", 0),
-    makeAchievement("tasks_10", 100),
-    makeAchievement("streak_7", 150),
-  };
-
+  m_storage->allAchievementsToReturn = { makeAchievement("level_1", 0), makeAchievement("tasks_10", 100), makeAchievement("streak_7", 150) };
   m_controller->onAchievementsRequested();
 
   QCOMPARE(m_view->showAchievementsListCallCount, 1);
@@ -1083,7 +1065,6 @@ void ControllerTest::achievementsRequested_showsFullList()
 void ControllerTest::mapRequested_showsUnlockedLocations()
 {
   m_storage->unlockedLocationsToReturn = {"main_building", "library", "gym"};
-
   m_controller->onMapRequested();
 
   QCOMPARE(m_view->showCampusMapCallCount, 1);
@@ -1093,7 +1074,6 @@ void ControllerTest::mapRequested_showsUnlockedLocations()
 void ControllerTest::statisticsRequested_updatesStats()
 {
   m_controller->onStatisticsRequested();
-
   QCOMPARE(m_view->updateStatsCallCount, 1);
   QCOMPARE(m_view->updateGamificationPanelCallCount, 1);
 }
@@ -1103,7 +1083,6 @@ void ControllerTest::delete_checksAchievementsAfterRemoval()
   const storage::Task task = makeTask(5, "Delete me", storage::Priority::Low, QDateTime::currentDateTime().addDays(1));
   m_storage->setTasks({ task });
   m_storage->allAchievementsToReturn = {};
-
   m_controller->onTaskDeleteRequested(5);
 
   QVERIFY(m_storage->getAllAchievementsCallCount >= 1);

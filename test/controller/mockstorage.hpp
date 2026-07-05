@@ -17,14 +17,14 @@ namespace test
 
     void addTask(const storage::Task &task) override
     {
-      addTaskCallCount++;
+      ++addTaskCallCount;
       lastAddedTask = task;
       m_tasks.append(task);
     }
 
     void removeTask(int id) override
     {
-      removeTaskCallCount++;
+      ++removeTaskCallCount;
       lastRemovedId = id;
       for (int i = 0; i < m_tasks.size(); ++i)
       {
@@ -38,7 +38,7 @@ namespace test
 
     void updateTask(const storage::Task &task) override
     {
-      updateTaskCallCount++;
+      ++updateTaskCallCount;
       lastUpdatedTask = task;
       for (auto &existing: m_tasks)
       {
@@ -52,13 +52,13 @@ namespace test
 
     QList< storage::Task > getAllTasks() const override
     {
-      getAllTasksCallCount++;
+      ++getAllTasksCallCount;
       return m_tasks;
     }
 
     QList< storage::Task > getTasksForDate(const QDate &date) const override
     {
-      getTasksForDateCallCount++;
+      ++getTasksForDateCallCount;
       lastQueriedDate = date;
       QList< storage::Task > result;
       for (const auto &task: m_tasks)
@@ -73,20 +73,19 @@ namespace test
 
     QList< storage::Task > getTasksForToday() const override
     {
-      getTasksForTodayCallCount++;
+      ++getTasksForTodayCallCount;
       return tasksForTodayToReturn;
     }
 
     QList< storage::Task > getOverdueTasks() const override
     {
-      getOverdueTasksCallCount++;
+      ++getOverdueTasksCallCount;
       return overdueTasksToReturn;
     }
 
-    QList< storage::Task > getTasksFiltered(const QString &searchText, bool today, bool overdue,
-      storage::Priority priority) const override
+    QList< storage::Task > getTasksFiltered(const QString &searchText, bool today, bool overdue, storage::Priority priority) const override
     {
-      getTasksFilteredCallCount++;
+      ++getTasksFilteredCallCount;
       lastSearchText = searchText;
       lastTodayFlag = today;
       lastOverdueFlag = overdue;
@@ -96,7 +95,7 @@ namespace test
 
     QList< storage::Task > getSortedTasks(const QList< storage::Task > &tasks, storage::Criterion criterion) const override
     {
-      getSortedTasksCallCount++;
+      ++getSortedTasksCallCount;
       lastSortedInput = tasks;
       lastCriterion = criterion;
       return tasks;
@@ -120,13 +119,13 @@ namespace test
 
     void updateUserProgress(const storage::UserProgress &progress) override
     {
-      updateUserProgressCallCount++;
+      ++updateUserProgressCallCount;
       userProgressToReturn = progress;
     }
 
     void addXP(int amount, const QString &reason) override
     {
-      addXPCallCount++;
+      ++addXPCallCount;
       lastXPAmount = amount;
       lastXPReason = reason;
       totalXP += amount;
@@ -147,19 +146,19 @@ namespace test
 
     void updateStreak(const QDate &currentDate) override
     {
-      updateStreakCallCount++;
+      ++updateStreakCallCount;
       lastStreakDate = currentDate;
     }
 
     int getCurrentLevel() const override
     {
-      getCurrentLevelCallCount++;
+      ++getCurrentLevelCallCount;
       return currentLevelToReturn;
     }
 
     int getTotalXP() const override
     {
-      getTotalXPCallCount++;
+      ++getTotalXPCallCount;
       return totalXP;
     }
 
@@ -170,13 +169,13 @@ namespace test
 
     QList< storage::Achievement > getAllAchievements() const override
     {
-      getAllAchievementsCallCount++;
+      ++getAllAchievementsCallCount;
       return allAchievementsToReturn;
     }
 
     void unlockAchievement(const QString &achievementId) override
     {
-      unlockAchievementCallCount++;
+      ++unlockAchievementCallCount;
       lastUnlockedAchievementId = achievementId;
       unlockedIds.insert(achievementId);
     }
@@ -195,7 +194,7 @@ namespace test
           return a;
         }
       }
-      return storage::Achievement();
+      return storage::Achievement{};
     }
 
     QList< QString > getUnlockedLocations() const override
@@ -205,7 +204,7 @@ namespace test
 
     void unlockLocation(const QString &locationId) override
     {
-      unlockLocationCallCount++;
+      ++unlockLocationCallCount;
       unlockedLocationsToReturn.append(locationId);
     }
 
