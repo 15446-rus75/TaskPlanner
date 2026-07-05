@@ -1,24 +1,17 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
-
 #include <QDate>
 #include <QDateTime>
 #include <QTemporaryDir>
 #include <ostream>
-
-// Boost.Test needs operator<< to print values on CHECK_EQUAL failures.
-inline std::ostream &operator<<(std::ostream &os, const QString &s)
-{
-  return os << s.toStdString();
-}
-
 #include "memorystorage.hpp"
 #include "serial-utils.hpp"
 #include "../utils/achievements.hpp"
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Fixture
-// ─────────────────────────────────────────────────────────────────────────────
+inline std::ostream &operator<<(std::ostream &os, const QString &s)
+{
+  return os << s.toStdString();
+}
 
 struct GamificationFixture
 {
@@ -36,18 +29,10 @@ struct GamificationFixture
   }
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
-
-static storage::Task makeTask(const QString &name,
-                              storage::Priority priority,
-                              const QDateTime &deadline,
-                              bool completed = false,
-                              const QDateTime &completedAt = {})
+static storage::Task makeTask(const QString &name, storage::Priority priority, const QDateTime &deadline, bool completed = false, const QDateTime &completedAt = {})
 {
   storage::Task t;
-  t.id = 0; // assigned by storage
+  t.id = 0;
   t.name = name;
   t.description = "";
   t.discipline = "";
@@ -58,9 +43,7 @@ static storage::Task makeTask(const QString &name,
   return t;
 }
 
-// ═════════════════════════════════════════════════════════════════════════════
 BOOST_FIXTURE_TEST_SUITE(Gamification_XP_Levels, GamificationFixture)
-// ═════════════════════════════════════════════════════════════════════════════
 
 BOOST_AUTO_TEST_CASE(InitialState_Level1_ZeroXP)
 {
@@ -123,7 +106,6 @@ BOOST_AUTO_TEST_CASE(AddXP_MultiLevelJump_SkipsLevels)
 BOOST_AUTO_TEST_CASE(AddXP_CapsAtMaxLevel)
 {
   storage::MemoryStorage s;
-  // enough XP to blow past the entire progression curve
   const int huge = storage::calculateTotalXPForLevel(storage::xp::MAX_LEVEL) + 999999;
   s.addXP(huge, "max grind");
   BOOST_CHECK_EQUAL(s.getCurrentLevel(), storage::xp::MAX_LEVEL);
@@ -156,9 +138,7 @@ BOOST_AUTO_TEST_CASE(UpdateUserProgress_OverwritesAllFields)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-// ═════════════════════════════════════════════════════════════════════════════
 BOOST_FIXTURE_TEST_SUITE(Gamification_Streak, GamificationFixture)
-// ═════════════════════════════════════════════════════════════════════════════
 
 BOOST_AUTO_TEST_CASE(Streak_FirstCall_SetsToOne)
 {
@@ -202,13 +182,12 @@ BOOST_AUTO_TEST_CASE(Streak_GapResets)
   const QDate today = QDate::currentDate();
   s.updateStreak(today);
   s.updateStreak(today.addDays(1));
-  s.updateStreak(today.addDays(3)); // skip day 2
+  s.updateStreak(today.addDays(3));
   BOOST_CHECK_EQUAL(s.getStreakDays(), 1);
 }
 
 BOOST_AUTO_TEST_CASE(Streak_BackwardsDateResets)
 {
-  // daysTo() returns negative → not 0, not 1 → falls into else → resets to 1
   storage::MemoryStorage s;
   const QDate today = QDate::currentDate();
   s.updateStreak(today);
@@ -219,9 +198,7 @@ BOOST_AUTO_TEST_CASE(Streak_BackwardsDateResets)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-// ═════════════════════════════════════════════════════════════════════════════
 BOOST_FIXTURE_TEST_SUITE(Gamification_Achievements, GamificationFixture)
-// ═════════════════════════════════════════════════════════════════════════════
 
 BOOST_AUTO_TEST_CASE(Catalog_IsNotEmpty)
 {
@@ -235,8 +212,7 @@ BOOST_AUTO_TEST_CASE(Catalog_ContainsKnownAchievements)
   const auto all = s.getAllAchievements();
   const auto hasId = [&](const QString &id)
   {
-    return std::any_of(all.begin(), all.end(),
-                       [&](const storage::Achievement &a) { return a.id == id; });
+    return std::any_of(all.begin(), all.end(), [&](const storage::Achievement &a) { return a.id == id; });
   };
   BOOST_CHECK(hasId(storage::achievements::LEVEL_1.id));
   BOOST_CHECK(hasId(storage::achievements::TASKS_10.id));
@@ -294,9 +270,7 @@ BOOST_AUTO_TEST_CASE(GetById_UnknownId_ReturnsDefaultStruct)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-// ═════════════════════════════════════════════════════════════════════════════
 BOOST_FIXTURE_TEST_SUITE(Gamification_Locations, GamificationFixture)
-// ═════════════════════════════════════════════════════════════════════════════
 
 BOOST_AUTO_TEST_CASE(Locations_InitiallyEmpty)
 {
@@ -340,9 +314,7 @@ BOOST_AUTO_TEST_CASE(IsLocationUnlocked_TrueAfterUnlock)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-// ═════════════════════════════════════════════════════════════════════════════
 BOOST_FIXTURE_TEST_SUITE(Gamification_TaskCounters, GamificationFixture)
-// ═════════════════════════════════════════════════════════════════════════════
 
 BOOST_AUTO_TEST_CASE(CompletedCount_OnlyCountsCompletedTasks)
 {
@@ -433,9 +405,6 @@ BOOST_AUTO_TEST_CASE(DeletedCount_RemoveNonExistent_NoIncrement)
 
 BOOST_AUTO_TEST_CASE(PerfectAndMaxCounters_InitiallyZero)
 {
-  // perfectDaysCount_ / maxTasksCompletedInOneDay_ / maxHardTasksCompletedInOneDay_
-  // are only set externally (no increment logic in MemoryStorage itself),
-  // so we verify initial state and persistence round-trip via updateUserProgress.
   storage::MemoryStorage s;
   BOOST_CHECK_EQUAL(s.getPerfectDaysCount(), 0);
   BOOST_CHECK_EQUAL(s.getMaxTasksCompletedInOneDay(), 0);
@@ -444,9 +413,7 @@ BOOST_AUTO_TEST_CASE(PerfectAndMaxCounters_InitiallyZero)
 
 BOOST_AUTO_TEST_SUITE_END()
 
-// ═════════════════════════════════════════════════════════════════════════════
 BOOST_FIXTURE_TEST_SUITE(Gamification_Persistence, GamificationFixture)
-// ═════════════════════════════════════════════════════════════════════════════
 
 BOOST_AUTO_TEST_CASE(Persist_XPAndLevel_SurviveReload)
 {
@@ -523,8 +490,6 @@ BOOST_AUTO_TEST_CASE(Persist_UserTitle_SurvivesReload)
 
 BOOST_AUTO_TEST_CASE(Persist_DeletedTasksCount_NotPersisted)
 {
-  // Known limitation: deletedTasksCount lives in UserProgress but is NOT
-  // written/read by progressToJson / progressFromJson → resets to 0 on reload.
   {
     storage::MemoryStorage s;
     const QDateTime now = QDateTime::currentDateTime();
@@ -535,7 +500,6 @@ BOOST_AUTO_TEST_CASE(Persist_DeletedTasksCount_NotPersisted)
   }
   {
     storage::MemoryStorage s;
-    // After reload the counter is lost — document the current behaviour.
     BOOST_CHECK_EQUAL(s.getDeletedTasksCount(), 0);
   }
 }
@@ -563,3 +527,4 @@ BOOST_AUTO_TEST_CASE(Persist_FullRoundTrip)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+
