@@ -1,4 +1,4 @@
-QT += core testlib
+QT += core gui widgets testlib
 CONFIG += qt console warn_on depend_includepath testcase c++17
 CONFIG -= app_bundle
 
@@ -8,10 +8,11 @@ TARGET = test_controller
 DEFINES += TEST_BUILD
 
 INCLUDEPATH += \
-    $$PWD/../../src \
+    $$PWD/.. \
     $$PWD/../../src/controller \
     $$PWD/../../src/storage \
-    $$PWD/../../src/view
+    $$PWD/../../src/view \
+    $$PWD/../../src/utils
 
 SOURCES += \
     test_controller.cpp \
