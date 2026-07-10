@@ -29,7 +29,8 @@ struct GamificationFixture
   }
 };
 
-static storage::Task makeTask(const QString &name, storage::Priority priority, const QDateTime &deadline, bool completed = false, const QDateTime &completedAt = {})
+static storage::Task makeTask(const QString &name, storage::Priority priority,
+    const QDateTime &deadline, bool completed = false, const QDateTime &completedAt = {})
 {
   storage::Task t;
   t.id = 0;
@@ -169,7 +170,7 @@ BOOST_AUTO_TEST_CASE(Streak_FiveDays_AccumulatesCorrectly)
 {
   storage::MemoryStorage s;
   const QDate start = QDate::currentDate();
-  for (int i = 0; i < 5; ++i)
+  for (size_t i = 0; i < 5; ++i)
   {
     s.updateStreak(start.addDays(i));
   }
@@ -248,7 +249,7 @@ BOOST_AUTO_TEST_CASE(Unlock_Idempotent_NoDuplicatesInProgress)
   s.unlockAchievement(id);
   s.unlockAchievement(id);
   const auto &ids = s.getUserProgress().unlockedAchievementIds;
-  const int count = static_cast<int>(std::count(ids.begin(), ids.end(), id));
+  const int count = static_cast< int >(std::count(ids.begin(), ids.end(), id));
   BOOST_CHECK_EQUAL(count, 1);
 }
 
@@ -363,14 +364,14 @@ BOOST_AUTO_TEST_CASE(CompletedByPriority_FiltersCorrectly)
 {
   storage::MemoryStorage s;
   const QDateTime now = QDateTime::currentDateTime();
-  s.addTask(makeTask("h1", storage::Priority::Hard,   now, true, now));
-  s.addTask(makeTask("h2", storage::Priority::Hard,   now, true, now));
+  s.addTask(makeTask("h1", storage::Priority::Hard, now, true, now));
+  s.addTask(makeTask("h2", storage::Priority::Hard, now, true, now));
   s.addTask(makeTask("m1", storage::Priority::Medium, now, true, now));
-  s.addTask(makeTask("l1", storage::Priority::Low,    now, false));
+  s.addTask(makeTask("l1", storage::Priority::Low, now, false));
 
-  BOOST_CHECK_EQUAL(s.getCompletedCountByPriority(storage::Priority::Hard),   2);
+  BOOST_CHECK_EQUAL(s.getCompletedCountByPriority(storage::Priority::Hard), 2);
   BOOST_CHECK_EQUAL(s.getCompletedCountByPriority(storage::Priority::Medium), 1);
-  BOOST_CHECK_EQUAL(s.getCompletedCountByPriority(storage::Priority::Low),    0);
+  BOOST_CHECK_EQUAL(s.getCompletedCountByPriority(storage::Priority::Low), 0);
 }
 
 BOOST_AUTO_TEST_CASE(DeletedCount_StartsAtZero)
