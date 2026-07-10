@@ -6,8 +6,6 @@ CONFIG += autouic
 TEMPLATE = app
 TARGET = test_view
 
-# Макрос TEST_BUILD может использоваться в коде для отключения 
-# специфичной для продакшена логики (например, в controller.cpp)
 DEFINES += TEST_BUILD
 
 INCLUDEPATH += \
@@ -25,7 +23,6 @@ SOURCES += \
     $$PWD/../../src/storage/serial-utils.cpp
 
 HEADERS += \
-    ../../src/view/gamification_view.hpp \
     mockstorage.hpp \
     $$PWD/../../src/view/taskplannerview.hpp \
     $$PWD/../../src/view/iview.hpp \
@@ -33,9 +30,7 @@ HEADERS += \
     $$PWD/../../src/view/igamification_view.hpp \
     $$PWD/../../src/storage/istorage.hpp \
     $$PWD/../../src/storage/task.hpp \
-    $$PWD/../../src/storage/igamification_storage.hpp \
     $$PWD/../../src/storage/serial-utils.hpp
 
-# Обязательно указываем UI-файл, чтобы сработал autouic и сгенерировал ui_taskplanner.h
 FORMS += \
     $$PWD/../../src/view/taskplanner.ui

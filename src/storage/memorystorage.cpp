@@ -156,14 +156,18 @@ void storage::MemoryStorage::removeTask(int id)
   }
 }
 
-void storage::MemoryStorage::updateTask(Task &task)
+void storage::MemoryStorage::updateTask(const Task &task)
 {
   for (auto &t: tasks_)
   {
     if (t.id == task.id)
     {
-      task.completedAt = QDateTime::currentDateTime();
-      t = task;
+      Task updated_task = task;
+      if (!t.completed && updated_task.completed)
+      {
+        updated_task.completedAt = QDateTime::currentDateTime();
+      }
+      t = updated_task;
       saveToFile();
       return;
     }

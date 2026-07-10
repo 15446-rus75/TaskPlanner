@@ -72,11 +72,11 @@ storage::Task storage::serial::taskFromJson(const QJsonObject &obj)
   task.deadline = deadline;
 
   const int priorityInt = obj["priority"].toInt(-1);
-  if (priorityInt < static_cast<int>(Priority::All) || priorityInt > static_cast<int>(Priority::Hard))
+  if (priorityInt < static_cast< int >(Priority::All) || priorityInt > static_cast< int >(Priority::Hard))
   {
     return {};
   }
-  task.priority = static_cast<Priority>(priorityInt);
+  task.priority = static_cast< Priority >(priorityInt);
 
   task.completed = obj["completed"].toBool();
 
