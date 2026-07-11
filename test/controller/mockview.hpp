@@ -6,7 +6,7 @@
 
 namespace test
 {
-  class MockView : public view::IView
+  class MockView: public view::IView
   {
   public:
     MockView() = default;
@@ -14,56 +14,56 @@ namespace test
 
     void showTaskList(const QList< storage::Task > &tasks) override
     {
-      showTaskListCallCount++;
+      ++showTaskListCallCount;
       lastShownTasks = tasks;
     }
 
     void showTasksForDate(const QDate &date, const QList< storage::Task > &tasks) override
     {
-      showTasksForDateCallCount++;
+      ++showTasksForDateCallCount;
       lastDateArg = date;
       lastShownTasks = tasks;
     }
 
     void setTaskListTitle(const QString &title) override
     {
-      setTaskListTitleCallCount++;
+      ++setTaskListTitleCallCount;
       lastTitle = title;
     }
 
     void showTaskCreationForm() override
     {
-      showTaskCreationFormCallCount++;
+      ++showTaskCreationFormCallCount;
       lastFormHadTask = false;
     }
 
     void showTaskCreationForm(const storage::Task &task) override
     {
-      showTaskCreationFormCallCount++;
+      ++showTaskCreationFormCallCount;
       lastFormHadTask = true;
       lastFormTask = task;
     }
 
     void closeTaskCreationForm() override
     {
-      closeTaskCreationFormCallCount++;
+      ++closeTaskCreationFormCallCount;
     }
 
     void showErrorMessage(const QString &message) override
     {
-      showErrorMessageCallCount++;
+      ++showErrorMessageCallCount;
       lastErrorMessage = message;
-   }
+    }
 
     void showInfoMessage(const QString &message) override
     {
-      showInfoMessageCallCount++;
+      ++showInfoMessageCallCount;
       lastInfoMessage = message;
     }
 
     void updateStats(int total, int completed, int today) override
     {
-      updateStatsCallCount++;
+      ++updateStatsCallCount;
       lastStatsTotal = total;
       lastStatsCompleted = completed;
       lastStatsToday = today;
@@ -71,72 +71,73 @@ namespace test
 
     void showUserLevel(int level, int currentXP, int xpToNext) override
     {
-      Q_UNUSED(level);
-      Q_UNUSED(currentXP);
-      Q_UNUSED(xpToNext);
-      showUserLevelCallCount++;
+      ++showUserLevelCallCount;
+      lastLevel = level;
+      lastCurrentXP = currentXP;
+      lastXpToNext = xpToNext;
     }
 
     void showStreak(int days) override
     {
-      Q_UNUSED(days);
-      showStreakCallCount++;
+      ++showStreakCallCount;
+      lastStreakDays = days;
     }
 
     void showUserTitle(const QString &title) override
     {
-      Q_UNUSED(title);
-      showUserTitleCallCount++;
+      ++showUserTitleCallCount;
+      lastUserTitle = title;
     }
 
     void showXPNotification(int amount, const QString &reason) override
     {
-      Q_UNUSED(amount);
-      Q_UNUSED(reason);
-      showXPNotificationCallCount++;
+      ++showXPNotificationCallCount;
+      lastXPAmount = amount;
+      lastXPReason = reason;
     }
 
     void showAchievementUnlocked(const storage::Achievement &achievement) override
     {
-      Q_UNUSED(achievement);
-      showAchievementUnlockedCallCount++;
+      ++showAchievementUnlockedCallCount;
+      lastUnlockedAchievement = achievement;
+      unlockedAchievementHistory.append(achievement);
     }
 
     void showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds) override
     {
-      Q_UNUSED(achievements);
       Q_UNUSED(unlockedAchievementIds);
-      showAchievementsListCallCount++;
+      ++showAchievementsListCallCount;
+      lastAchievementsList = achievements;
     }
 
     void showCampusMap(const QList< QString > &unlockedLocations) override
     {
-      Q_UNUSED(unlockedLocations);
-      showCampusMapCallCount++;
+      ++showCampusMapCallCount;
+      lastUnlockedLocations = unlockedLocations;
     }
 
     void showLocationUnlocked(const QString &locationName) override
     {
-      Q_UNUSED(locationName);
-      showLocationUnlockedCallCount++;
+      ++showLocationUnlockedCallCount;
+      lastUnlockedLocationName = locationName;
     }
 
     void showLevelUpAnimation(int newLevel, const QString &newTitle) override
     {
-      Q_UNUSED(newLevel);
-      Q_UNUSED(newTitle);
-      showLevelUpAnimationCallCount++;
+      ++showLevelUpAnimationCallCount;
+      lastNewLevel = newLevel;
+      lastNewTitle = newTitle;
     }
 
     void updateGamificationPanel() override
     {
-      updateGamificationPanelCallCount++;
+      ++updateGamificationPanelCallCount;
     }
 
     void updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements) override
     {
       Q_UNUSED(unlockedAchievements);
-      updateAchievementSlotsCallCount++;
+      ++updateAchievementSlotsCallCount;
     }
 
     int showTaskListCallCount = 0;
@@ -147,6 +148,7 @@ namespace test
     int showErrorMessageCallCount = 0;
     int showInfoMessageCallCount = 0;
     int updateStatsCallCount = 0;
+
     int showUserLevelCallCount = 0;
     int showStreakCallCount = 0;
     int showUserTitleCallCount = 0;
@@ -169,6 +171,22 @@ namespace test
     int lastStatsTotal = 0;
     int lastStatsCompleted = 0;
     int lastStatsToday = 0;
+
+    int lastLevel = 0;
+    int lastCurrentXP = 0;
+    int lastXpToNext = 0;
+    int lastStreakDays = 0;
+    QString lastUserTitle;
+    int lastXPAmount = 0;
+    QString lastXPReason;
+    storage::Achievement lastUnlockedAchievement;
+    QList< storage::Achievement > lastAchievementsList;
+    QList< QString > lastUnlockedLocations;
+    QString lastUnlockedLocationName;
+    int lastNewLevel = 0;
+    QString lastNewTitle;
+
+    QList< storage::Achievement > unlockedAchievementHistory;
   };
 }
 
