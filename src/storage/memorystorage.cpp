@@ -130,6 +130,7 @@ storage::MemoryStorage::MemoryStorage():
   progress_.currentXP = 0;
   progress_.xpToNextLevel = calculateXPForLevel(1);
   progress_.streakDays = 0;
+  progress_.deletedTasksCount = 0;
   load();
 }
 

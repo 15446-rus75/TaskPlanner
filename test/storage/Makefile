@@ -13,7 +13,8 @@ TEST_SOURCES := \
   $(TEST_DIR)/main_test.cpp \
   $(TEST_DIR)/test_task.cpp \
   $(TEST_DIR)/test_memorystorage.cpp \
-  $(TEST_DIR)/test_serial.cpp
+  $(TEST_DIR)/test_serial.cpp \
+  $(TEST_DIR)/test_gamification.cpp
 
 TEST_BIN := $(TEST_DIR)/run_tests
 
