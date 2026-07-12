@@ -772,6 +772,7 @@ void controller::Controller::onTaskCompleted(int taskId)
 
   onCalculateXP(taskId);
   m_storage->updateStreak(QDate::currentDate());
+  checkLocationUnlocks();
   onCheckAchievements();
   updateAchievementSlots();
 }
@@ -883,6 +884,7 @@ void controller::Controller::onApplicationStart()
   m_view->showStreak(progress.streakDays);
 
   onNewDay(QDate::currentDate());
+  checkLocationUnlocks();
 }
 
 void controller::Controller::updateAchievementSlots()
@@ -904,4 +906,128 @@ void controller::Controller::updateAchievementSlots()
   }
 
   m_view->updateAchievementSlots(unlockedAchievements);
+}
+
+void controller::Controller::checkLocationUnlocks()
+{
+  if (!checkReady())
+  {
+    return;
+  }
+
+  QList< storage::Location > newlyUnlocked;
+
+  const auto tryUnlock = [&](const storage::Location &location)
+  {
+    if (!m_storage->isLocationUnlocked(location.id))
+    {
+      m_storage->unlockLocation(location.id);
+      newlyUnlocked.append(location);
+    }
+  };
+
+  tryUnlock(storage::locations::ADMISSION_AND_PASS_OFFICE);
+  tryUnlock(storage::locations::METRO_POLITEKHNICHESKAYA);
+
+  const int currentLevel = m_storage->getCurrentLevel();
+
+  if (currentLevel >= 2)
+  {
+    tryUnlock(storage::locations::SPORTS_COMPLEX);
+  }
+  if (currentLevel >= 4)
+  {
+    tryUnlock(storage::locations::BUILDING_1);
+  }
+  if (currentLevel >= 6)
+  {
+    tryUnlock(storage::locations::HYDRO_CAMPUS_1);
+  }
+  if (currentLevel >= 8)
+  {
+    tryUnlock(storage::locations::BUILDING_2);
+  }
+  if (currentLevel >= 10)
+  {
+    tryUnlock(storage::locations::HYDRO_CAMPUS_2);
+  }
+  if (currentLevel >= 12)
+  {
+    tryUnlock(storage::locations::BUILDING_3);
+  }
+  if (currentLevel >= 14)
+  {
+    tryUnlock(storage::locations::MECHANICS_BUILDING);
+  }
+  if (currentLevel >= 16)
+  {
+    tryUnlock(storage::locations::BUILDING_4);
+  }
+  if (currentLevel >= 18)
+  {
+    tryUnlock(storage::locations::LAB_AUDITORIUM);
+  }
+  if (currentLevel >= 20)
+  {
+    tryUnlock(storage::locations::BUILDING_11);
+  }
+  if (currentLevel >= 22)
+  {
+    tryUnlock(storage::locations::HYDRO_TOWER);
+  }
+  if (currentLevel >= 24)
+  {
+    tryUnlock(storage::locations::MECHANICS_WORKSHOP);
+  }
+  if (currentLevel >= 26)
+  {
+    tryUnlock(storage::locations::PRODUCTION_BUILDING);
+  }
+  if (currentLevel >= 28)
+  {
+    tryUnlock(storage::locations::CHEMISTRY_BUILDING);
+  }
+  if (currentLevel >= 30)
+  {
+    tryUnlock(storage::locations::LASER_CENTER);
+  }
+  if (currentLevel >= 32)
+  {
+    tryUnlock(storage::locations::PROFESSOR_BUILDING_1);
+  }
+  if (currentLevel >= 34)
+  {
+    tryUnlock(storage::locations::PROFESSOR_BUILDING_2);
+  }
+  if (currentLevel >= 36)
+  {
+    tryUnlock(storage::locations::MAIN_BUILDING);
+  }
+  if (currentLevel >= 38)
+  {
+    tryUnlock(storage::locations::RESEARCH_CENTER);
+  }
+  if (currentLevel >= 42)
+  {
+    tryUnlock(storage::locations::RAN_CENTER);
+  }
+  if (currentLevel >= 50)
+  {
+    tryUnlock(storage::locations::SCIENTISTS_HOUSE);
+  }
+
+  announceUnlockedLocations(newlyUnlocked);
+}
+
+void controller::Controller::announceUnlockedLocations(const QList< storage::Location > &unlocked)
+{
+  if (!checkReady() || unlocked.isEmpty())
+  {
+    return;
+  }
+
+  for (const storage::Location &location: unlocked)
+  {
+    m_view->showLocationUnlocked(location.name);
+  }
 }
