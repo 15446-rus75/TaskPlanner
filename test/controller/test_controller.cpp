@@ -1148,11 +1148,13 @@ void ControllerTest::onTaskCompleted_callsCheckLocationUnlocks()
   m_storage->totalXP = 0;
   m_storage->currentXPToReturn = 0;
 
-  const storage::Task task = makeTask(1, "Level up task", storage::Priority::Hard, QDateTime::currentDateTime().addDays(1));
-  m_storage->setTasks({ task });
+  const storage::Task task1 = makeTask(1, "Level up task", storage::Priority::Hard, QDateTime::currentDateTime().addDays(1));
+  const storage::Task task2 = makeTask(2, "Level up task 2", storage::Priority::Hard, QDateTime::currentDateTime().addDays(1));
+  m_storage->setTasks({ task1, task2 });
   m_storage->allAchievementsToReturn = {};
 
   m_controller->onCompleteRequested(1);
+  m_controller->onCompleteRequested(2);
 
   const auto &unlocked = m_storage->unlockedLocationsToReturn;
   QVERIFY(unlocked.contains("admission_and_pass_office"));
