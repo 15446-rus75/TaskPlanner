@@ -5,6 +5,7 @@
 #include "../storage/task.hpp"
 #include "../storage/istorage.hpp"
 #include "../utils/achievements.hpp"
+#include "../utils/locations.hpp"
 #include "../view/iview.hpp"
 
 namespace controller
@@ -57,6 +58,14 @@ namespace controller
     QList< storage::Achievement > checkAndUnlockAchievements();
     bool isAchievementConditionMet(const storage::Achievement &achievement) const;
     void announceUnlockedAchievements(const QList< storage::Achievement > &unlocked);
+#ifdef TEST_BUILD
+  public:
+#endif
+    void checkLocationUnlocks();
+    void announceUnlockedLocations(const QList<storage::Location> &unlocked);
+#ifdef TEST_BUILD
+  private:
+#endif
 
     storage::IStorage *m_storage;
     view::IView *m_view;
