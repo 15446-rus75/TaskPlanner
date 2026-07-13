@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "serial-utils.hpp"
+#include "../utils/locations.hpp"
 
 namespace
 {
@@ -391,7 +392,7 @@ int storage::MemoryStorage::getPerfectDaysCount() const
 
 int storage::MemoryStorage::getTotalLocationsCount() const
 {
-  return 0;
+  return locations::TOTAL_LOCATIONS;
 }
 
 int storage::MemoryStorage::getMaxTasksCompletedInOneDay() const
