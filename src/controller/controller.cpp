@@ -930,6 +930,7 @@ void controller::Controller::checkLocationUnlocks()
     {
       m_storage->unlockLocation(location.id);
       newlyUnlocked.append(location);
+      m_view->showLocationUnlocked(location);
     }
   };
 
@@ -986,10 +987,6 @@ void controller::Controller::checkLocationUnlocks()
   {
     tryUnlock(storage::locations::MECHANICS_WORKSHOP);
   }
-  if (currentLevel >= 26)
-  {
-    tryUnlock(storage::locations::PRODUCTION_BUILDING);
-  }
   if (currentLevel >= 28)
   {
     tryUnlock(storage::locations::CHEMISTRY_BUILDING);
@@ -1035,7 +1032,7 @@ void controller::Controller::announceUnlockedLocations(const QList< storage::Loc
 
   for (const storage::Location &location: unlocked)
   {
-    m_view->showLocationUnlocked(location.name);
+    m_view->showLocationUnlocked(location);
   }
 }
 

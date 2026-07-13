@@ -14,7 +14,7 @@ namespace storage
 
   namespace locations
   {
-    inline constexpr int TOTAL_LOCATIONS = 23;
+    inline constexpr int TOTAL_LOCATIONS = 22;
 
     inline const Location ADMISSION_AND_PASS_OFFICE
     {
@@ -114,13 +114,6 @@ namespace storage
       "Руки. Инструменты. Создание. Магический треугольник инженера"
     };
 
-    inline const Location PRODUCTION_BUILDING
-    {
-      "production_building",
-      "Учебно-производственный корпус",
-      "От теории к практике. Где студенты становятся мастерами"
-    };
-
     inline const Location CHEMISTRY_BUILDING
     {
       "chemistry_building",
@@ -194,7 +187,6 @@ namespace storage
         BUILDING_11,
         HYDRO_TOWER,
         MECHANICS_WORKSHOP,
-        PRODUCTION_BUILDING,
         CHEMISTRY_BUILDING,
         LASER_CENTER,
         PROFESSOR_BUILDING_1,
