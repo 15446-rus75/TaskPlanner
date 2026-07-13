@@ -1,5 +1,6 @@
 #include "taskplannerview.hpp"
 
+#include <QDesktopServices>
 #include <QCalendarWidget>
 #include <QCheckBox>
 #include <QComboBox>
@@ -12,14 +13,14 @@
 #include <Qt>
 
 view::TaskPlannerView::TaskPlannerView(QWidget *parent):
-    QMainWindow(parent),
-    IView(),
-    ui(new Ui::TaskPlanner),
-    m_gamificationView(new GamificationView(this)),
-    m_currentTaskId(-1),
-    m_currentSortCriterion(storage::Criterion::Date),
-    m_statusTimer(new QTimer(this)),
-    m_isFormReadOnly(false)
+  QMainWindow(parent),
+  IView(),
+  ui(new Ui::TaskPlanner),
+  m_gamificationView(new GamificationView(this)),
+  m_currentTaskId(-1),
+  m_currentSortCriterion(storage::Criterion::Date),
+  m_statusTimer(new QTimer(this)),
+  m_isFormReadOnly(false)
 {
   ui->setupUi(this);
 
@@ -54,6 +55,7 @@ view::TaskPlannerView::TaskPlannerView(QWidget *parent):
   connectSignals();
   setupFilterLogic();
   setupGamification();
+  populateSDOLinks();
   ui->frameTaskForm->setVisible(false);
 
   m_statusTimer->setSingleShot(true);
@@ -432,6 +434,10 @@ void view::TaskPlannerView::connectSignals()
                      }
                    });
   QObject::connect(ui->btnViewAchievements, &QPushButton::clicked, this, &TaskPlannerView::onGamificationAchievementsRequested);
+  QObject::connect(ui->comboInstitute, QOverload< int >::of(&QComboBox::currentIndexChanged), this, &TaskPlannerView::onInstituteChanged);
+  QObject::connect(ui->btnOpenSDO, &QPushButton::clicked, this, &TaskPlannerView::onOpenSDOClicked);
+  QObject::connect(ui->btnRefreshSDO, &QPushButton::clicked, this, &TaskPlannerView::onRefreshSDOClicked);
+  QObject::connect(ui->listSDOLinks, &QListWidget::itemDoubleClicked, this, &TaskPlannerView::onSDOLinkDoubleClicked);
 }
 
 void view::TaskPlannerView::setupFilterLogic()
@@ -592,5 +598,67 @@ void view::TaskPlannerView::updateAchievementSlots(const QList< storage::Achieve
       achievementLabels[i]->setStyleSheet("background-color: #e8eaf6; border-radius: 10px; padding: 4px 8px; color: #3f51b5; font-weight: bold;");
       achievementLabels[i]->setToolTip(achievement.description);
     }
+  }
+}
+
+void view::TaskPlannerView::populateSDOLinks()
+{
+  const QList< sdo::Institute > institutes = sdo::get_institutes();
+  ui->comboInstitute->clear();
+  for (const sdo::Institute &institute: institutes)
+  {
+    ui->comboInstitute->addItem(institute.name);
+  }
+  if (!institutes.isEmpty())
+  {
+    onInstituteChanged(0);
+  }
+}
+
+void view::TaskPlannerView::onInstituteChanged(int index)
+{
+  ui->listSDOLinks->clear();
+  const QList< sdo::Institute > institutes = sdo::get_institutes();
+  if (index < 0 || index >= institutes.size())
+  {
+    return;
+  }
+  const sdo::Institute &institute = institutes[index];
+  QListWidgetItem *item = new QListWidgetItem(QString("🌐 Перейти на платформу СДО (%1)").arg(institute.name));
+  item->setData(Qt::UserRole, institute.url);
+  ui->listSDOLinks->addItem(item);
+}
+
+void view::TaskPlannerView::onOpenSDOClicked()
+{
+  QListWidgetItem *current_item = ui->listSDOLinks->currentItem();
+  if (!current_item)
+  {
+    showErrorMessage("Выберите ссылку из списка");
+    return;
+  }
+  const QString url = current_item->data(Qt::UserRole).toString();
+  if (!url.isEmpty())
+  {
+    QDesktopServices::openUrl(QUrl(url));
+  }
+}
+
+void view::TaskPlannerView::onRefreshSDOClicked()
+{
+  populateSDOLinks();
+  showInfoMessage("Список СДО обновлён");
+}
+
+void view::TaskPlannerView::onSDOLinkDoubleClicked(QListWidgetItem *item)
+{
+  if (!item)
+  {
+    return;
+  }
+  const QString url = item->data(Qt::UserRole).toString();
+  if (!url.isEmpty())
+  {
+    QDesktopServices::openUrl(QUrl(url));
   }
 }
