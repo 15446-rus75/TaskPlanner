@@ -16,282 +16,302 @@
     <height>768</height>
    </size>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>📚 Планировщик учебных задач</string>
   </property>
   <property name="styleSheet">
    <string notr="true">
 QMainWindow {
-    background-color: #e8eaf6;
+  background-color: #e8eaf6;
 }
 QWidget {
-    color: #212121;
-    font-family: "Segoe UI", Arial, sans-serif;
-    font-size: 12px;
+  color: #212121;
+  font-family: &quot;Segoe UI&quot;, Arial, sans-serif;
+  font-size: 12px;
 }
 QTabWidget::pane {
-    background-color: #e8eaf6;
-    border: none;
+  background-color: #e8eaf6;
+  border: none;
 }
 QTabBar::tab {
-    background-color: #ffffff;
-    color: #212121;
-    border: 1px solid #c5cae9;
-    border-bottom: none;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
-    padding: 8px 16px;
-    margin-right: 2px;
-    font-weight: bold;
+  background-color: #ffffff;
+  color: #212121;
+  border: 1px solid #c5cae9;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  padding: 8px 16px;
+  margin-right: 2px;
+  font-weight: bold;
 }
 QTabBar::tab:selected {
-    background-color: #3f51b5;
-    color: #ffffff;
-    border-color: #3f51b5;
+  background-color: #3f51b5;
+  color: #ffffff;
+  border-color: #3f51b5;
 }
 QTabBar::tab:hover:!selected {
-    background-color: #e8eaf6;
+  background-color: #e8eaf6;
 }
 QPushButton {
-    background-color: #ffffff;
-    color: #212121;
-    border: 1px solid #c5cae9;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-weight: bold;
-    min-height: 32px;
-    font-size: 12px;
+  background-color: #ffffff;
+  color: #212121;
+  border: 1px solid #c5cae9;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: bold;
+  min-height: 32px;
+  font-size: 12px;
 }
 QPushButton:hover {
-    background-color: #f5f5f5;
-    border-color: #9fa8da;
+  background-color: #f5f5f5;
+  border-color: #9fa8da;
 }
 QPushButton:pressed {
-    background-color: #e8eaf6;
-    border-color: #3f51b5;
+  background-color: #e8eaf6;
+  border-color: #3f51b5;
 }
 QLineEdit {
-    background-color: #ffffff;
-    color: #000000;
-    border: 1px solid #c5cae9;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 12px;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #c5cae9;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
 }
 QLineEdit:focus {
-    border: 2px solid #3f51b5;
+  border: 2px solid #3f51b5;
 }
 QTextEdit {
-    background-color: #ffffff;
-    color: #000000;
-    border: 1px solid #9fa8da;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 12px;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #9fa8da;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
 }
 QTextEdit:focus {
-    border: 2px solid #3f51b5;
+  border: 2px solid #3f51b5;
 }
 QComboBox {
-    background-color: #ffffff;
-    color: #000000;
-    border: 1px solid #c5cae9;
-    border-radius: 4px;
-    padding: 4px 8px;
-    min-width: 80px;
-    font-size: 12px;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #c5cae9;
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-width: 80px;
+  font-size: 12px;
 }
 QComboBox:hover {
-    border: 1px solid #9fa8da;
+  border: 1px solid #9fa8da;
 }
 QComboBox::drop-down {
-    border: none;
-    width: 16px;
+  border: none;
+  width: 16px;
 }
 QComboBox QAbstractItemView {
-    background-color: #ffffff;
-    color: #000000;
-    selection-background-color: #e8eaf6;
-    border: 1px solid #c5cae9;
+  background-color: #ffffff;
+  color: #000000;
+  selection-background-color: #e8eaf6;
+  border: 1px solid #c5cae9;
 }
 QCheckBox {
-    color: #000000;
-    spacing: 6px;
-    font-size: 12px;
+  color: #000000;
+  spacing: 6px;
+  font-size: 12px;
 }
 QCheckBox::indicator {
-    width: 14px;
-    height: 14px;
-    border: 2px solid #9fa8da;
-    border-radius: 3px;
-    background-color: #ffffff;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #9fa8da;
+  border-radius: 3px;
+  background-color: #ffffff;
 }
 QCheckBox::indicator:checked {
-    background-color: #3f51b5;
-    border-color: #3f51b5;
+  background-color: #3f51b5;
+  border-color: #3f51b5;
 }
 QLabel {
-    color: #000000;
-    background-color: transparent;
-    font-size: 12px;
+  color: #000000;
+  background-color: transparent;
+  font-size: 12px;
 }
 QCalendarWidget {
-    background-color: #ffffff;
-    border: 1px solid #c5cae9;
-    border-radius: 6px;
+  background-color: #ffffff;
+  border: 1px solid #c5cae9;
+  border-radius: 6px;
 }
 QCalendarWidget QWidget#qt_calendar_navigationbar {
-    background-color: #3f51b5;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+  background-color: #3f51b5;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 QCalendarWidget QToolButton {
-    background-color: transparent;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-weight: bold;
-    font-size: 12px;
+  background-color: transparent;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-weight: bold;
+  font-size: 12px;
 }
 QCalendarWidget QToolButton:hover {
-    background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255,255,255,0.2);
 }
 QCalendarWidget QComboBox {
-    background-color: transparent;
-    color: #ffffff;
-    border: 1px solid rgba(255,255,255,0.4);
-    border-radius: 4px;
-    padding: 2px 6px;
+  background-color: transparent;
+  color: #ffffff;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 4px;
+  padding: 2px 6px;
 }
 QCalendarWidget QComboBox::drop-down {
-    border: none;
-    width: 16px;
+  border: none;
+  width: 16px;
 }
 QCalendarWidget QComboBox QAbstractItemView {
-    background-color: #ffffff;
-    color: #000000;
+  background-color: #ffffff;
+  color: #000000;
 }
 QCalendarWidget QHeaderView {
-    background-color: #e8eaf6;
-    color: #212121;
-    font-weight: bold;
-    border: none;
+  background-color: #e8eaf6;
+  color: #212121;
+  font-weight: bold;
+  border: none;
 }
 QCalendarWidget QTableView {
-    border: none;
-    gridline-color: #e0e0e0;
-    background-color: #ffffff;
-    selection-background-color: #e8eaf6;
-    selection-color: #1a237e;
+  border: none;
+  gridline-color: #e0e0e0;
+  background-color: #ffffff;
+  selection-background-color: #e8eaf6;
+  selection-color: #1a237e;
 }
 QListWidget {
-    background-color: #f5f5f5;
-    border: 1px solid #c5cae9;
-    border-radius: 6px;
-    padding: 6px;
+  background-color: #f5f5f5;
+  border: 1px solid #c5cae9;
+  border-radius: 6px;
+  padding: 6px;
 }
 QListWidget::item {
-    background-color: #ffffff;
-    border: 1px solid #c5cae9;
-    border-radius: 4px;
-    padding: 8px 10px;
-    margin: 3px 0;
+  background-color: #ffffff;
+  border: 1px solid #c5cae9;
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin: 3px 0;
 }
 QListWidget::item:hover {
-    background-color: #f8f9fa;
-    border-color: #9fa8da;
+  background-color: #f8f9fa;
+  border-color: #9fa8da;
 }
 QListWidget::item:selected {
-    background-color: #e8eaf6;
-    border-color: #3f51b5;
-    color: #1a237e;
+  background-color: #e8eaf6;
+  border-color: #3f51b5;
+  color: #1a237e;
 }
 QGroupBox {
-    border: 1px solid #c5cae9;
-    border-radius: 6px;
-    margin-top: 10px;
-    padding-top: 10px;
-    background-color: #ffffff;
-    font-weight: bold;
-    color: #3f51b5;
+  border: 1px solid #c5cae9;
+  border-radius: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  background-color: #ffffff;
+  font-weight: bold;
+  color: #3f51b5;
 }
 QGroupBox::title {
-    subcontrol-origin: margin;
-    left: 10px;
-    padding: 0 6px;
-    color: #3f51b5;
+  subcontrol-origin: margin;
+  left: 10px;
+  padding: 0 6px;
+  color: #3f51b5;
 }
 QLabel#labelStatus {
-    padding: 6px;
-    border-radius: 4px;
-    font-weight: bold;
+  padding: 6px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 QScrollBar:vertical {
-    background-color: #f5f5f5;
-    width: 8px;
-    border-radius: 4px;
+  background-color: #f5f5f5;
+  width: 8px;
+  border-radius: 4px;
 }
 QScrollBar::handle:vertical {
-    background-color: #bdbdbd;
-    border-radius: 4px;
-    min-height: 20px;
+  background-color: #bdbdbd;
+  border-radius: 4px;
+  min-height: 20px;
 }
 QScrollBar::handle:vertical:hover {
-    background-color: #9e9e9e;
+  background-color: #9e9e9e;
 }
 QDateTimeEdit {
-    background-color: #ffffff;
-    color: #000000;
-    border: 1px solid #c5cae9;
-    border-radius: 4px;
-    padding: 4px 8px;
-    font-size: 12px;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #c5cae9;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
 }
 QDateTimeEdit::drop-down {
-    border: none;
-    width: 16px;
+  subcontrol-origin: padding;
+  subcontrol-position: top right;
+  width: 24px;
+  border: none;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  background-color: #3f51b5;
+  margin-right: 2px;
 }
 QDateTimeEdit::down-arrow {
-    image: none;
-    border-left: 4px solid transparent;
-    border-right: 4px solid transparent;
-    border-top: 4px solid #3f51b5;
-    margin-right: 8px;
+  image: none;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid #ffffff;
+  margin-right: 7px;
+}
+QDateTimeEdit::drop-down:hover {
+  background-color: #303f9f;
 }
 QFrame#frameTaskForm {
-    background-color: #ffffff;
-    border: 1px solid #c5cae9;
-    border-radius: 8px;
+  background-color: #ffffff;
+  border: 1px solid #c5cae9;
+  border-radius: 8px;
 }
 QFrame#frameTaskForm QLabel {
-    color: #212121;
+  color: #212121;
 }
 QFrame#frameTaskForm QLineEdit,
 QFrame#frameTaskForm QTextEdit,
 QFrame#frameTaskForm QDateTimeEdit,
 QFrame#frameTaskForm QComboBox {
-    background-color: #ffffff;
-    color: #000000;
-    border: 1px solid #c5cae9;
-    border-radius: 4px;
-    padding: 4px 8px;
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #c5cae9;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+QFrame#frameTaskForm QTextEdit {
+  min-height: 18px;
+  max-height: 18px;
 }
 QFrame#frameTaskForm QPushButton {
-    background-color: #ffffff;
-    color: #212121;
-    border: 1px solid #c5cae9;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-weight: bold;
+  background-color: #ffffff;
+  color: #212121;
+  border: 1px solid #c5cae9;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: bold;
 }
-   </string>
+      </string>
   </property>
   <widget class="QTabWidget" name="centralwidget">
    <property name="styleSheet">
     <string notr="true">QTabWidget::pane { background-color: #e8eaf6; border: none; }</string>
    </property>
-   <!-- ========= ВКЛАДКА ЗАДАЧИ (без изменений) ========= -->
    <widget class="QWidget" name="tabTasks">
     <attribute name="title">
      <string>📋 Задачи</string>
@@ -322,7 +342,6 @@ QFrame#frameTaskForm QPushButton {
          <property name="spacing">
           <number>10</number>
          </property>
-         <!-- Профиль -->
          <item>
           <widget class="QFrame" name="frameProfile">
            <property name="minimumSize">
@@ -340,16 +359,17 @@ QFrame#frameTaskForm QPushButton {
             </property>
             <item>
              <widget class="QLabel" name="labelAvatar">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>-1</pointsize>
+               </font>
+              </property>
               <property name="text">
                <string></string>
               </property>
-              <property name="font">
-               <font>
-                <pointsize>24</pointsize>
-               </font>
-              </property>
               <property name="alignment">
-               <set>Qt::AlignCenter</set>
+               <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
              </widget>
             </item>
@@ -357,12 +377,6 @@ QFrame#frameTaskForm QPushButton {
              <layout class="QVBoxLayout" name="verticalLayoutProfileInfo">
               <item>
                <widget class="QPushButton" name="btnUserName">
-                <property name="text">
-                 <string>Имя пользователя</string>
-                </property>
-                <property name="flat">
-                 <bool>true</bool>
-                </property>
                 <property name="cursor">
                  <cursorShape>PointingHandCursor</cursorShape>
                 </property>
@@ -371,34 +385,41 @@ QFrame#frameTaskForm QPushButton {
                 </property>
                 <property name="styleSheet">
                  <string notr="true">
-    QPushButton {
-     color: #1a237e;
-     font-weight: bold;
-     font-size: 12pt;
-     border: none;
-     padding: 0;
-     text-align: left;
-    }
-    QPushButton:hover {
-     color: #3f51b5;
-     text-decoration: underline;
-    }
-                 </string>
+QPushButton {
+  color: #1a237e;
+  font-weight: bold;
+  font-size: 12pt;
+  border: none;
+  padding: 0;
+  text-align: left;
+}
+QPushButton:hover {
+  color: #3f51b5;
+  text-decoration: underline;
+}
+                                  </string>
+                </property>
+                <property name="text">
+                 <string>Имя пользователя</string>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="labelUserRank">
-                <property name="text">
-                 <string>🏅 Начинающий</string>
-                </property>
                 <property name="font">
                  <font>
-                  <pointsize>10</pointsize>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">color: #5c6bc0;</string>
+                </property>
+                <property name="text">
+                 <string>🏅 Начинающий</string>
                 </property>
                </widget>
               </item>
@@ -407,7 +428,7 @@ QFrame#frameTaskForm QPushButton {
             <item>
              <spacer name="horizontalSpacerProfile">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -419,27 +440,27 @@ QFrame#frameTaskForm QPushButton {
             </item>
             <item>
              <widget class="QLabel" name="labelLevel">
-              <property name="text">
-               <string>Lv.1</string>
-              </property>
               <property name="font">
                <font>
-                <pointsize>16</pointsize>
+                <family>Segoe UI</family>
+                <pointsize>-1</pointsize>
                 <bold>true</bold>
                </font>
               </property>
               <property name="styleSheet">
                <string notr="true">color: #3f51b5;</string>
               </property>
+              <property name="text">
+               <string>Lv.1</string>
+              </property>
               <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignVCenter</set>
+               <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
               </property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
-         <!-- Прогресс -->
          <item>
           <widget class="QFrame" name="frameProgress">
            <property name="minimumSize">
@@ -459,35 +480,39 @@ QFrame#frameTaskForm QPushButton {
              <layout class="QHBoxLayout" name="horizontalLayoutExp">
               <item>
                <widget class="QLabel" name="labelExpText">
-                <property name="text">
-                 <string>Опыт:</string>
-                </property>
                 <property name="font">
                  <font>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                   <bold>true</bold>
                  </font>
+                </property>
+                <property name="text">
+                 <string>Опыт:</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="labelExpValue">
-                <property name="text">
-                 <string>0 / 100</string>
-                </property>
                 <property name="font">
                  <font>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">color: #3f51b5;</string>
                 </property>
+                <property name="text">
+                 <string>0 / 100</string>
+                </property>
                </widget>
               </item>
               <item>
                <spacer name="horizontalSpacerExp">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -499,17 +524,18 @@ QFrame#frameTaskForm QPushButton {
               </item>
               <item>
                <widget class="QLabel" name="labelStreak">
-                <property name="text">
-                 <string>🔥 0 дней</string>
-                </property>
                 <property name="font">
                  <font>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                   <bold>true</bold>
-                  <pointsize>11</pointsize>
                  </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">color: #e65100;</string>
+                </property>
+                <property name="text">
+                 <string>🔥 0 дней</string>
                 </property>
                </widget>
               </item>
@@ -517,21 +543,20 @@ QFrame#frameTaskForm QPushButton {
             </item>
             <item>
              <widget class="QProgressBar" name="progressBarExp">
+              <property name="styleSheet">
+               <string notr="true">QProgressBar { border: none; border-radius: 4px; background-color: #e8eaf6; height: 10px; text-align: center; } QProgressBar::chunk { background-color: #3f51b5; border-radius: 4px; }</string>
+              </property>
               <property name="maximum">
                <number>100</number>
               </property>
               <property name="value">
                <number>0</number>
               </property>
-              <property name="styleSheet">
-               <string notr="true">QProgressBar { border: none; border-radius: 4px; background-color: #e8eaf6; height: 10px; text-align: center; } QProgressBar::chunk { background-color: #3f51b5; border-radius: 4px; }</string>
-              </property>
              </widget>
             </item>
            </layout>
           </widget>
          </item>
-         <!-- Достижения -->
          <item>
           <widget class="QFrame" name="frameAchievements">
            <property name="minimumSize">
@@ -563,24 +588,25 @@ QFrame#frameTaskForm QPushButton {
              <layout class="QHBoxLayout" name="horizontalLayoutAchievementsHeader">
               <item>
                <widget class="QLabel" name="labelAchievementsTitle">
-                <property name="text">
-                 <string>🏆 Достижения</string>
-                </property>
                 <property name="font">
                  <font>
-                  <pointsize>11</pointsize>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                   <bold>true</bold>
                  </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">color: #3f51b5;</string>
                 </property>
+                <property name="text">
+                 <string>🏆 Достижения</string>
+                </property>
                </widget>
               </item>
               <item>
                <spacer name="horizontalSpacerAchievements">
                 <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
+                 <enum>Qt::Orientation::Horizontal</enum>
                 </property>
                 <property name="sizeHint" stdset="0">
                  <size>
@@ -592,21 +618,21 @@ QFrame#frameTaskForm QPushButton {
               </item>
               <item>
                <widget class="QPushButton" name="btnViewAchievements">
-                <property name="text">
-                 <string>Все достижения</string>
-                </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #3f51b5; color: #ffffff; border-radius: 4px; padding: 4px 12px; font-size: 10px;</string>
+                </property>
+                <property name="text">
+                 <string>Все достижения</string>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QPushButton" name="btnViewMap">
-                <property name="text">
-                 <string>️ Карта кампуса</string>
-                </property>
                 <property name="styleSheet">
-                 <string notr="true">background-color: #5c6bc0; color: #ffffff; border-radius: 4px; padding: 4px 12px; font-size: 10px;</string>
+                 <string notr="true">background-color: #3f51b5; color: #ffffff; border-radius: 4px; padding: 4px 12px; font-size: 10px;</string>
+                </property>
+                <property name="text">
+                 <string>🗺️ Карта кампуса</string>
                 </property>
                </widget>
               </item>
@@ -619,73 +645,77 @@ QFrame#frameTaskForm QPushButton {
               </property>
               <item>
                <widget class="QLabel" name="achievement1">
-                <property name="text">
-                 <string>🔒 ???</string>
-                </property>
                 <property name="font">
                  <font>
-                  <pointsize>9</pointsize>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;</string>
                 </property>
+                <property name="text">
+                 <string> ???</string>
+                </property>
                 <property name="alignment">
-                 <set>Qt::AlignCenter</set>
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="achievement2">
-                <property name="text">
-                 <string>🔒 ???</string>
-                </property>
                 <property name="font">
                  <font>
-                  <pointsize>9</pointsize>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;</string>
                 </property>
+                <property name="text">
+                 <string>🔒 ???</string>
+                </property>
                 <property name="alignment">
-                 <set>Qt::AlignCenter</set>
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="achievement3">
-                <property name="text">
-                 <string>🔒 ???</string>
-                </property>
                 <property name="font">
                  <font>
-                  <pointsize>9</pointsize>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;</string>
                 </property>
+                <property name="text">
+                 <string> ???</string>
+                </property>
                 <property name="alignment">
-                 <set>Qt::AlignCenter</set>
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
                 </property>
                </widget>
               </item>
               <item>
                <widget class="QLabel" name="achievement4">
-                <property name="text">
-                 <string>🔒 ???</string>
-                </property>
                 <property name="font">
                  <font>
-                  <pointsize>9</pointsize>
+                  <family>Segoe UI</family>
+                  <pointsize>-1</pointsize>
                  </font>
                 </property>
                 <property name="styleSheet">
                  <string notr="true">background-color: #e0e0e0; border-radius: 10px; padding: 4px 8px; color: #9e9e9e;</string>
                 </property>
+                <property name="text">
+                 <string>🔒 ???</string>
+                </property>
                 <property name="alignment">
-                 <set>Qt::AlignCenter</set>
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
                 </property>
                </widget>
               </item>
@@ -694,7 +724,6 @@ QFrame#frameTaskForm QPushButton {
            </layout>
           </widget>
          </item>
-         <!-- Календарь -->
          <item>
           <widget class="QCalendarWidget" name="calendarWidget">
            <property name="minimumSize">
@@ -711,7 +740,6 @@ QFrame#frameTaskForm QPushButton {
            </property>
           </widget>
          </item>
-         <!-- Статистика -->
          <item>
           <widget class="QGroupBox" name="groupBoxStats">
            <property name="minimumSize">
@@ -721,7 +749,7 @@ QFrame#frameTaskForm QPushButton {
             </size>
            </property>
            <property name="title">
-            <string> Статистика</string>
+            <string>📊 Статистика</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayoutStats">
             <property name="spacing">
@@ -729,46 +757,49 @@ QFrame#frameTaskForm QPushButton {
             </property>
             <item>
              <widget class="QLabel" name="labelStatsTotal">
-              <property name="text">
-               <string>Всего задач: 0</string>
-              </property>
               <property name="font">
                <font>
-                <pointsize>10</pointsize>
+                <family>Segoe UI</family>
+                <pointsize>-1</pointsize>
                 <bold>true</bold>
                </font>
+              </property>
+              <property name="text">
+               <string>Всего задач: 0</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLabel" name="labelStatsCompleted">
-              <property name="text">
-               <string>✅ Выполнено: 0</string>
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>-1</pointsize>
+                <bold>true</bold>
+               </font>
               </property>
               <property name="styleSheet">
                <string notr="true">color: #43a047;</string>
               </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <bold>true</bold>
-               </font>
+              <property name="text">
+               <string>✅ Выполнено: 0</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLabel" name="labelStatsToday">
-              <property name="text">
-               <string> На сегодня: 0</string>
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <pointsize>-1</pointsize>
+                <bold>true</bold>
+               </font>
               </property>
               <property name="styleSheet">
                <string notr="true">color: #3f51b5;</string>
               </property>
-              <property name="font">
-               <font>
-                <pointsize>10</pointsize>
-                <bold>true</bold>
-               </font>
+              <property name="text">
+               <string> На сегодня: 0</string>
               </property>
              </widget>
             </item>
@@ -777,7 +808,6 @@ QFrame#frameTaskForm QPushButton {
          </item>
         </layout>
        </item>
-       <!-- Правая колонка -->
        <item>
         <layout class="QVBoxLayout" name="verticalLayoutCenter" stretch="0,0,0,1,0">
          <property name="spacing">
@@ -809,13 +839,14 @@ QFrame#frameTaskForm QPushButton {
             </property>
             <item>
              <widget class="QLabel" name="labelSearchIcon">
-              <property name="text">
-               <string>🔍</string>
-              </property>
               <property name="font">
                <font>
-                <pointsize>12</pointsize>
+                <family>Segoe UI</family>
+                <pointsize>-1</pointsize>
                </font>
+              </property>
+              <property name="text">
+               <string>🔍</string>
               </property>
              </widget>
             </item>
@@ -855,13 +886,15 @@ QFrame#frameTaskForm QPushButton {
             </property>
             <item>
              <widget class="QLabel" name="labelFilterTitle">
-              <property name="text">
-               <string>Фильтры:</string>
-              </property>
               <property name="font">
                <font>
+                <family>Segoe UI</family>
+                <pointsize>-1</pointsize>
                 <bold>true</bold>
                </font>
+              </property>
+              <property name="text">
+               <string>Фильтры:</string>
               </property>
              </widget>
             </item>
@@ -878,21 +911,21 @@ QFrame#frameTaskForm QPushButton {
             <item>
              <widget class="QCheckBox" name="checkBoxToday">
               <property name="text">
-               <string>📅 Сегодня</string>
+               <string> Сегодня</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="checkBoxOverdue">
               <property name="text">
-               <string>️ Просроченные</string>
+               <string>⚠️ Просроченные</string>
               </property>
              </widget>
             </item>
             <item>
              <spacer name="horizontalSpacerFilters">
               <property name="orientation">
-               <enum>Qt::Horizontal</enum>
+               <enum>Qt::Orientation::Horizontal</enum>
               </property>
               <property name="sizeHint" stdset="0">
                <size>
@@ -911,17 +944,17 @@ QFrame#frameTaskForm QPushButton {
               </item>
               <item>
                <property name="text">
-                <string> Высокий</string>
+                <string>🔴 Высокий</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string> Средний</string>
+                <string>🟡 Средний</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string> Низкий</string>
+                <string>🟢 Низкий</string>
                </property>
               </item>
              </widget>
@@ -941,10 +974,10 @@ QFrame#frameTaskForm QPushButton {
             <string notr="true">background-color: #ffe0b2; color: #e65100; border-radius: 4px; padding: 6px; font-weight: bold; font-size: 12px;</string>
            </property>
            <property name="text">
-            <string> СПИСОК ЗАДАЧ</string>
+            <string>📋 СПИСОК ЗАДАЧ</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -970,7 +1003,7 @@ QFrame#frameTaskForm QPushButton {
             <string/>
            </property>
            <property name="alignment">
-            <set>Qt::AlignCenter</set>
+            <set>Qt::AlignmentFlag::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -978,23 +1011,22 @@ QFrame#frameTaskForm QPushButton {
        </item>
       </layout>
      </item>
-     <!-- Форма задачи -->
      <item>
       <widget class="QFrame" name="frameTaskForm">
-       <property name="visible">
-        <bool>false</bool>
-       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
          <height>280</height>
         </size>
        </property>
+       <property name="visible">
+        <bool>false</bool>
+       </property>
        <property name="styleSheet">
         <string notr="true">QFrame#frameTaskForm {
-    background-color: #ffffff;
-    border-radius: 8px;
-    border: 1px solid #c5cae9;
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #c5cae9;
 }</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayoutForm">
@@ -1030,14 +1062,14 @@ QFrame#frameTaskForm QPushButton {
           </item>
           <item row="0" column="1">
            <widget class="QLineEdit" name="lineEditFormName">
-            <property name="placeholderText">
-             <string>Например: Лабораторная работа №3</string>
-            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
               <height>28</height>
              </size>
+            </property>
+            <property name="placeholderText">
+             <string>Например: Лабораторная работа №3</string>
             </property>
            </widget>
           </item>
@@ -1050,14 +1082,14 @@ QFrame#frameTaskForm QPushButton {
           </item>
           <item row="1" column="1">
            <widget class="QLineEdit" name="lineEditFormDiscipline">
-            <property name="placeholderText">
-             <string>Например: Алгоритмы и структуры данных</string>
-            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
               <height>28</height>
              </size>
+            </property>
+            <property name="placeholderText">
+             <string>Например: Алгоритмы и структуры данных</string>
             </property>
            </widget>
           </item>
@@ -1092,7 +1124,7 @@ QFrame#frameTaskForm QPushButton {
            <widget class="QComboBox" name="comboBoxFormPriority">
             <property name="minimumSize">
              <size>
-              <width>0</width>
+              <width>98</width>
               <height>28</height>
              </size>
             </property>
@@ -1122,10 +1154,22 @@ QFrame#frameTaskForm QPushButton {
           </item>
           <item row="4" column="1">
            <widget class="QTextEdit" name="textEditFormDescription">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>18</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>60</height>
+              <height>18</height>
              </size>
             </property>
            </widget>
@@ -1139,14 +1183,14 @@ QFrame#frameTaskForm QPushButton {
           </item>
           <item row="5" column="1">
            <widget class="QLineEdit" name="lineEditFormTags">
-            <property name="placeholderText">
-             <string>через запятую: #лаба #срочно</string>
-            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
               <height>28</height>
              </size>
+            </property>
+            <property name="placeholderText">
+             <string>через запятую: #лаба #срочно</string>
             </property>
            </widget>
           </item>
@@ -1159,14 +1203,14 @@ QFrame#frameTaskForm QPushButton {
           </item>
           <item row="6" column="1">
            <widget class="QLineEdit" name="lineEditFormLinks">
-            <property name="placeholderText">
-             <string>URL через пробел или запятую</string>
-            </property>
             <property name="minimumSize">
              <size>
               <width>0</width>
               <height>28</height>
              </size>
+            </property>
+            <property name="placeholderText">
+             <string>URL через пробел или запятую</string>
             </property>
            </widget>
           </item>
@@ -1180,7 +1224,7 @@ QFrame#frameTaskForm QPushButton {
           <item>
            <spacer name="horizontalSpacerFormLeft">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1193,7 +1237,7 @@ QFrame#frameTaskForm QPushButton {
           <item>
            <widget class="QPushButton" name="btnFormCancel">
             <property name="text">
-             <string> Отмена</string>
+             <string>❌ Отмена</string>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -1215,7 +1259,6 @@ QFrame#frameTaskForm QPushButton {
        </layout>
       </widget>
      </item>
-     <!-- Кнопки действий -->
      <item>
       <widget class="QFrame" name="frameButtons">
        <property name="minimumSize">
@@ -1260,14 +1303,14 @@ QFrame#frameTaskForm QPushButton {
         <item>
          <widget class="QPushButton" name="btnDelete">
           <property name="text">
-           <string>️ Удалить</string>
+           <string>🗑️ Удалить</string>
           </property>
          </widget>
         </item>
         <item>
          <spacer name="horizontalSpacerButtons">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1287,7 +1330,7 @@ QFrame#frameTaskForm QPushButton {
         <item>
          <widget class="QPushButton" name="btnSort">
           <property name="text">
-           <string> Сортировать</string>
+           <string>🔄 Сортировать</string>
           </property>
          </widget>
         </item>
@@ -1296,10 +1339,9 @@ QFrame#frameTaskForm QPushButton {
      </item>
     </layout>
    </widget>
-   <!-- ========= ВКЛАДКА СДО (ОБНОВЛЕННАЯ) ========= -->
    <widget class="QWidget" name="tabSDO">
     <attribute name="title">
-     <string>🌐 СДО</string>
+     <string> СДО</string>
     </attribute>
     <layout class="QVBoxLayout" name="verticalLayoutSDO">
      <property name="spacing">
@@ -1321,7 +1363,8 @@ QFrame#frameTaskForm QPushButton {
       <widget class="QLabel" name="labelSDOTitle">
        <property name="font">
         <font>
-         <pointsize>18</pointsize>
+         <family>Segoe UI</family>
+         <pointsize>-1</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -1332,7 +1375,7 @@ QFrame#frameTaskForm QPushButton {
         <string>🌐 Образовательный портал (СДО)</string>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignmentFlag::AlignCenter</set>
        </property>
       </widget>
      </item>
@@ -1359,13 +1402,15 @@ QFrame#frameTaskForm QPushButton {
         </property>
         <item>
          <widget class="QLabel" name="labelInstitute">
-          <property name="text">
-           <string>Выберите институт:</string>
-          </property>
           <property name="font">
            <font>
+            <family>Segoe UI</family>
+            <pointsize>-1</pointsize>
             <bold>true</bold>
            </font>
+          </property>
+          <property name="text">
+           <string>Выберите институт:</string>
           </property>
          </widget>
         </item>
@@ -1435,21 +1480,20 @@ QFrame#frameTaskForm QPushButton {
         </item>
         <item>
          <widget class="QLabel" name="labelLinks">
-          <property name="text">
-           <string>Доступные ресурсы (нажмите дважды, чтобы открыть):</string>
-          </property>
           <property name="font">
            <font>
+            <family>Segoe UI</family>
+            <pointsize>-1</pointsize>
             <bold>true</bold>
            </font>
+          </property>
+          <property name="text">
+           <string>Доступные ресурсы (нажмите дважды, чтобы открыть):</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QListWidget" name="listSDOLinks">
-          <property name="minimumHeight">
-           <number>120</number>
-          </property>
           <property name="styleSheet">
            <string notr="true">QListWidget::item { padding: 8px 12px; }</string>
           </property>
@@ -1460,7 +1504,7 @@ QFrame#frameTaskForm QPushButton {
           <item>
            <spacer name="horizontalSpacerSDOLeft">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -1472,18 +1516,18 @@ QFrame#frameTaskForm QPushButton {
           </item>
           <item>
            <widget class="QPushButton" name="btnOpenSDO">
-            <property name="text">
-             <string>🔗 Открыть выбранную ссылку</string>
-            </property>
             <property name="styleSheet">
              <string notr="true">background-color: #3f51b5; color: #ffffff; border-radius: 4px; padding: 6px 16px;</string>
+            </property>
+            <property name="text">
+             <string>🔗 Открыть выбранную ссылку</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QPushButton" name="btnRefreshSDO">
             <property name="text">
-             <string>🔄 Обновить список</string>
+             <string> Обновить список</string>
             </property>
            </widget>
           </item>
@@ -1495,7 +1539,7 @@ QFrame#frameTaskForm QPushButton {
      <item>
       <spacer name="verticalSpacerSDO">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Orientation::Vertical</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
