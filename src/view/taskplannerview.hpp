@@ -41,6 +41,7 @@ namespace view
     void showLevelUpAnimation(int newLevel, const QString &newTitle) override;
     void updateGamificationPanel() override;
     void updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements) override;
+    void setUserName(const QString &userName) override;
 
   signals:
     void viewReady();
@@ -55,6 +56,7 @@ namespace view
     void filterChanged(storage::Filter filter, const QVariant &value);
     void achievementsRequested();
     void mapRequested();
+    void userNameChanged(const QString &userName);
 
   private slots:
     void onCalendarClicked(const QDate &date);
@@ -78,6 +80,7 @@ namespace view
     void onOpenSDOClicked();
     void onRefreshSDOClicked();
     void onSDOLinkDoubleClicked(QListWidgetItem *item);
+    void onUserNameClicked();
 
   private:
     void connectSignals();
@@ -93,6 +96,8 @@ namespace view
     storage::Priority indexToPriority(int index) const;
     int priorityToIndex(storage::Priority priority) const;
     int getSelectedTaskId() const;
+
+    void editUserName();
 
     Ui::TaskPlanner *ui;
     GamificationView *m_gamificationView;

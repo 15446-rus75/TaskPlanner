@@ -1,6 +1,7 @@
 #include "taskplannerview.hpp"
 
 #include <QDesktopServices>
+#include <QInputDialog>
 #include <QCalendarWidget>
 #include <QCheckBox>
 #include <QComboBox>
@@ -65,6 +66,9 @@ view::TaskPlannerView::TaskPlannerView(QWidget *parent):
                      {
                        emit viewReady();
                      });
+
+  ui->btnUserName->setCursor(Qt::PointingHandCursor);
+  ui->btnUserName->setToolTip("Нажмите, чтобы изменить имя");
 }
 
 void view::TaskPlannerView::setupGamification()
@@ -438,6 +442,7 @@ void view::TaskPlannerView::connectSignals()
   QObject::connect(ui->btnOpenSDO, &QPushButton::clicked, this, &TaskPlannerView::onOpenSDOClicked);
   QObject::connect(ui->btnRefreshSDO, &QPushButton::clicked, this, &TaskPlannerView::onRefreshSDOClicked);
   QObject::connect(ui->listSDOLinks, &QListWidget::itemDoubleClicked, this, &TaskPlannerView::onSDOLinkDoubleClicked);
+  QObject::connect(ui->btnUserName, &QPushButton::clicked, this, &TaskPlannerView::onUserNameClicked);
 }
 
 void view::TaskPlannerView::setupFilterLogic()
@@ -661,4 +666,30 @@ void view::TaskPlannerView::onSDOLinkDoubleClicked(QListWidgetItem *item)
   {
     QDesktopServices::openUrl(QUrl(url));
   }
+}
+
+void view::TaskPlannerView::onUserNameClicked()
+{
+  editUserName();
+}
+
+void view::TaskPlannerView::editUserName()
+{
+  bool ok;
+  QString current_name = ui->btnUserName->text();
+
+  QString new_name = QInputDialog::getText(this, "Изменение имени", "Введите ваше имя:", QLineEdit::Normal, current_name, &ok);
+
+  if (ok && !new_name.trimmed().isEmpty())
+  {
+    QString trimmed_name = new_name.trimmed();
+    ui->btnUserName->setText(trimmed_name);
+    emit userNameChanged(trimmed_name);
+    showInfoMessage("Имя изменено на: " + trimmed_name);
+  }
+}
+
+void view::TaskPlannerView::setUserName(const QString &userName)
+{
+  ui->btnUserName->setText(userName);
 }

@@ -41,6 +41,7 @@ namespace view
     virtual void showLevelUpAnimation(int newLevel, const QString &newTitle) = 0;
     virtual void updateGamificationPanel() = 0;
     virtual void updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements) = 0;
+    virtual void setUserName(const QString &userName) = 0;
   };
 
 }
