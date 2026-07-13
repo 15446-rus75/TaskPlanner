@@ -205,6 +205,7 @@ namespace test
     void unlockLocation(const QString &locationId) override
     {
       ++unlockLocationCallCount;
+      lastUnlockedLocationId = locationId;
       unlockedLocationsToReturn.append(locationId);
     }
 
@@ -290,6 +291,7 @@ namespace test
     QString lastXPReason;
     QDate lastStreakDate;
     QString lastUnlockedAchievementId;
+    QString lastUnlockedLocationId;
 
     QList< storage::Task > tasksForTodayToReturn;
     QList< storage::Task > overdueTasksToReturn;
