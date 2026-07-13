@@ -258,9 +258,9 @@ void view::TaskPlannerView::showCampusMap(const QList< QString > &unlockedLocati
   m_gamificationView->showCampusMap(unlockedLocations);
 }
 
-void view::TaskPlannerView::showLocationUnlocked(const QString &locationName)
+void view::TaskPlannerView::showLocationUnlocked(const storage::Location &location)
 {
-  m_gamificationView->showLocationUnlocked(locationName);
+  m_gamificationView->showLocationUnlocked(location);
 }
 
 void view::TaskPlannerView::showLevelUpAnimation(int newLevel, const QString &newTitle)
@@ -443,6 +443,7 @@ void view::TaskPlannerView::connectSignals()
   QObject::connect(ui->btnRefreshSDO, &QPushButton::clicked, this, &TaskPlannerView::onRefreshSDOClicked);
   QObject::connect(ui->listSDOLinks, &QListWidget::itemDoubleClicked, this, &TaskPlannerView::onSDOLinkDoubleClicked);
   QObject::connect(ui->btnUserName, &QPushButton::clicked, this, &TaskPlannerView::onUserNameClicked);
+  QObject::connect(ui->btnViewMap, &QPushButton::clicked, this, &TaskPlannerView::onGamificationMapRequested);
 }
 
 void view::TaskPlannerView::setupFilterLogic()

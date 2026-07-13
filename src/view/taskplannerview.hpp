@@ -37,7 +37,7 @@ namespace view
     void showAchievementUnlocked(const storage::Achievement &achievement) override;
     void showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds) override;
     void showCampusMap(const QList< QString > &unlockedLocations) override;
-    void showLocationUnlocked(const QString &locationName) override;
+    void showLocationUnlocked(const storage::Location &location) override;
     void showLevelUpAnimation(int newLevel, const QString &newTitle) override;
     void updateGamificationPanel() override;
     void updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements) override;
