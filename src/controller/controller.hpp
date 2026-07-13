@@ -44,6 +44,7 @@ namespace controller
     void onCheckAchievements() override;
     void onCalculateXP(int taskId) override;
     void updateAchievementSlots() override;
+    void onUserNameChanged(const QString &userName);
 
   private:
     bool checkReady() const;
