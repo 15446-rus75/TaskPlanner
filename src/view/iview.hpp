@@ -8,6 +8,7 @@
 
 #include "../storage/istorage.hpp"
 #include "../storage/task.hpp"
+#include "../utils/locations.hpp"
 
 namespace view
 {
@@ -35,8 +36,8 @@ namespace view
     virtual void showAchievementUnlocked(const storage::Achievement &achievement) = 0;
     virtual void showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds) = 0;
 
-    virtual void showCampusMap(const QList< QString > &unlockedLocations) = 0;
-    virtual void showLocationUnlocked(const QString &locationName) = 0;
+    virtual void showCampusMap(const QList< QString > &unlockedLocationIds) = 0;
+    virtual void showLocationUnlocked(const storage::Location &location) = 0;
 
     virtual void showLevelUpAnimation(int newLevel, const QString &newTitle) = 0;
     virtual void updateGamificationPanel() = 0;

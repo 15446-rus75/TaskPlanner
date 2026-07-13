@@ -1,0 +1,28 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+  <qresource prefix="/map">
+    <file>utils/map/map_base.png</file>
+    <file>utils/map/admission_and_pass_office.png</file>
+    <file>utils/map/building_1.png</file>
+    <file>utils/map/building_2.png</file>
+    <file>utils/map/building_3.png</file>
+    <file>utils/map/building_4.png</file>
+    <file>utils/map/building_11.png</file>
+    <file>utils/map/chemistry_building.png</file>
+    <file>utils/map/hydro_campus_1.png</file>
+    <file>utils/map/hydro_campus_2.png</file>
+    <file>utils/map/hydro_tower.png</file>
+    <file>utils/map/lab_auditorium.png</file>
+    <file>utils/map/laser_center.png</file>
+    <file>utils/map/main_building.png</file>
+    <file>utils/map/mechanics_building.png</file>
+    <file>utils/map/mechanics_workshop.png</file>
+    <file>utils/map/metro_politekhnicheskaya.png</file>
+    <file>utils/map/professor_building_1.png</file>
+    <file>utils/map/professor_building_2.png</file>
+    <file>utils/map/ran_center.png</file>
+    <file>utils/map/research_center.png</file>
+    <file>utils/map/scientists_house.png</file>
+    <file>utils/map/sports_complex.png</file>
+  </qresource>
+</RCC>

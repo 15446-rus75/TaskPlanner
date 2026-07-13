@@ -7,13 +7,14 @@
 #include <QListWidgetItem>
 #include <QGraphicsOpacityEffect>
 #include <QPropertyAnimation>
+#include <QPainter>
 
 namespace
 {
   constexpr int k_achievementDialogWidth = 400;
   constexpr int k_achievementDialogHeight = 500;
-  constexpr int k_mapDialogWidth = 600;
-  constexpr int k_mapDialogHeight = 400;
+  constexpr int k_mapDialogWidth = 800;
+  constexpr int k_mapDialogHeight = 600;
 
   constexpr int k_xpAnimationDurationMs = 3000;
   constexpr int k_levelAnimationDurationMs = 5000;
@@ -141,8 +142,7 @@ void view::GamificationView::showAchievementsList( const QList< storage::Achieve
   QVBoxLayout *layout = new QVBoxLayout(&dialog);
 
   QLabel *title_label = new QLabel("🏆 Ваши достижения", &dialog);
-  title_label->setStyleSheet(
-      "font-size: 16px; font-weight: bold; color: #3f51b5; padding: 8px;");
+  title_label->setStyleSheet("font-size: 16px; font-weight: bold; color: #3f51b5; padding: 8px;");
   layout->addWidget(title_label);
 
   QListWidget *list_widget = new QListWidget(&dialog);
@@ -188,44 +188,99 @@ void view::GamificationView::showAchievementsList( const QList< storage::Achieve
 
   layout->addWidget(list_widget);
 
-  QLabel *stats_label = new QLabel(
-      QString("📊 Разблокировано: %1 из %2")
-          .arg(unlocked_count)
-          .arg(achievements.size()),
-      &dialog);
+  QLabel *stats_label = new QLabel(QString("📊 Разблокировано: %1 из %2").arg(unlocked_count).arg(achievements.size()), &dialog);
   stats_label->setStyleSheet("color: #5c6bc0; font-size: 11px; padding: 4px;");
   layout->addWidget(stats_label);
 
   dialog.exec();
 }
 
-void view::GamificationView::showCampusMap(const QList< QString > &unlocked_locations)
+void view::GamificationView::showCampusMap(const QList< QString > &unlockedLocationIds)
 {
   QDialog dialog(this);
   dialog.setWindowTitle("Карта кампуса");
   dialog.setMinimumSize(k_mapDialogWidth, k_mapDialogHeight);
+  dialog.setFixedSize(k_mapDialogWidth, k_mapDialogHeight);
 
   QVBoxLayout *layout = new QVBoxLayout(&dialog);
-  QLabel *map_label = new QLabel("Карта кампуса", &dialog);
-  map_label->setAlignment(Qt::AlignCenter);
 
-  QListWidget *location_list = new QListWidget(&dialog);
-
-  for (const QString &location : unlocked_locations)
+  QPixmap baseMap(":/map/utils/map/map_base.png");
+  if (baseMap.isNull())
   {
-    QListWidgetItem *item = new QListWidgetItem();
-    item->setText(location + " ✓");
-    location_list->addItem(item);
+    qWarning() << "GamificationView::showCampusMap: base map not found";
+    QLabel *errorLabel = new QLabel("Карта не найдена");
+    errorLabel->setAlignment(Qt::AlignCenter);
+    layout->addWidget(errorLabel);
+  }
+  else
+  {
+    QPixmap finalMap = baseMap.copy();
+    QPainter painter(&finalMap);
+    for (const QString &id: unlockedLocationIds)
+    {
+      const QString spritePath = ":/map/utils/map/" + id + ".png";
+      const QPixmap sprite(spritePath);
+      if (!sprite.isNull())
+      {
+        painter.drawPixmap(0, 0, sprite);
+      }
+      else
+      {
+        qWarning() << "GamificationView::showCampusMap: sprite not found:" << spritePath;
+      }
+    }
+    painter.end();
+
+    const int maxWidth = k_mapDialogWidth - 40;
+    const int maxHeight = k_mapDialogHeight - 200;
+
+    const QPixmap scaledMap = finalMap.scaled(maxWidth, maxHeight, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    QLabel *mapLabel = new QLabel(&dialog);
+    mapLabel->setAlignment(Qt::AlignCenter);
+    mapLabel->setPixmap(scaledMap);
+    layout->addWidget(mapLabel);
   }
 
-  layout->addWidget(map_label);
-  layout->addWidget(location_list);
+  QLabel *locationsTitle = new QLabel("📍 Разблокированные локации:", &dialog);
+  locationsTitle->setStyleSheet("font-weight: bold; font-size: 12px; color: #3f51b5;");
+  layout->addWidget(locationsTitle);
+
+  QListWidget *locationList = new QListWidget(&dialog);
+  locationList->setMinimumHeight(175);
+  locationList->setMaximumHeight(175);
+
+  const QList< storage::Location > allLocations = storage::locations::getAllLocations();
+  int unlockedCount = 0;
+
+  for (const auto &location: allLocations)
+  {
+    if (unlockedLocationIds.contains(location.id))
+    {
+      QListWidgetItem *item = new QListWidgetItem("✅ " + location.name, locationList);
+      item->setForeground(QColor("#3f51b5"));
+      ++unlockedCount;
+    }
+    else
+    {
+      QListWidgetItem *item = new QListWidgetItem("🔒 " + location.name, locationList);
+      item->setForeground(QColor("#9e9e9e"));
+    }
+  }
+
+  layout->addWidget(locationList);
+
+  QLabel *statsLabel = new QLabel(QString("📊 Открыто: %1 из %2").arg(unlockedCount).arg(allLocations.size()), &dialog);
+  statsLabel->setStyleSheet("color: #5c6bc0; font-size: 11px; padding: 4px;");
+  statsLabel->setAlignment(Qt::AlignRight);
+  layout->addWidget(statsLabel);
+
   dialog.exec();
 }
 
-void view::GamificationView::showLocationUnlocked(const QString &location_name)
+void view::GamificationView::showLocationUnlocked(const storage::Location &location)
 {
-  Q_UNUSED(location_name);
+  Q_UNUSED(location);
 }
 
 void view::GamificationView::showLevelUpAnimation(int new_level, const QString &new_title)

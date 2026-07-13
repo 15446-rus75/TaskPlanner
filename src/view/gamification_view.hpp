@@ -26,8 +26,8 @@ namespace view
     void showXPNotification(int amount, const QString &reason) override;
     void showAchievementUnlocked(const storage::Achievement &achievement) override;
     void showAchievementsList(const QList< storage::Achievement > &achievements, const QList< QString > &unlockedAchievementIds) override;
-    void showCampusMap(const QList< QString > &unlocked_locations) override;
-    void showLocationUnlocked(const QString &location_name) override;
+    void showCampusMap(const QList< QString > &unlockedLocationIds) override;
+    void showLocationUnlocked(const storage::Location &location) override;
     void showLevelUpAnimation(int new_level, const QString &new_title) override;
 
     void setLevelLabel(QLabel *label);
