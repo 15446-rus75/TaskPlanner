@@ -356,20 +356,36 @@ QFrame#frameTaskForm QPushButton {
             <item>
              <layout class="QVBoxLayout" name="verticalLayoutProfileInfo">
               <item>
-               <widget class="QLabel" name="labelUserName">
-                <property name="text">
-                 <string>Имя пользователя</string>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>12</pointsize>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">color: #1a237e;</string>
-                </property>
-               </widget>
+               <widget class="QPushButton" name="btnUserName">
+ 		<property name="text">
+  			<string>Имя пользователя</string>
+ 		</property>
+ 		<property name="flat">
+  			<bool>true</bool>
+		 </property>
+ 		<property name="cursor">
+  			<cursorShape>PointingHandCursor</cursorShape>
+ 		</property>
+ 		<property name="toolTip">
+  			<string>Нажмите, чтобы изменить имя</string>
+ 		</property>
+ 		<property name="styleSheet">
+  		<string notr="true">
+   		QPushButton {
+    		color: #1a237e;
+    		font-weight: bold;
+    		font-size: 12pt;
+    		border: none;
+    		padding: 0;
+    		text-align: left;
+   		}
+   		QPushButton:hover {
+    		color: #3f51b5;
+    		text-decoration: underline;
+   		}
+  		</string>
+ 		</property>
+		</widget>
               </item>
               <item>
                <widget class="QLabel" name="labelUserRank">

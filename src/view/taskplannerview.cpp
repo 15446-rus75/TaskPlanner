@@ -1,5 +1,7 @@
 #include "taskplannerview.hpp"
 
+#include <QDesktopServices>
+#include <QInputDialog>
 #include <QCalendarWidget>
 #include <QCheckBox>
 #include <QComboBox>
@@ -12,14 +14,14 @@
 #include <Qt>
 
 view::TaskPlannerView::TaskPlannerView(QWidget *parent):
-    QMainWindow(parent),
-    IView(),
-    ui(new Ui::TaskPlanner),
-    m_gamificationView(new GamificationView(this)),
-    m_currentTaskId(-1),
-    m_currentSortCriterion(storage::Criterion::Date),
-    m_statusTimer(new QTimer(this)),
-    m_isFormReadOnly(false)
+  QMainWindow(parent),
+  IView(),
+  ui(new Ui::TaskPlanner),
+  m_gamificationView(new GamificationView(this)),
+  m_currentTaskId(-1),
+  m_currentSortCriterion(storage::Criterion::Date),
+  m_statusTimer(new QTimer(this)),
+  m_isFormReadOnly(false)
 {
   ui->setupUi(this);
 
@@ -54,6 +56,7 @@ view::TaskPlannerView::TaskPlannerView(QWidget *parent):
   connectSignals();
   setupFilterLogic();
   setupGamification();
+  populateSDOLinks();
   ui->frameTaskForm->setVisible(false);
 
   m_statusTimer->setSingleShot(true);
@@ -63,6 +66,9 @@ view::TaskPlannerView::TaskPlannerView(QWidget *parent):
                      {
                        emit viewReady();
                      });
+
+  ui->btnUserName->setCursor(Qt::PointingHandCursor);
+  ui->btnUserName->setToolTip("Нажмите, чтобы изменить имя");
 }
 
 void view::TaskPlannerView::setupGamification()
@@ -432,6 +438,11 @@ void view::TaskPlannerView::connectSignals()
                      }
                    });
   QObject::connect(ui->btnViewAchievements, &QPushButton::clicked, this, &TaskPlannerView::onGamificationAchievementsRequested);
+  QObject::connect(ui->comboInstitute, QOverload< int >::of(&QComboBox::currentIndexChanged), this, &TaskPlannerView::onInstituteChanged);
+  QObject::connect(ui->btnOpenSDO, &QPushButton::clicked, this, &TaskPlannerView::onOpenSDOClicked);
+  QObject::connect(ui->btnRefreshSDO, &QPushButton::clicked, this, &TaskPlannerView::onRefreshSDOClicked);
+  QObject::connect(ui->listSDOLinks, &QListWidget::itemDoubleClicked, this, &TaskPlannerView::onSDOLinkDoubleClicked);
+  QObject::connect(ui->btnUserName, &QPushButton::clicked, this, &TaskPlannerView::onUserNameClicked);
 }
 
 void view::TaskPlannerView::setupFilterLogic()
@@ -593,4 +604,92 @@ void view::TaskPlannerView::updateAchievementSlots(const QList< storage::Achieve
       achievementLabels[i]->setToolTip(achievement.description);
     }
   }
+}
+
+void view::TaskPlannerView::populateSDOLinks()
+{
+  const QList< sdo::Institute > institutes = sdo::get_institutes();
+  ui->comboInstitute->clear();
+  for (const sdo::Institute &institute: institutes)
+  {
+    ui->comboInstitute->addItem(institute.name);
+  }
+  if (!institutes.isEmpty())
+  {
+    onInstituteChanged(0);
+  }
+}
+
+void view::TaskPlannerView::onInstituteChanged(int index)
+{
+  ui->listSDOLinks->clear();
+  const QList< sdo::Institute > institutes = sdo::get_institutes();
+  if (index < 0 || index >= institutes.size())
+  {
+    return;
+  }
+  const sdo::Institute &institute = institutes[index];
+  QListWidgetItem *item = new QListWidgetItem(QString("🌐 Перейти на платформу СДО (%1)").arg(institute.name));
+  item->setData(Qt::UserRole, institute.url);
+  ui->listSDOLinks->addItem(item);
+}
+
+void view::TaskPlannerView::onOpenSDOClicked()
+{
+  QListWidgetItem *current_item = ui->listSDOLinks->currentItem();
+  if (!current_item)
+  {
+    showErrorMessage("Выберите ссылку из списка");
+    return;
+  }
+  const QString url = current_item->data(Qt::UserRole).toString();
+  if (!url.isEmpty())
+  {
+    QDesktopServices::openUrl(QUrl(url));
+  }
+}
+
+void view::TaskPlannerView::onRefreshSDOClicked()
+{
+  populateSDOLinks();
+  showInfoMessage("Список СДО обновлён");
+}
+
+void view::TaskPlannerView::onSDOLinkDoubleClicked(QListWidgetItem *item)
+{
+  if (!item)
+  {
+    return;
+  }
+  const QString url = item->data(Qt::UserRole).toString();
+  if (!url.isEmpty())
+  {
+    QDesktopServices::openUrl(QUrl(url));
+  }
+}
+
+void view::TaskPlannerView::onUserNameClicked()
+{
+  editUserName();
+}
+
+void view::TaskPlannerView::editUserName()
+{
+  bool ok;
+  QString current_name = ui->btnUserName->text();
+
+  QString new_name = QInputDialog::getText(this, "Изменение имени", "Введите ваше имя:", QLineEdit::Normal, current_name, &ok);
+
+  if (ok && !new_name.trimmed().isEmpty())
+  {
+    QString trimmed_name = new_name.trimmed();
+    ui->btnUserName->setText(trimmed_name);
+    emit userNameChanged(trimmed_name);
+    showInfoMessage("Имя изменено на: " + trimmed_name);
+  }
+}
+
+void view::TaskPlannerView::setUserName(const QString &userName)
+{
+  ui->btnUserName->setText(userName);
 }

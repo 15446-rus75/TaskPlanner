@@ -38,6 +38,7 @@ namespace storage
     int streakDays;
     int deletedTasksCount;
     QDate lastActivityDate;
+    QString userName;
     QString currentTitle;
     QList< QString > unlockedAchievementIds;
     QList< QString > unlockedLocations;

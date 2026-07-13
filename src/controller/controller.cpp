@@ -71,6 +71,7 @@ void controller::Controller::start()
   QObject::connect(view_ptr, &view::TaskPlannerView::filterChanged, this, &controller::Controller::onFilterChanged);
   QObject::connect(view_ptr, &view::TaskPlannerView::achievementsRequested, this, &controller::Controller::onAchievementsRequested);
   QObject::connect(view_ptr, &view::TaskPlannerView::mapRequested, this, &controller::Controller::onMapRequested);
+  QObject::connect(view_ptr, &view::TaskPlannerView::userNameChanged, this, &controller::Controller::onUserNameChanged);
 #endif
   onApplicationStart();
 }
@@ -871,6 +872,13 @@ void controller::Controller::onApplicationStart()
   const storage::UserProgress progress = m_storage->getUserProgress();
   m_view->showUserLevel(progress.currentLevel, progress.currentXP, progress.xpToNextLevel);
 
+  QString user_name = progress.userName;
+  if (user_name.trimmed().isEmpty())
+  {
+    user_name = "Имя пользователя";
+  }
+  m_view->setUserName(user_name);
+
   QString title;
   if (progress.currentLevel >= storage::xp::MAX_LEVEL)
   {
@@ -882,7 +890,6 @@ void controller::Controller::onApplicationStart()
   }
   m_view->showUserTitle(title);
   m_view->showStreak(progress.streakDays);
-
   onNewDay(QDate::currentDate());
   checkLocationUnlocks();
 }
@@ -1030,4 +1037,18 @@ void controller::Controller::announceUnlockedLocations(const QList< storage::Loc
   {
     m_view->showLocationUnlocked(location.name);
   }
+}
+
+void controller::Controller::onUserNameChanged(const QString &userName)
+{
+  if (!checkReady())
+  {
+    return;
+  }
+
+  storage::UserProgress progress = m_storage->getUserProgress();
+  progress.userName = userName;
+  m_storage->updateUserProgress(progress);
+
+  m_view->setUserName(userName);
 }

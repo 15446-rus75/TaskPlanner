@@ -150,6 +150,7 @@ QJsonObject storage::serial::progressToJson(const UserProgress &progress)
   obj["xpToNextLevel"] = progress.xpToNextLevel;
   obj["streakDays"] = progress.streakDays;
   obj["lastActivityDate"] = progress.lastActivityDate.toString(Qt::ISODate);
+  obj["userName"] = progress.userName;
   obj["currentTitle"] = progress.currentTitle;
   obj["unlockedAchievements"] = unlockedAchievements;
   obj["unlockedLocations"] = unlockedLocations;
@@ -165,6 +166,7 @@ storage::UserProgress storage::serial::progressFromJson(const QJsonObject &obj)
   progress.xpToNextLevel = obj["xpToNextLevel"].toInt(100);
   progress.streakDays = obj["streakDays"].toInt(0);
   progress.lastActivityDate = QDate::fromString(obj["lastActivityDate"].toString(), Qt::ISODate);
+  progress.userName = obj["userName"].toString();
   progress.currentTitle = obj["currentTitle"].toString();
   progress.deletedTasksCount = obj["deletedTasksCount"].toInt(0);
 

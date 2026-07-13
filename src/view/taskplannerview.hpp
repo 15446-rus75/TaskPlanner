@@ -1,12 +1,12 @@
 #ifndef TASKPLANNERVIEW_HPP
 #define TASKPLANNERVIEW_HPP
 
+#include <QMainWindow>
+#include <QTimer>
 #include "iview.hpp"
 #include "gamification_view.hpp"
 #include "ui_taskplanner.h"
-
-#include <QMainWindow>
-#include <QTimer>
+#include "../utils/sdo_links.hpp"
 
 namespace view
 {
@@ -41,6 +41,7 @@ namespace view
     void showLevelUpAnimation(int newLevel, const QString &newTitle) override;
     void updateGamificationPanel() override;
     void updateAchievementSlots(const QList< storage::Achievement > &unlockedAchievements) override;
+    void setUserName(const QString &userName) override;
 
   signals:
     void viewReady();
@@ -55,6 +56,7 @@ namespace view
     void filterChanged(storage::Filter filter, const QVariant &value);
     void achievementsRequested();
     void mapRequested();
+    void userNameChanged(const QString &userName);
 
   private slots:
     void onCalendarClicked(const QDate &date);
@@ -74,11 +76,17 @@ namespace view
     void clearStatusMessage();
     void onGamificationAchievementsRequested();
     void onGamificationMapRequested();
+    void onInstituteChanged(int index);
+    void onOpenSDOClicked();
+    void onRefreshSDOClicked();
+    void onSDOLinkDoubleClicked(QListWidgetItem *item);
+    void onUserNameClicked();
 
   private:
     void connectSignals();
     void setupFilterLogic();
     void setupGamification();
+    void populateSDOLinks();
 
     storage::Task formToTask() const;
     void taskToForm(const storage::Task &task);
@@ -88,6 +96,8 @@ namespace view
     storage::Priority indexToPriority(int index) const;
     int priorityToIndex(storage::Priority priority) const;
     int getSelectedTaskId() const;
+
+    void editUserName();
 
     Ui::TaskPlanner *ui;
     GamificationView *m_gamificationView;
