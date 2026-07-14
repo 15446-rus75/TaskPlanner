@@ -930,7 +930,6 @@ void controller::Controller::checkLocationUnlocks()
     {
       m_storage->unlockLocation(location.id);
       newlyUnlocked.append(location);
-      m_view->showLocationUnlocked(location);
     }
   };
 
