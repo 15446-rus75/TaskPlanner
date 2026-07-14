@@ -63,7 +63,7 @@ namespace controller
   public:
 #endif
     void checkLocationUnlocks();
-    void announceUnlockedLocations(const QList<storage::Location> &unlocked);
+    void announceUnlockedLocations(const QList< storage::Location > &unlocked);
 #ifdef TEST_BUILD
   private:
 #endif
