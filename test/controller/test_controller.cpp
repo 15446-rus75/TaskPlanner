@@ -130,6 +130,14 @@ private slots:
 
   void delete_checksAchievementsAfterRemoval();
 
+  void checkLocationUnlocks_unlocksCorrectLocationsByLevel();
+  void checkLocationUnlocks_doesNotUnlockAlreadyUnlocked();
+  void checkLocationUnlocks_doesNotUnlockBelowThreshold();
+  void onTaskCompleted_callsCheckLocationUnlocks();
+  void onApplicationStart_callsCheckLocationUnlocks();
+  void updateAchievementSlots_calledAfterUnlock();
+  void achievementsRequested_passesUnlockedIds();
+
 private:
   storage::Task makeTask(int id, const QString &name, storage::Priority priority, const QDateTime &deadline, bool completed = false) const;
   storage::Achievement makeAchievement(const QString &id, int xpReward = 0) const;
@@ -1086,6 +1094,110 @@ void ControllerTest::delete_checksAchievementsAfterRemoval()
   m_controller->onTaskDeleteRequested(5);
 
   QVERIFY(m_storage->getAllAchievementsCallCount >= 1);
+}
+
+void ControllerTest::checkLocationUnlocks_unlocksCorrectLocationsByLevel()
+{
+  m_storage->currentLevelToReturn = 10;
+  m_storage->unlockedLocationsToReturn.clear();
+
+  m_controller->checkLocationUnlocks();
+
+  const auto &unlocked = m_storage->unlockedLocationsToReturn;
+  QVERIFY(unlocked.contains("admission_and_pass_office"));
+  QVERIFY(unlocked.contains("metro_politekhnicheskaya"));
+  QVERIFY(unlocked.contains("sports_complex"));
+  QVERIFY(unlocked.contains("building_1"));
+  QVERIFY(unlocked.contains("hydro_campus_1"));
+  QVERIFY(unlocked.contains("building_2"));
+  QVERIFY(unlocked.contains("hydro_campus_2"));
+
+  QVERIFY(!unlocked.contains("building_3"));
+  QVERIFY(!unlocked.contains("mechanics_building"));
+
+  QCOMPARE(m_view->showLocationUnlockedCallCount, 7);
+}
+
+void ControllerTest::checkLocationUnlocks_doesNotUnlockAlreadyUnlocked()
+{
+  m_storage->unlockedLocationsToReturn = {"admission_and_pass_office"};
+  m_storage->currentLevelToReturn = 10;
+
+  m_controller->checkLocationUnlocks();
+
+  QCOMPARE(m_storage->unlockLocationCallCount, 6);
+  QVERIFY(m_storage->lastUnlockedLocationId != "admission_and_pass_office");
+}
+
+void ControllerTest::checkLocationUnlocks_doesNotUnlockBelowThreshold()
+{
+  m_storage->currentLevelToReturn = 1;
+  m_storage->unlockedLocationsToReturn.clear();
+
+  m_controller->checkLocationUnlocks();
+
+  const auto &unlocked = m_storage->unlockedLocationsToReturn;
+  QCOMPARE(unlocked.size(), 2);
+  QVERIFY(unlocked.contains("admission_and_pass_office"));
+  QVERIFY(unlocked.contains("metro_politekhnicheskaya"));
+}
+
+void ControllerTest::onTaskCompleted_callsCheckLocationUnlocks()
+{
+  m_storage->currentLevelToReturn = 1;
+  m_storage->totalXP = 0;
+  m_storage->currentXPToReturn = 0;
+
+  const storage::Task task1 = makeTask(1, "Level up task", storage::Priority::Hard, QDateTime::currentDateTime().addDays(1));
+  const storage::Task task2 = makeTask(2, "Level up task 2", storage::Priority::Hard, QDateTime::currentDateTime().addDays(1));
+  m_storage->setTasks({ task1, task2 });
+  m_storage->allAchievementsToReturn = {};
+
+  m_controller->onCompleteRequested(1);
+  m_controller->onCompleteRequested(2);
+
+  const auto &unlocked = m_storage->unlockedLocationsToReturn;
+  QVERIFY(unlocked.contains("admission_and_pass_office"));
+  QVERIFY(unlocked.contains("metro_politekhnicheskaya"));
+  QVERIFY(unlocked.contains("sports_complex"));
+  QVERIFY(!unlocked.contains("building_1"));
+}
+
+void ControllerTest::onApplicationStart_callsCheckLocationUnlocks()
+{
+  m_storage->currentLevelToReturn = 6;
+  m_storage->unlockedLocationsToReturn.clear();
+
+  m_controller->onApplicationStart();
+
+  const auto &unlocked = m_storage->unlockedLocationsToReturn;
+  QVERIFY(unlocked.contains("admission_and_pass_office"));
+  QVERIFY(unlocked.contains("metro_politekhnicheskaya"));
+  QVERIFY(unlocked.contains("sports_complex"));
+  QVERIFY(unlocked.contains("building_1"));
+  QVERIFY(unlocked.contains("hydro_campus_1"));
+  QVERIFY(!unlocked.contains("building_2"));
+  QVERIFY(!unlocked.contains("hydro_campus_2"));
+}
+
+void ControllerTest::updateAchievementSlots_calledAfterUnlock()
+{
+  m_storage->allAchievementsToReturn = { makeAchievement("level_1", 0), makeAchievement("tasks_10", 100) };
+  m_storage->unlockedIds.insert("level_1");
+
+  m_controller->onViewReady();
+
+  QCOMPARE(m_view->updateAchievementSlotsCallCount, 1);
+}
+
+void ControllerTest::achievementsRequested_passesUnlockedIds()
+{
+  m_storage->allAchievementsToReturn = { makeAchievement("level_1", 0), makeAchievement("tasks_10", 100) };
+  m_storage->unlockedIds.insert("level_1");
+
+  m_controller->onAchievementsRequested();
+
+  QCOMPARE(m_view->showAchievementsListCallCount, 1);
 }
 
 QTEST_APPLESS_MAIN(ControllerTest)

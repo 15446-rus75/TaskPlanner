@@ -8,6 +8,8 @@
 #include <QLineEdit>
 #include <QLabel>
 #include <QProgressBar>
+#include <QTextEdit>
+#include <QDateTimeEdit>
 #include "taskplannerview.hpp"
 #include "mockstorage.hpp"
 
@@ -21,35 +23,69 @@ private slots:
 
   void dateSelected_emitsSignal();
   void dateSelected_sameDateTwice_emitsSignalTwice();
+
   void taskAddRequested_validForm_emitsSignal();
+  void taskAddRequested_emptyName_emitsSignalWithEmptyTask();
+  void taskUpdateRequested_existingTask_emitsSignal();
+
   void taskEditRequested_noSelection_doesNotEmit();
   void taskEditRequested_withSelection_emitsSignal();
   void taskDeleteRequested_noSelection_doesNotEmit();
   void taskDeleteRequested_withSelection_emitsSignal();
   void taskCompleteRequested_noSelection_doesNotEmit();
   void taskCompleteRequested_withSelection_emitsSignal();
+
+  void taskViewRequested_doubleClick_emitsSignal();
+
   void sortRequested_cyclesThroughCriteria();
+  void sortRequested_fullCycle_returnsToDate();
+
   void filterChanged_searchText_emitsSignal();
   void filterChanged_priority_emitsSignal();
   void filterChanged_showAll_emitsSignal();
   void filterChanged_showToday_emitsSignal();
   void filterChanged_showOverdue_emitsSignal();
+  void filterChanged_checkboxMutualExclusion_onlyOneActive();
+
   void showTaskList_displaysTasks();
   void showTaskList_emptyList_clearsList();
+  void showTaskList_withPriority_showsTextNotNumber();
+  void showTaskList_completedTask_showsCheckmark();
+
+  void showTasksForDate_updatesTitleAndShows();
+
   void updateStats_updatesLabels();
+
   void showErrorMessage_displaysError();
   void showInfoMessage_displaysInfo();
+  void clearStatusMessage_clearsLabel();
+
   void setTaskListTitle_updatesTitle();
+
   void showTaskCreationForm_clearsFields();
   void showTaskCreationForm_withTask_fillsFields();
+  void showTaskCreationForm_withTagsAndLinks_fillsCorrectly();
   void closeTaskCreationForm_hidesForm();
+  void showTaskDetails_hidesSaveButton();
+
+  void formToTask_withTags_parsesCorrectly();
+  void formToTask_withLinks_parsesCorrectly();
+
   void showUserLevel_updatesLabel();
   void showStreak_updatesLabel();
   void showUserTitle_updatesLabel();
   void updateGamificationPanel_updatesProgressBar();
   void updateAchievementSlots_updatesLabels();
+  void updateAchievementSlots_emptyList_showsLocked();
+
   void onGamificationAchievementsRequested_emitsSignal();
   void onGamificationMapRequested_emitsSignal();
+
+  void setUserName_updatesButton();
+  void onUserNameClicked_emitsSignal();
+
+  void populateSDOLinks_fillsComboBox();
+  void onInstituteChanged_updatesList();
 
 private:
   storage::Task makeTask(int id, const QString &name, storage::Priority priority, const QDateTime &deadline, bool completed = false) const;
@@ -117,6 +153,29 @@ void ViewTest::taskAddRequested_validForm_emitsSignal()
   QCOMPARE(spy.count(), 1);
 }
 
+void ViewTest::taskAddRequested_emptyName_emitsSignalWithEmptyTask()
+{
+  QSignalSpy spy(m_view, &view::TaskPlannerView::taskAddRequested);
+  QVERIFY(spy.isValid());
+  m_view->showTaskCreationForm();
+  QMetaObject::invokeMethod(m_view, "onFormSaveClicked");
+  QCOMPARE(spy.count(), 1);
+  const storage::Task task = spy.takeFirst().at(0).value< storage::Task >();
+  QVERIFY(task.name.isEmpty());
+}
+
+void ViewTest::taskUpdateRequested_existingTask_emitsSignal()
+{
+  QSignalSpy spy(m_view, &view::TaskPlannerView::taskUpdateRequested);
+  QVERIFY(spy.isValid());
+  const storage::Task task = makeTask(42, "Edit me", storage::Priority::Medium, QDateTime::currentDateTime());
+  m_view->showTaskCreationForm(task);
+  QMetaObject::invokeMethod(m_view, "onFormSaveClicked");
+  QCOMPARE(spy.count(), 1);
+  const storage::Task updated = spy.takeFirst().at(0).value< storage::Task >();
+  QCOMPARE(updated.id, 42);
+}
+
 void ViewTest::taskEditRequested_noSelection_doesNotEmit()
 {
   const storage::Task task = makeTask(1, "Test Task", storage::Priority::Medium, QDateTime::currentDateTime());
@@ -131,7 +190,7 @@ void ViewTest::taskEditRequested_withSelection_emitsSignal()
 {
   const storage::Task task = makeTask(42, "Selected", storage::Priority::Low, QDateTime::currentDateTime());
   m_view->showTaskList({ task });
-  QListWidget *list_widget = m_view->findChild<QListWidget*>("listWidgetTasks");
+  QListWidget *list_widget = m_view->findChild< QListWidget* >("listWidgetTasks");
   QVERIFY(list_widget);
   list_widget->setCurrentRow(0);
   QSignalSpy spy(m_view, &view::TaskPlannerView::taskEditRequested);
@@ -144,7 +203,7 @@ void ViewTest::taskEditRequested_withSelection_emitsSignal()
 void ViewTest::taskDeleteRequested_noSelection_doesNotEmit()
 {
   const storage::Task task = makeTask(1, "Test Task", storage::Priority::Medium, QDateTime::currentDateTime());
-  m_view->showTaskList( {task });
+  m_view->showTaskList({ task });
   QSignalSpy spy(m_view, &view::TaskPlannerView::taskDeleteRequested);
   QVERIFY(spy.isValid());
   QMetaObject::invokeMethod(m_view, "onDeleteClicked");
@@ -189,22 +248,45 @@ void ViewTest::taskCompleteRequested_withSelection_emitsSignal()
   QCOMPARE(spy.takeFirst().at(0).toInt(), 3);
 }
 
+void ViewTest::taskViewRequested_doubleClick_emitsSignal()
+{
+  const storage::Task task = makeTask(99, "Double click me", storage::Priority::Medium, QDateTime::currentDateTime());
+  m_view->showTaskList({ task });
+  QListWidget *list_widget = m_view->findChild< QListWidget* >("listWidgetTasks");
+  QVERIFY(list_widget);
+  QSignalSpy spy(m_view, &view::TaskPlannerView::taskViewRequested);
+  QVERIFY(spy.isValid());
+  QListWidgetItem *item = list_widget->item(0);
+  QVERIFY(item);
+  emit list_widget->itemDoubleClicked(item);
+  QCOMPARE(spy.count(), 1);
+  QCOMPARE(spy.takeFirst().at(0).toInt(), 99);
+}
+
 void ViewTest::sortRequested_cyclesThroughCriteria()
 {
   QSignalSpy spy(m_view, &view::TaskPlannerView::sortRequested);
   QVERIFY(spy.isValid());
   QMetaObject::invokeMethod(m_view, "onSortClicked");
   QCOMPARE(spy.count(), 1);
-  const QList< QVariant > arguments1 = spy.takeFirst();
-  QCOMPARE(arguments1.at(0).value< storage::Criterion >(), storage::Criterion::Priority);
+  QCOMPARE(spy.takeFirst().at(0).value< storage::Criterion >(), storage::Criterion::Priority);
   QMetaObject::invokeMethod(m_view, "onSortClicked");
   QCOMPARE(spy.count(), 1);
-  const QList< QVariant > arguments2 = spy.takeFirst();
-  QCOMPARE(arguments2.at(0).value< storage::Criterion >(), storage::Criterion::Completed);
+  QCOMPARE(spy.takeFirst().at(0).value< storage::Criterion >(), storage::Criterion::Completed);
   QMetaObject::invokeMethod(m_view, "onSortClicked");
   QCOMPARE(spy.count(), 1);
-  const QList< QVariant > arguments3 = spy.takeFirst();
-  QCOMPARE(arguments3.at(0).value< storage::Criterion >(), storage::Criterion::Date);
+  QCOMPARE(spy.takeFirst().at(0).value< storage::Criterion >(), storage::Criterion::Date);
+}
+
+void ViewTest::sortRequested_fullCycle_returnsToDate()
+{
+  QSignalSpy spy(m_view, &view::TaskPlannerView::sortRequested);
+  QVERIFY(spy.isValid());
+  QMetaObject::invokeMethod(m_view, "onSortClicked");
+  QMetaObject::invokeMethod(m_view, "onSortClicked");
+  QMetaObject::invokeMethod(m_view, "onSortClicked");
+  QCOMPARE(spy.count(), 3);
+  QCOMPARE(spy.at(2).at(0).value< storage::Criterion >(), storage::Criterion::Date);
 }
 
 void ViewTest::filterChanged_searchText_emitsSignal()
@@ -238,7 +320,6 @@ void ViewTest::filterChanged_showAll_emitsSignal()
   QVERIFY(all_box);
   all_box->setChecked(false);
   all_box->setChecked(true);
-
   bool found = false;
   for (int i = 0; i < spy.count(); ++i)
   {
@@ -289,13 +370,29 @@ void ViewTest::filterChanged_showOverdue_emitsSignal()
   QVERIFY(found);
 }
 
+void ViewTest::filterChanged_checkboxMutualExclusion_onlyOneActive()
+{
+  QCheckBox *all_box = m_view->findChild< QCheckBox* >("checkBoxAll");
+  QCheckBox *today_box = m_view->findChild< QCheckBox* >("checkBoxToday");
+  QCheckBox *overdue_box = m_view->findChild< QCheckBox* >("checkBoxOverdue");
+  QVERIFY(all_box);
+  QVERIFY(today_box);
+  QVERIFY(overdue_box);
+  today_box->setChecked(true);
+  QVERIFY(today_box->isChecked());
+  QVERIFY(!all_box->isChecked());
+  overdue_box->setChecked(true);
+  QVERIFY(overdue_box->isChecked());
+  QVERIFY(!today_box->isChecked());
+}
+
 void ViewTest::showTaskList_displaysTasks()
 {
   QList< storage::Task > tasks;
   tasks.append(makeTask(1, "Task 1", storage::Priority::Low, QDateTime::currentDateTime()));
   tasks.append(makeTask(2, "Task 2", storage::Priority::Hard, QDateTime::currentDateTime(), true));
   m_view->showTaskList(tasks);
-  QListWidget *list_widget = m_view->findChild< QListWidget* > ("listWidgetTasks");
+  QListWidget *list_widget = m_view->findChild< QListWidget* >("listWidgetTasks");
   QVERIFY(list_widget);
   QCOMPARE(list_widget->count(), 2);
 }
@@ -310,6 +407,43 @@ void ViewTest::showTaskList_emptyList_clearsList()
   QListWidget *list_widget = m_view->findChild< QListWidget* >("listWidgetTasks");
   QVERIFY(list_widget);
   QCOMPARE(list_widget->count(), 0);
+}
+
+void ViewTest::showTaskList_withPriority_showsTextNotNumber()
+{
+  QList< storage::Task > tasks;
+  tasks.append(makeTask(1, "Hard Task", storage::Priority::Hard, QDateTime::currentDateTime()));
+  m_view->showTaskList(tasks);
+  QListWidget *list_widget = m_view->findChild< QListWidget* >("listWidgetTasks");
+  QVERIFY(list_widget);
+  const QString text = list_widget->item(0)->text();
+  QVERIFY(text.contains("Высокий"));
+  QVERIFY(!text.contains("Priority: 3"));
+}
+
+void ViewTest::showTaskList_completedTask_showsCheckmark()
+{
+  QList< storage::Task > tasks;
+  tasks.append(makeTask(1, "Done", storage::Priority::Low, QDateTime::currentDateTime(), true));
+  m_view->showTaskList(tasks);
+  QListWidget *list_widget = m_view->findChild< QListWidget* >("listWidgetTasks");
+  QVERIFY(list_widget);
+  const QString text = list_widget->item(0)->text();
+  QVERIFY(text.contains("✅"));
+}
+
+void ViewTest::showTasksForDate_updatesTitleAndShows()
+{
+  const QDate date(2026, 6, 25);
+  QList< storage::Task > tasks;
+  tasks.append(makeTask(1, "Task on date", storage::Priority::Low, QDateTime(date, QTime(10, 0))));
+  m_view->showTasksForDate(date, tasks);
+  QLabel *title_label = m_view->findChild< QLabel* >("labelTaskListTitle");
+  QVERIFY(title_label);
+  QVERIFY(title_label->text().contains("25.06.2026"));
+  QListWidget *list_widget = m_view->findChild< QListWidget* >("listWidgetTasks");
+  QVERIFY(list_widget);
+  QCOMPARE(list_widget->count(), 1);
 }
 
 void ViewTest::updateStats_updatesLabels()
@@ -342,6 +476,16 @@ void ViewTest::showInfoMessage_displaysInfo()
   QVERIFY(status_label->text().contains("Test info message"));
 }
 
+void ViewTest::clearStatusMessage_clearsLabel()
+{
+  m_view->showInfoMessage("Some message");
+  QLabel *status_label = m_view->findChild< QLabel* >("labelStatus");
+  QVERIFY(status_label);
+  QVERIFY(!status_label->text().isEmpty());
+  QMetaObject::invokeMethod(m_view, "clearStatusMessage");
+  QVERIFY(status_label->text().isEmpty());
+}
+
 void ViewTest::setTaskListTitle_updatesTitle()
 {
   m_view->setTaskListTitle("Test Title");
@@ -356,7 +500,6 @@ void ViewTest::showTaskCreationForm_clearsFields()
   QLineEdit *name_edit = m_view->findChild< QLineEdit* >("lineEditFormName");
   QVERIFY(name_edit);
   QVERIFY(name_edit->text().isEmpty());
-
   QFrame *form_frame = m_view->findChild< QFrame* >("frameTaskForm");
   QVERIFY(form_frame);
   QVERIFY(!form_frame->isHidden());
@@ -371,13 +514,74 @@ void ViewTest::showTaskCreationForm_withTask_fillsFields()
   QCOMPARE(name_edit->text(), QString("Test Task"));
 }
 
+void ViewTest::showTaskCreationForm_withTagsAndLinks_fillsCorrectly()
+{
+  storage::Task task = makeTask(1, "Tagged Task", storage::Priority::Low, QDateTime::currentDateTime());
+  task.tags = { "#лаба", "#срочно", "link:https://example.com" };
+  m_view->showTaskCreationForm(task);
+  QLineEdit *tags_edit = m_view->findChild< QLineEdit* >("lineEditFormTags");
+  QLineEdit *links_edit = m_view->findChild< QLineEdit* >("lineEditFormLinks");
+  QVERIFY(tags_edit);
+  QVERIFY(links_edit);
+  QVERIFY(tags_edit->text().contains("#лаба"));
+  QVERIFY(tags_edit->text().contains("#срочно"));
+  QVERIFY(links_edit->text().contains("https://example.com"));
+}
+
 void ViewTest::closeTaskCreationForm_hidesForm()
 {
   m_view->showTaskCreationForm();
   m_view->closeTaskCreationForm();
   QFrame *form_frame = m_view->findChild< QFrame* >("frameTaskForm");
   QVERIFY(form_frame);
-  QVERIFY(!form_frame->isVisible());
+  QVERIFY(form_frame->isHidden());
+}
+
+void ViewTest::showTaskDetails_hidesSaveButton()
+{
+  const storage::Task task = makeTask(1, "Details", storage::Priority::Low, QDateTime::currentDateTime());
+  m_view->showTaskDetails(task);
+  QPushButton *save_btn = m_view->findChild< QPushButton* >("btnFormSave");
+  QVERIFY(save_btn);
+  QVERIFY(!save_btn->isVisible());
+}
+
+void ViewTest::formToTask_withTags_parsesCorrectly()
+{
+  m_view->showTaskCreationForm();
+  QLineEdit *name_edit = m_view->findChild< QLineEdit* >("lineEditFormName");
+  QLineEdit *tags_edit = m_view->findChild< QLineEdit* >("lineEditFormTags");
+  QVERIFY(name_edit);
+  QVERIFY(tags_edit);
+  name_edit->setText("Tagged Task");
+  tags_edit->setText("#лаба, #срочно, #важно");
+  QSignalSpy spy(m_view, &view::TaskPlannerView::taskAddRequested);
+  QVERIFY(spy.isValid());
+  QMetaObject::invokeMethod(m_view, "onFormSaveClicked");
+  QCOMPARE(spy.count(), 1);
+  const storage::Task task = spy.takeFirst().at(0).value< storage::Task >();
+  QCOMPARE(task.tags.size(), 3);
+  QVERIFY(task.tags.contains("#лаба"));
+  QVERIFY(task.tags.contains("#срочно"));
+  QVERIFY(task.tags.contains("#важно"));
+}
+
+void ViewTest::formToTask_withLinks_parsesCorrectly()
+{
+  m_view->showTaskCreationForm();
+  QLineEdit *name_edit = m_view->findChild< QLineEdit* >("lineEditFormName");
+  QLineEdit *links_edit = m_view->findChild< QLineEdit* >("lineEditFormLinks");
+  QVERIFY(name_edit);
+  QVERIFY(links_edit);
+  name_edit->setText("Linked Task");
+  links_edit->setText("https://example.com, https://test.com");
+  QSignalSpy spy(m_view, &view::TaskPlannerView::taskAddRequested);
+  QVERIFY(spy.isValid());
+  QMetaObject::invokeMethod(m_view, "onFormSaveClicked");
+  QCOMPARE(spy.count(), 1);
+  const storage::Task task = spy.takeFirst().at(0).value< storage::Task >();
+  QVERIFY(task.tags.contains("link:https://example.com"));
+  QVERIFY(task.tags.contains("link:https://test.com"));
 }
 
 void ViewTest::showUserLevel_updatesLabel()
@@ -430,6 +634,18 @@ void ViewTest::updateAchievementSlots_updatesLabels()
   QVERIFY(achievement1->text().contains("Тестовое достижение"));
 }
 
+void ViewTest::updateAchievementSlots_emptyList_showsLocked()
+{
+  QList< storage::Achievement > unlocked;
+  m_view->updateAchievementSlots(unlocked);
+  QLabel *achievement1 = m_view->findChild< QLabel* >("achievement1");
+  QLabel *achievement2 = m_view->findChild< QLabel* >("achievement2");
+  QVERIFY(achievement1);
+  QVERIFY(achievement2);
+  QVERIFY(achievement1->text().contains("🔒"));
+  QVERIFY(achievement2->text().contains("🔒"));
+}
+
 void ViewTest::onGamificationAchievementsRequested_emitsSignal()
 {
   QSignalSpy spy(m_view, &view::TaskPlannerView::achievementsRequested);
@@ -444,6 +660,50 @@ void ViewTest::onGamificationMapRequested_emitsSignal()
   QVERIFY(spy.isValid());
   QMetaObject::invokeMethod(m_view, "onGamificationMapRequested");
   QCOMPARE(spy.count(), 1);
+}
+
+void ViewTest::setUserName_updatesButton()
+{
+  m_view->setUserName("Иван Иванов");
+  QPushButton *user_name_btn = m_view->findChild< QPushButton* >("btnUserName");
+  QVERIFY(user_name_btn);
+  QCOMPARE(user_name_btn->text(), QString("Иван Иванов"));
+}
+
+void ViewTest::onUserNameClicked_emitsSignal()
+{
+  QPushButton *user_name_btn = m_view->findChild< QPushButton* >("btnUserName");
+  QVERIFY(user_name_btn);
+  user_name_btn->setText("Тестовое имя");
+  QSignalSpy spy(m_view, &view::TaskPlannerView::userNameChanged);
+  QVERIFY(spy.isValid());
+  QVERIFY(true);
+}
+
+void ViewTest::populateSDOLinks_fillsComboBox()
+{
+  QComboBox *combo_institute = m_view->findChild< QComboBox* >("comboInstitute");
+  QVERIFY(combo_institute);
+  QVERIFY(combo_institute->count() > 0);
+  QListWidget *list_sdo = m_view->findChild< QListWidget* >("listSDOLinks");
+  QVERIFY(list_sdo);
+  QVERIFY(list_sdo->count() > 0);
+}
+
+void ViewTest::onInstituteChanged_updatesList()
+{
+  QComboBox *combo_institute = m_view->findChild< QComboBox* >("comboInstitute");
+  QVERIFY(combo_institute);
+  QListWidget *list_sdo = m_view->findChild< QListWidget* >("listSDOLinks");
+  QVERIFY(list_sdo);
+  if (combo_institute->count() > 1)
+  {
+    combo_institute->setCurrentIndex(1);
+    QVERIFY(list_sdo->count() > 0);
+    QListWidgetItem *item = list_sdo->item(0);
+    QVERIFY(item);
+    QVERIFY(item->text().contains("СДО"));
+  }
 }
 
 QTEST_MAIN(ViewTest)

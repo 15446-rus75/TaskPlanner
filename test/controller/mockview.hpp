@@ -116,10 +116,10 @@ namespace test
       lastUnlockedLocations = unlockedLocations;
     }
 
-    void showLocationUnlocked(const QString &locationName) override
+    void showLocationUnlocked(const storage::Location &location) override
     {
       ++showLocationUnlockedCallCount;
-      lastUnlockedLocationName = locationName;
+      lastUnlockedLocation = location;
     }
 
     void showLevelUpAnimation(int newLevel, const QString &newTitle) override
@@ -138,6 +138,12 @@ namespace test
     {
       Q_UNUSED(unlockedAchievements);
       ++updateAchievementSlotsCallCount;
+    }
+
+    void setUserName(const QString &userName) override
+    {
+      ++setUserNameCallCount;
+      lastUserName = userName;
     }
 
     int showTaskListCallCount = 0;
@@ -160,6 +166,7 @@ namespace test
     int showLevelUpAnimationCallCount = 0;
     int updateGamificationPanelCallCount = 0;
     int updateAchievementSlotsCallCount = 0;
+    int setUserNameCallCount = 0;
 
     QList< storage::Task > lastShownTasks;
     QDate lastDateArg;
@@ -182,10 +189,11 @@ namespace test
     storage::Achievement lastUnlockedAchievement;
     QList< storage::Achievement > lastAchievementsList;
     QList< QString > lastUnlockedLocations;
+    storage::Location lastUnlockedLocation;
     QString lastUnlockedLocationName;
     int lastNewLevel = 0;
     QString lastNewTitle;
-
+    QString lastUserName;
     QList< storage::Achievement > unlockedAchievementHistory;
   };
 }

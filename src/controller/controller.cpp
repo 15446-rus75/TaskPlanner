@@ -97,12 +97,12 @@ bool controller::Controller::validateTask(const storage::Task &task) const
   }
   if (task.name.trimmed().isEmpty())
   {
-    m_view->showErrorMessage("Task name can't be empty.");
+    m_view->showErrorMessage("Название задачи не может быть пустым.");
     return false;
   }
   if (!task.deadline.isValid())
   {
-    m_view->showErrorMessage("Specify the correct deadline for completing the task.");
+    m_view->showErrorMessage("Укажите корректный дедлайн для выполнения задачи.");
     return false;
   }
   return true;
@@ -256,7 +256,7 @@ void controller::Controller::onTaskAddRequested(const storage::Task &task)
   }
 
   m_storage->addTask(task);
-  m_view->showInfoMessage("Task \"" + task.name + "\" added successfully.");
+  m_view->showInfoMessage("Задача \"" + task.name + "\" успешно добавлена.");
   refreshView();
 }
 
@@ -277,7 +277,7 @@ void controller::Controller::onTaskEditRequested(int task_id)
     }
   }
 
-  m_view->showErrorMessage("Task with ID " + QString::number(task_id) + " not found.");
+  m_view->showErrorMessage("Задача с ID " + QString::number(task_id) + " не найдена.");
 }
 
 void controller::Controller::onTaskViewRequested(int task_id)
@@ -303,7 +303,7 @@ void controller::Controller::onTaskViewRequested(int task_id)
     }
   }
 
-  m_view->showErrorMessage("Task with ID " + QString::number(task_id) + " not found.");
+  m_view->showErrorMessage("Задача с ID " + QString::number(task_id) + " не найдена.");
 #else
   Q_UNUSED(task_id);
 #endif
@@ -321,7 +321,7 @@ void controller::Controller::onTaskUpdateRequested(const storage::Task &task)
   }
 
   m_storage->updateTask(task);
-  m_view->showInfoMessage("Task \"" + task.name + "\" successfully updated.");
+  m_view->showInfoMessage("Задача \"" + task.name + "\" успешно обновлена.");
   refreshView();
 }
 
@@ -348,11 +348,11 @@ void controller::Controller::onTaskDeleteRequested(int task_id)
 
   if (!task_name.isEmpty())
   {
-    m_view->showInfoMessage("Task \"" + task_name + "\" deleted successfully.");
+    m_view->showInfoMessage("Задача \"" + task_name + "\" успешно удалена.");
   }
   else
   {
-    m_view->showInfoMessage("Task deleted successfully.");
+    m_view->showInfoMessage("Задача успешно удалена.");
   }
 
   onCheckAchievements();
@@ -377,8 +377,8 @@ void controller::Controller::onCompleteRequested(int task_id)
       m_storage->updateTask(task);
 
       const QString message = task.completed
-                                ? "Task \"" + task.name + "\" marked as completed."
-                                : "Task \"" + task.name + "\" marked as not completed.";
+                                ? "Задача \"" + task.name + "\" отмечена как выполненная."
+                                : "Задача \"" + task.name + "\" отмечена как невыполненная.";
       m_view->showInfoMessage(message);
 
       if (!wasCompleted && task.completed)
@@ -391,7 +391,7 @@ void controller::Controller::onCompleteRequested(int task_id)
     }
   }
 
-  m_view->showErrorMessage("Task with ID " + QString::number(task_id) + " not found.");
+  m_view->showErrorMessage("Задача с ID " + QString::number(task_id) + " не найдена.");
 }
 
 void controller::Controller::onDateSelected(const QDate &date)
@@ -930,7 +930,6 @@ void controller::Controller::checkLocationUnlocks()
     {
       m_storage->unlockLocation(location.id);
       newlyUnlocked.append(location);
-      m_view->showLocationUnlocked(location);
     }
   };
 

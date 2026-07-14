@@ -90,19 +90,16 @@ void view::TaskPlannerView::setupGamification()
 void view::TaskPlannerView::showTaskList(const QList< storage::Task > &tasks)
 {
   ui->listWidgetTasks->clear();
-
-  for (const storage::Task &task: tasks)
+  for (int i = 0; i < tasks.size(); ++i)
   {
-    QString line = "[" + QString::number(task.id) + "] ";
+    const storage::Task &task = tasks[i];
+    QString line = "[" + QString::number(i + 1) + "] ";
     line += task.name;
-
     if (!task.discipline.trimmed().isEmpty())
     {
       line += " | 📚 " + task.discipline;
     }
-
     line += " | " + task.deadline.toString("dd.MM.yyyy HH:mm");
-
     if (task.priority != storage::Priority::All)
     {
       QString priority_text;
@@ -131,9 +128,7 @@ void view::TaskPlannerView::showTaskList(const QList< storage::Task > &tasks)
       }
       line += " | " + priority_text;
     }
-
     line += task.completed ? " | ✅" : " | ⬜";
-
     auto *item = new QListWidgetItem(line, ui->listWidgetTasks);
     item->setData(Qt::UserRole, task.id);
   }
